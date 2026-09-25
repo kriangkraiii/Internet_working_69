@@ -1,0 +1,126 @@
+{
+  "activityEntities" : [
+    "experimentCreated",
+    [
+      {
+        "createdDate" : "2026-09-16T20:28:46Z",
+        "event" : "experimentCreated",
+        "id" : "BBBD0C10-78A4-4EB6-8234-7B718333E9DC",
+        "subtitle" : "MyImageClassifier 1",
+        "title" : "Model Source Created"
+      }
+    ]
+  ],
+  "contentDataResult" : {
+
+  },
+  "createdDate" : "2026-09-16T20:28:46Z",
+  "evaluationContainerEntity" : {
+    "createdDate" : "2026-09-16T20:28:46Z",
+    "evaluationEntities" : [
+
+    ],
+    "id" : "88b87c99-fdd4-4baf-99c1-082f4e23289c",
+    "modifiedDate" : "2026-09-16T20:28:46Z",
+    "previewType" : "imageClassifier",
+    "testingEvaluationEntity" : {
+      "analysedDataType" : "none",
+      "createdDate" : "2026-09-16T20:28:46Z",
+      "dataResult" : {
+
+      },
+      "id" : "4910e8d4-92f8-4358-89b3-0bd07f2c1c4d"
+    },
+    "trainingEvaluationEntity" : {
+      "analysedDataType" : "none",
+      "createdDate" : "2026-09-16T20:28:46Z",
+      "dataResult" : {
+
+      },
+      "id" : "9122b578-a51b-491b-96d5-55f207c6ef76"
+    },
+    "validationEvaluationEntity" : {
+      "analysedDataType" : "none",
+      "createdDate" : "2026-09-16T20:28:46Z",
+      "dataResult" : {
+
+      },
+      "id" : "f09b5b8a-1ec0-4b2e-a43e-631aa372b5df"
+    }
+  },
+  "evaluationEntity" : {
+    "analysedDataType" : "none",
+    "dataResult" : {
+
+    },
+    "id" : "92429d53-d68f-467b-8e90-6a7df56d9c7d"
+  },
+  "evaluationState" : "uninitialized",
+  "id" : "F57018BA-215E-41D3-9752-EC7A1A3F9A3E",
+  "modelEntity" : {
+    "createdDate" : "2026-09-16T20:28:46Z",
+    "experimentID" : "F57018BA-215E-41D3-9752-EC7A1A3F9A3E",
+    "id" : "229535F9-8CA0-435A-A8B3-460E189F38C7",
+    "modifiedDate" : "2026-09-16T20:28:46Z",
+    "title" : "",
+    "version" : "1.0"
+  },
+  "modifiedDate" : "2026-09-16T20:28:46Z",
+  "preferredFilename" : "MyImageClassifier 1",
+  "settingEntity" : {
+    "algorithmType" : "maxEnt",
+    "augmentations" : [
+
+    ],
+    "featureExtractorType" : "scenePrintV1",
+    "featureNames" : [
+
+    ],
+    "handActionClassifierAugmentations" : [
+
+    ],
+    "handPoseClassifierAugmentations" : [
+
+    ],
+    "harVideoAugmentations" : 0,
+    "seedType" : "default",
+    "styleTransferAlgorithmType" : "image",
+    "taskType" : "imageClassifier",
+    "transferLearningEmbeddingType" : "dynamic"
+  },
+  "snapshotRole" : {
+    "withoutSnapshots" : 0
+  },
+  "state" : "uninitialized",
+  "title" : "MyImageClassifier 1",
+  "trainingEntity" : {
+    "analysedDataType" : "choose",
+    "checkpointMetrics" : {
+
+    },
+    "dataResult" : {
+
+    },
+    "featureExtractionCheckpointMayBeAvailable" : false,
+    "progress" : [
+
+    ],
+    "snapshottableCheckpoints" : {
+
+    }
+  },
+  "validationEntity" : {
+    "analysedDataType" : "auto",
+    "dataResult" : {
+
+    },
+    "splitOptions" : {
+      "strategy" : {
+        "automatic" : {
+
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

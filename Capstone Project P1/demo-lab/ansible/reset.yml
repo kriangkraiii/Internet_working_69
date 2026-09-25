@@ -1,0 +1,23 @@
+# Rehearsal helper: return both routers to the pre-demo state so site.yml shows changed=3 again.
+- name: Reset lab to pre-demo state
+  hosts: routers
+  gather_facts: false
+  tasks:
+    - name: Remove OSPF process 1
+      cisco.ios.ios_ospfv2:
+        state: deleted
+        config:
+          processes:
+            - process_id: 1
+
+    - name: Remove IPv4 addresses from Loopback0 and Gi0/1
+      cisco.ios.ios_l3_interfaces:
+        state: deleted
+        config:
+          - name: Loopback0
+          - name: GigabitEthernet0/1
+
+    - name: Shut down Gi0/1
+      cisco.ios.ios_interfaces:
+        state: merged
+        config: [{name: GigabitEthernet0/1, enabled: false}]

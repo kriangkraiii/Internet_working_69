@@ -1,0 +1,64 @@
+2026-09-16T23:35:39.779372+00:00 192.168.100.12 151: *Sep 16 23:35:32.593: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:interface GigabitEthernet0/1 
+2026-09-16T23:35:39.779847+00:00 192.168.100.12 152: *Sep 16 23:35:32.775: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:ip address 10.12.12.2 255.255.255.252
+2026-09-16T23:35:39.780543+00:00 192.168.100.12 153: *Sep 16 23:35:32.913: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:interface Loopback0 
+2026-09-16T23:35:39.781184+00:00 192.168.100.12 154: *Sep 16 23:35:33.077: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:ip address 2.2.2.2 255.255.255.255
+2026-09-16T23:35:39.781806+00:00 192.168.100.12 155: *Sep 16 23:35:33.189: %SYS-5-CONFIG_I: Configured from console by admin on vty1 (192.168.100.10)
+2026-09-16T23:35:39.869865+00:00 192.168.100.11 147: *Sep 16 23:35:33.411: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:interface GigabitEthernet0/1 
+2026-09-16T23:35:39.870499+00:00 192.168.100.11 148: *Sep 16 23:35:33.590: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:ip address 10.12.12.1 255.255.255.252
+2026-09-16T23:35:39.871192+00:00 192.168.100.11 149: *Sep 16 23:35:33.729: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:interface Loopback0 
+2026-09-16T23:35:39.871919+00:00 192.168.100.11 150: *Sep 16 23:35:33.894: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:ip address 1.1.1.1 255.255.255.255
+2026-09-16T23:35:39.872816+00:00 192.168.100.11 151: *Sep 16 23:35:34.006: %SYS-5-CONFIG_I: Configured from console by admin on vty1 (192.168.100.10)
+2026-09-16T23:35:43.342615+00:00 192.168.100.11 152: *Sep 16 23:35:37.066: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:interface GigabitEthernet0/1 
+2026-09-16T23:35:43.343228+00:00 192.168.100.11 153: *Sep 16 23:35:37.330: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:no shutdown 
+2026-09-16T23:35:43.344135+00:00 192.168.100.11 154: *Sep 16 23:35:37.442: %SYS-5-CONFIG_I: Configured from console by admin on vty1 (192.168.100.10)
+2026-09-16T23:35:43.560094+00:00 192.168.100.12 156: *Sep 16 23:35:36.302: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:interface GigabitEthernet0/1 
+2026-09-16T23:35:43.560698+00:00 192.168.100.12 157: *Sep 16 23:35:36.568: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:no shutdown 
+2026-09-16T23:35:43.561443+00:00 192.168.100.12 158: *Sep 16 23:35:36.695: %SYS-5-CONFIG_I: Configured from console by admin on vty1 (192.168.100.10)
+2026-09-16T23:35:45.450550+00:00 192.168.100.11 155: *Sep 16 23:35:39.189: %LINK-3-UPDOWN: Interface GigabitEthernet0/1, changed state to up
+2026-09-16T23:35:45.451439+00:00 192.168.100.11 156: *Sep 16 23:35:40.189: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/1, changed state to up
+2026-09-16T23:35:45.510946+00:00 192.168.100.12 159: *Sep 16 23:35:38.426: %LINK-3-UPDOWN: Interface GigabitEthernet0/1, changed state to up
+2026-09-16T23:35:45.511988+00:00 192.168.100.12 160: *Sep 16 23:35:39.426: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/1, changed state to up
+2026-09-16T23:35:46.544590+00:00 192.168.100.11 157: *Sep 16 23:35:40.288: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:router ospf 1 
+2026-09-16T23:35:46.545127+00:00 192.168.100.11 158: *Sep 16 23:35:40.426: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:router-id 1.1.1.1
+2026-09-16T23:35:46.545956+00:00 192.168.100.11 159: *Sep 16 23:35:40.592: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:network 10.12.12.0 0.0.0.3 area 0
+2026-09-16T23:35:46.546672+00:00 192.168.100.11 160: *Sep 16 23:35:40.751: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:network 1.1.1.1 0.0.0.0 area 0
+2026-09-16T23:35:46.547559+00:00 192.168.100.11 161: *Sep 16 23:35:40.863: %SYS-5-CONFIG_I: Configured from console by admin on vty1 (192.168.100.10)
+2026-09-16T23:35:46.565216+00:00 192.168.100.12 161: *Sep 16 23:35:39.486: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:router ospf 1 
+2026-09-16T23:35:46.566233+00:00 192.168.100.12 162: *Sep 16 23:35:39.621: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:router-id 2.2.2.2
+2026-09-16T23:35:46.567283+00:00 192.168.100.12 163: *Sep 16 23:35:39.788: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:network 10.12.12.0 0.0.0.3 area 0
+2026-09-16T23:35:46.568341+00:00 192.168.100.12 164: *Sep 16 23:35:39.949: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:network 2.2.2.2 0.0.0.0 area 0
+2026-09-16T23:35:46.569322+00:00 192.168.100.12 165: *Sep 16 23:35:40.061: %SYS-5-CONFIG_I: Configured from console by admin on vty1 (192.168.100.10)
+2026-09-16T23:36:31.471851+00:00 192.168.100.12 166: *Sep 16 23:36:24.401: %OSPF-5-ADJCHG: Process 1, Nbr 1.1.1.1 on GigabitEthernet0/1 from LOADING to FULL, Loading Done
+2026-09-16T23:36:31.473272+00:00 192.168.100.11 162: *Sep 16 23:36:25.142: %OSPF-5-ADJCHG: Process 1, Nbr 2.2.2.2 on GigabitEthernet0/1 from LOADING to FULL, Loading Done
+2026-09-16T23:37:47.330026+00:00 192.168.100.11 163: *Sep 16 23:37:40.478: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:event manager applet OSPF-NBR-DOWN
+2026-09-16T23:37:58.239397+00:00 192.168.100.11 164: *Sep 16 23:37:51.352: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:event syslog pattern "OSPF-5-ADJCHG.*FULL to DOWN" ratelimit 60 maxrun 60
+2026-09-16T23:38:03.127718+00:00 192.168.100.11 165: *Sep 16 23:37:56.221: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:action 1.0 cli command "enable"
+2026-09-16T23:38:11.750285+00:00 192.168.100.11 166: *Sep 16 23:38:04.826: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:action 1.5 cli command "delete /force flash0:ospf-ev.txt"
+2026-09-16T23:38:23.133656+00:00 192.168.100.11 167: *Sep 16 23:38:16.181: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:action 2.0 cli command "show ip ospf neighbor | redirect flash0:ospf-ev.txt"
+2026-09-16T23:38:26.082115+00:00 192.168.100.11 168: *Sep 16 23:38:19.112: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:action 2.5 wait 6
+2026-09-16T23:38:36.691477+00:00 192.168.100.11 169: *Sep 16 23:38:29.690: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:action 3.0 cli command "show ip route ospf | append flash0:ospf-ev.txt"
+2026-09-16T23:38:47.344541+00:00 192.168.100.11 170: *Sep 16 23:38:40.318: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:action 4.0 syslog priority critical msg "OSPF nbr lost - evidence saved"
+2026-09-16T23:38:47.345267+00:00 192.168.100.11 171: *Sep 16 23:38:41.126: %SYS-5-CONFIG_I: Configured from console by admin on vty0 (192.168.100.10)
+2026-09-16T23:39:15.542947+00:00 192.168.100.12 167: *Sep 16 23:39:08.454: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:crypto key zeroize rsa 
+2026-09-16T23:39:15.543574+00:00 192.168.100.12 168: *Sep 16 23:39:08.455: %SSH-5-DISABLED: SSH 2.0 has been disabled
+2026-09-16T23:39:15.544223+00:00 192.168.100.12 169: *Sep 16 23:39:09.287: %SYS-5-CONFIG_I: Configured from console by admin on vty0 (192.168.100.10)
+2026-09-16T23:40:23.560685+00:00 192.168.100.12 170: *Sep 16 23:40:16.308: %SSH-5-ENABLED: SSH 2.0 has been enabled
+2026-09-16T23:40:23.561358+00:00 192.168.100.12 171: *Sep 16 23:40:16.331: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:crypto key generate rsa modulus 2048
+2026-09-16T23:40:28.155765+00:00 192.168.100.12 172: *Sep 16 23:40:20.897: %SYS-5-CONFIG_I: Configured from console by admin on vty0 (192.168.100.10)
+2026-09-16T23:41:13.625744+00:00 192.168.100.12 173: *Sep 16 23:41:06.046: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:interface GigabitEthernet0/1 
+2026-09-16T23:41:15.199945+00:00 192.168.100.12 174: *Sep 16 23:41:07.605: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:shutdown 
+2026-09-16T23:41:15.200547+00:00 192.168.100.12 175: *Sep 16 23:41:07.608: %OSPF-5-ADJCHG: Process 1, Nbr 1.1.1.1 on GigabitEthernet0/1 from FULL to DOWN, Neighbor Down: Interface down or detached
+2026-09-16T23:41:15.201120+00:00 192.168.100.12 176: *Sep 16 23:41:08.427: %SYS-5-CONFIG_I: Configured from console by admin on vty0 (192.168.100.10)
+2026-09-16T23:41:17.184443+00:00 192.168.100.12 177: *Sep 16 23:41:09.580: %LINK-5-CHANGED: Interface GigabitEthernet0/1, changed state to administratively down
+2026-09-16T23:41:17.185026+00:00 192.168.100.12 178: *Sep 16 23:41:10.580: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/1, changed state to down
+2026-09-16T23:41:52.922345+00:00 192.168.100.11 172: *Sep 16 23:41:46.612: %OSPF-5-ADJCHG: Process 1, Nbr 2.2.2.2 on GigabitEthernet0/1 from FULL to DOWN, Neighbor Down: Dead timer expired
+2026-09-16T23:41:52.930068+00:00 192.168.100.11 173: *Sep 16 23:41:46.626: %PARSER-5-CFGLOG_LOGGEDCMD: User:unknown user  logged command:!exec: enable
+2026-09-16T23:42:00.018263+00:00 192.168.100.11 174: *Sep 16 23:41:53.668: %HA_EM-2-LOG: OSPF-NBR-DOWN: OSPF nbr lost - evidence saved
+2026-09-16T23:43:08.714561+00:00 192.168.100.12 179: *Sep 16 23:43:01.051: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:interface GigabitEthernet0/1 
+2026-09-16T23:43:10.970596+00:00 192.168.100.12 180: *Sep 16 23:43:03.272: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:no shutdown 
+2026-09-16T23:43:10.971211+00:00 192.168.100.12 181: *Sep 16 23:43:03.951: %SYS-5-CONFIG_I: Configured from console by admin on vty0 (192.168.100.10)
+2026-09-16T23:43:12.865007+00:00 192.168.100.12 182: *Sep 16 23:43:05.149: %LINK-3-UPDOWN: Interface GigabitEthernet0/1, changed state to up
+2026-09-16T23:43:12.865611+00:00 192.168.100.12 183: *Sep 16 23:43:06.149: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/1, changed state to up
+2026-09-16T23:43:18.833988+00:00 192.168.100.11 175: *Sep 16 23:43:11.419: %OSPF-5-ADJCHG: Process 1, Nbr 2.2.2.2 on GigabitEthernet0/1 from LOADING to FULL, Loading Done
+2026-09-16T23:43:18.833988+00:00 192.168.100.12 184: *Sep 16 23:43:11.128: %OSPF-5-ADJCHG: Process 1, Nbr 1.1.1.1 on GigabitEthernet0/1 from LOADING to FULL, Loading Done
+

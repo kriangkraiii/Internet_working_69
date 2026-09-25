@@ -1,0 +1,178 @@
+(admin@192.168.100.11) Password: 
+
+
+
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************
+R1#terminal length 0
+R1#terminal width 0
+R1#terminal monitor
+R1#
+R1#show run | section line vty 0
+line vty 0 4
+ exec-timeout 30 0
+ logging synchronous
+ login local
+ transport input ssh
+R1#show ip ssh | include SSH
+SSH Enabled - version 2.0
+R1#
+*Sep 16 23:35:33.411: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:interface GigabitEthernet0/1 
+*Sep 16 23:35:33.590: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:ip address 10.12.12.1 255.255.255.252
+*Sep 16 23:35:33.729: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:interface Loopback0 
+*Sep 16 23:35:33.894: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:ip address 1.1.1.1 255.255.255.255
+*Sep 16 23:35:34.006: %SYS-5-CONFIG_I: Configured from console by admin on vty1 (192.168.100.10)
+R1#
+*Sep 16 23:35:37.066: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:interface GigabitEthernet0/1 
+*Sep 16 23:35:37.330: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:no shutdown 
+*Sep 16 23:35:37.442: %SYS-5-CONFIG_I: Configured from console by admin on vty1 (192.168.100.10)
+R1#
+*Sep 16 23:35:39.189: %LINK-3-UPDOWN: Interface GigabitEthernet0/1, changed state to up
+*Sep 16 23:35:40.189: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/1, changed state to up
+R1#
+*Sep 16 23:35:40.288: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:router ospf 1 
+*Sep 16 23:35:40.426: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:router-id 1.1.1.1
+*Sep 16 23:35:40.592: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:network 10.12.12.0 0.0.0.3 area 0
+*Sep 16 23:35:40.751: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:network 1.1.1.1 0.0.0.0 area 0
+*Sep 16 23:35:40.863: %SYS-5-CONFIG_I: Configured from console by admin on vty1 (192.168.100.10)
+R1#
+*Sep 16 23:36:25.142: %OSPF-5-ADJCHG: Process 1, Nbr 2.2.2.2 on GigabitEthernet0/1 from LOADING to FULL, Loading Done
+R1#show ip ospf neighbor
+
+Neighbor ID     Pri   State           Dead Time   Address         Interface
+2.2.2.2           1   FULL/DR         00:00:33    10.12.12.2      GigabitEthernet0/1
+R1#show ip route ospf | begin Gateway
+Gateway of last resort is not set
+
+      2.0.0.0/32 is subnetted, 1 subnets
+O        2.2.2.2 [110/2] via 10.12.12.2, 00:00:45, GigabitEthernet0/1
+R1#show archive log config all | include router-id
+   40     0          admin@vty1     | router-id 1.1.1.1
+   70     0          admin@vty1     | router-id 1.1.1.1
+   97     0          admin@vty1     | router-id 1.1.1.1
+R1#show logging | include CONFIG_I
+*Sep 16 23:33:40.722: %SYS-5-CONFIG_I: Configured from console by admin on vty1 (192.168.100.10)
+*Sep 16 23:33:44.299: %SYS-5-CONFIG_I: Configured from console by admin on vty1 (192.168.100.10)
+*Sep 16 23:33:47.874: %SYS-5-CONFIG_I: Configured from console by admin on vty1 (192.168.100.10)
+*Sep 16 23:35:34.006: %SYS-5-CONFIG_I: Configured from console by admin on vty1 (192.168.100.10)
+*Sep 16 23:35:37.442: %SYS-5-CONFIG_I: Configured from console by admin on vty1 (192.168.100.10)
+*Sep 16 23:35:40.863: %SYS-5-CONFIG_I: Configured from console by admin on vty1 (192.168.100.10)
+R1#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+R1(config)#event manager applet OSPF-NBR-DOWN
+R1(config-applet)# event sy
+*Sep 16 23:37:40.478: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:event manager applet OSPF-NBR-DOWN
+R1(config-applet)# event syslog pattern "OSPF-5-ADJCHG.*FULL to DOWN" ratelimit 60 maxrun 60
+R1(config-applet)# action 1.
+*Sep 16 23:37:51.352: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:event syslog pattern "OSPF-5-ADJCHG.*FULL to DOWN" ratelimit 60 maxrun 60
+R1(config-applet)# action 1.0 cli command "enable"
+R1(config-applet)# action 1.5
+*Sep 16 23:37:56.221: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:action 1.0 cli command "enable"
+R1(config-applet)# action 1.5 cli command "delete /force flash0:ospf-ev.txt"
+R1(config-applet)# action
+*Sep 16 23:38:04.826: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:action 1.5 cli command "delete /force flash0:ospf-ev.txt"
+R1(config-applet)# action 2.0 cli command "show ip ospf neighbor | redirect flash0:ospf-ev.txt"
+R1(config-applet)# action 2.5
+*Sep 16 23:38:16.181: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:action 2.0 cli command "show ip ospf neighbor | redirect flash0:ospf-ev.txt" 
+R1(config-applet)# action 2.5 wait 6
+R1(config-applet)# acti
+*Sep 16 23:38:19.112: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:action 2.5 wait 6
+R1(config-applet)# action 3.0 cli command "show ip route ospf | append flash0:ospf-ev.txt"
+R1(config-applet)# action 
+*Sep 16 23:38:29.690: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:action 3.0 cli command "show ip route ospf | append flash0:ospf-ev.txt"4
+R1(config-applet)# action 4.0 syslog priority critical msg "OSPF nbr lost - evidence saved"
+R1(config-applet)#end
+R1#
+*Sep 16 23:38:40.318: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:action 4.0 syslog priority critical msg "OSPF nbr lost - evidence saved"
+*Sep 16 23:38:41.126: %SYS-5-CONFIG_I: Configured from console by admin on vty0 (192.168.100.10)
+R1#show event manager policy registered
+No.  Class     Type    Event Type          Trap  Time Registered           Name
+1    applet    user    syslog              Off   Wed Sep 16 23:38:41 2026  OSPF-NBR-DOWN
+ pattern {OSPF-5-ADJCHG.*FULL to DOWN}
+ maxrun 60.000
+ ratelimit 60.000
+ action 1.0 cli command "enable"
+ action 1.5 cli command "delete /force flash0:ospf-ev.txt"
+ action 2.0 cli command "show ip ospf neighbor | redirect flash0:ospf-ev.txt"
+ action 2.5 wait 6
+ action 3.0 cli command "show ip route ospf | append flash0:ospf-ev.txt"
+ action 4.0 syslog priority critical msg "OSPF nbr lost - evidence saved"
+
+R1#debug event manager action cli
+Debug EEM action cli debugging is on
+R1#
+*Sep 16 23:41:46.612: %OSPF-5-ADJCHG: Process 1, Nbr 2.2.2.2 on GigabitEthernet0/1 from FULL to DOWN, Neighbor Down: Dead timer expired
+*Sep 16 23:41:46.621: %HA_EM-6-LOG: OSPF-NBR-DOWN : DEBUG(cli_lib) : : CTL : cli_open called.
+*Sep 16 23:41:46.622: %HA_EM-6-LOG: OSPF-NBR-DOWN : DEBUG(cli_lib) : : OUT : **************************************************************************
+*Sep 16 23:41:46.622: %HA_EM-6-LOG: OSPF-NBR-DOWN : DEBUG(cli_lib) : : OUT : * IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+*Sep 16 23:41:46.622: %HA_EM-6-LOG: OSPF-NBR-DOWN : DEBUG(cli_lib) : : OUT : * education. IOSv is provided as-is and is not supported by Cisco's      *
+*Sep 16 23:41:46.623: %HA_EM-6-LOG: OSPF-NBR-DOWN : DEBUG(cli_lib) : : OUT : * Technical Advisory Center. Any use or disclosure, in whole or in part, *
+*Sep 16 23:41:46.623: %HA_EM-6-LOG: OSPF-NBR-DOWN : DEBUG(cli_lib) : : OUT : * of the IOSv Software or Documentation to any third party for any       *
+*Sep 16 23:41:46.623: %HA_EM-6-LOG: OSPF-NBR-DOWN : DEBUG(cli_lib) : : OUT : * purposes is expressly prohibited except as otherwise authorized by     *
+*Sep 16 23:41:46.623: %HA_EM-6-LOG: OSPF-NBR-DOWN : DEBUG(cli_lib) : : OUT : * Cisco in writing.                                                      *
+*Sep 16 23:41:46.623: %HA_EM-6-LOG: OSPF-NBR-DOWN : DEBUG(cli_lib) : : OUT : **************************************************************************
+*Sep 16 23:41:46.624: %HA_EM-6-LOG: OSPF-NBR-DOWN : DEBUG(cli_lib) : : OUT : R1>
+*Sep 16 23:41:46.624: %HA_EM-6-LOG: OSPF-NBR-DOWN : DEBUG(cli_lib) : : IN  : R1>enable
+*Sep 16 23:41:46.626: %PARSER-5-CFGLOG_LOGGEDCMD: User:unknown user  logged command:!exec: enable
+R1#
+*Sep 16 23:41:46.634: %HA_EM-6-LOG: OSPF-NBR-DOWN : DEBUG(cli_lib) : : OUT : R1#
+*Sep 16 23:41:46.634: %HA_EM-6-LOG: OSPF-NBR-DOWN : DEBUG(cli_lib) : : IN  : R1#delete /force flash0:ospf-ev.txt
+*Sep 16 23:41:46.744: %HA_EM-6-LOG: OSPF-NBR-DOWN : DEBUG(cli_lib) : : OUT : %Error deleting flash0:ospf-ev.txt (File not found)
+*Sep 16 23:41:46.744: %HA_EM-6-LOG: OSPF-NBR-DOWN : DEBUG(cli_lib) : : OUT : R1#
+*Sep 16 23:41:46.745: %HA_EM-6-LOG: OSPF-NBR-DOWN : DEBUG(cli_lib) : : IN  : R1#show ip ospf neighbor | redirect flash0:ospf-ev.txt
+*Sep 16 23:41:47.358: %HA_EM-6-LOG: OSPF-NBR-DOWN : DEBUG(cli_lib) : : OUT : R1#
+R1#
+*Sep 16 23:41:53.358: %HA_EM-6-LOG: OSPF-NBR-DOWN : DEBUG(cli_lib) : : IN  : R1#show ip route ospf | append flash0:ospf-ev.txt
+*Sep 16 23:41:53.668: %HA_EM-6-LOG: OSPF-NBR-DOWN : DEBUG(cli_lib) : : OUT : R1#
+*Sep 16 23:41:53.668: %HA_EM-2-LOG: OSPF-NBR-DOWN: OSPF nbr lost - evidence saved
+R1#
+*Sep 16 23:41:53.669: %HA_EM-6-LOG: OSPF-NBR-DOWN : DEBUG(cli_lib) : : CTL : cli_close called.
+*Sep 16 23:41:53.674: 
+*Sep 16 23:41:53.674: tty is now going through its death sequence
+R1#undebug all
+All possible debugging has been turned off
+R1#show ip ospf neighbor
+R1#show ip route 2.2.2.2
+% Network not in table
+R1#show ip ospf interface brief
+Interface    PID   Area            IP Address/Mask    Cost  State Nbrs F/C
+Lo0          1     0               1.1.1.1/32         1     LOOP  0/0
+Gi0/1        1     0               10.12.12.1/30      1     DR    0/0
+R1#show event manager history events
+No.  Job Id Proc Status   Time of Event            Event Type        Name
+1    1      Actv success  Wed Sep16 23:15:22 2026  syslog            applet: OSPF-NBR-DOWN 
+2    2      Actv success  Wed Sep16 23:28:25 2026  syslog            applet: OSPF-NBR-DOWN 
+3    3      Actv success  Wed Sep16 23:41:46 2026  syslog            applet: OSPF-NBR-DOWN 
+R1#more flash0:ospf-ev.txt
+
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area 
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+       a - application route
+       + - replicated route, % - next hop override, p - overrides from PfR
+
+Gateway of last resort is not set
+
+
+
+R1#
+*Sep 16 23:43:11.419: %OSPF-5-ADJCHG: Process 1, Nbr 2.2.2.2 on GigabitEthernet0/1 from LOADING to FULL, Loading Done
+R1#show ip route ospf | include 2.2.2.2
+O        2.2.2.2 [110/2] via 10.12.12.2, 00:00:12, GigabitEthernet0/1
+R1#ping 2.2.2.2 source loopback0
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 2.2.2.2, timeout is 2 seconds:
+Packet sent with a source address of 1.1.1.1 
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms
+R1#

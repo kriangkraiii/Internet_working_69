@@ -1,0 +1,15 @@
+# Optional: collect the same evidence shown on slide 14 without logging in to each router.
+- name: Verify OSPF state
+  hosts: routers
+  gather_facts: false
+  tasks:
+    - name: Collect OSPF neighbor and routes
+      cisco.ios.ios_command:
+        commands:
+          - show ip ospf neighbor
+          - show ip route ospf
+      register: out
+
+    - name: Show results
+      ansible.builtin.debug:
+        var: out.stdout_lines

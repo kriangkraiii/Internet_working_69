@@ -1,0 +1,3 @@
+# Use paramiko for network_cli (works with the SSH algorithms of IOSv 15.9
+# and avoids the "ansible-pylibssh not installed" warning during the demo).
+ansible_network_cli_ssh_type: paramiko

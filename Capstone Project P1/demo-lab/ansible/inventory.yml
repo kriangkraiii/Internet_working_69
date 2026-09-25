@@ -1,0 +1,13 @@
+all:
+  children:
+    routers:
+      hosts:
+        R1: {ansible_host: 192.168.100.11,
+             rid: 1.1.1.1, p2p_ip: 10.12.12.1}
+        R2: {ansible_host: 192.168.100.12,
+             rid: 2.2.2.2, p2p_ip: 10.12.12.2}
+      vars:
+        ansible_connection: ansible.netcommon.network_cli
+        ansible_network_os: cisco.ios.ios
+        ansible_user: admin
+        ansible_password: "{{ vault_admin_pw }}"

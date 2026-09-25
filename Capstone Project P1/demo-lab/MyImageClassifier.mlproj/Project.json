@@ -1,0 +1,29 @@
+{
+  "activityEntities" : [
+    "projectCreated",
+    [
+      {
+        "createdDate" : "2026-09-16T20:28:46Z",
+        "event" : "projectCreated",
+        "id" : "056CA8B8-13B4-4D68-A3B3-07DA6AEE83FA",
+        "subtitle" : "MyImageClassifier",
+        "title" : "Project Created"
+      }
+    ]
+  ],
+  "authorName" : "KRIANGKRAI PRASERT",
+  "createdDate" : "2026-09-16T20:28:46Z",
+  "description" : "",
+  "id" : "9B1F03E7-9466-4187-BB06-475219D20B26",
+  "license" : "",
+  "location" : "",
+  "modifiedDate" : "2026-09-16T20:28:46Z",
+  "projectName" : "MyImageClassifier",
+  "settingsEntity" : {
+    "snapshotOnExtendTraining" : true,
+    "snapshotOnResumeTraining" : false
+  },
+  "taskType" : "imageClassifier",
+  "title" : "Image Classification",
+  "version" : "1.1"
+}

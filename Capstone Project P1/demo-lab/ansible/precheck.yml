@@ -1,0 +1,13 @@
+# Run before presenting: proves SSH + credentials work on every router.
+- name: Pre-check router access
+  hosts: routers
+  gather_facts: false
+  tasks:
+    - name: Log in and run a show command
+      cisco.ios.ios_command:
+        commands: show version | include uptime
+      register: ver
+
+    - name: Print uptime
+      ansible.builtin.debug:
+        msg: "{{ ver.stdout_lines[0][0] }}"

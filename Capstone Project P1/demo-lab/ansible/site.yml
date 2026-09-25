@@ -1,0 +1,29 @@
+- name: Deploy OSPF area 0
+  hosts: routers
+  gather_facts: false
+  tasks:
+    - name: L3 interfaces (resource module)
+      cisco.ios.ios_l3_interfaces:
+        state: merged
+        config:
+          - {name: Loopback0, ipv4: [{address: "{{ rid }}/32"}]}
+          - {name: GigabitEthernet0/1,
+             ipv4: [{address: "{{ p2p_ip }}/30"}]}
+    - name: Enable Gi0/1 (idempotent no shutdown)
+      cisco.ios.ios_interfaces:
+        state: merged
+        config: [{name: GigabitEthernet0/1, enabled: true}]
+    - name: OSPF process 1
+      cisco.ios.ios_config:
+        parents: router ospf 1
+        lines:
+          - router-id {{ rid }}
+          - network 10.12.12.0 0.0.0.3 area 0
+          - network {{ rid }} 0.0.0.0 area 0
+    - name: Verify adjacency is FULL
+      cisco.ios.ios_command:
+        commands: show ip ospf neighbor
+        wait_for: result[0] contains FULL
+        retries: 12
+        interval: 5
+      when: not ansible_check_mode

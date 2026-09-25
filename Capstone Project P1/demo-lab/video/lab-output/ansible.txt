@@ -1,0 +1,206 @@
+grp9@automation-host:~/lab/ansible$ cat inventory.yml
+all:
+  children:
+    routers:
+      hosts:
+        R1: {ansible_host: 192.168.100.11,
+             rid: 1.1.1.1, p2p_ip: 10.12.12.1}
+        R2: {ansible_host: 192.168.100.12,
+             rid: 2.2.2.2, p2p_ip: 10.12.12.2}
+      vars:
+        ansible_connection: ansible.netcommon.network_cli
+        ansible_network_os: cisco.ios.ios
+        ansible_user: admin
+        ansible_password: "{{ vault_admin_pw }}"
+grp9@automation-host:~/lab/ansible$ 
+grp9@automation-host:~/lab/ansible$ cat site.yml
+- name: Deploy OSPF area 0
+  hosts: routers
+  gather_facts: false
+  tasks:
+    - name: L3 interfaces (resource module)
+      cisco.ios.ios_l3_interfaces:
+        state: merged
+        config:
+          - {name: Loopback0, ipv4: [{address: "{{ rid }}/32"}]}
+          - {name: GigabitEthernet0/1,
+             ipv4: [{address: "{{ p2p_ip }}/30"}]}
+    - name: Enable Gi0/1 (idempotent no shutdown)
+      cisco.ios.ios_interfaces:
+        state: merged
+        config: [{name: GigabitEthernet0/1, enabled: true}]
+    - name: OSPF process 1
+      cisco.ios.ios_config:
+        parents: router ospf 1
+        lines:
+          - router-id {{ rid }}
+          - network 10.12.12.0 0.0.0.3 area 0
+          - network {{ rid }} 0.0.0.0 area 0
+    - name: Verify adjacency is FULL
+      cisco.ios.ios_command:
+        commands: show ip ospf neighbor
+        wait_for: result[0] contains FULL
+        retries: 12
+        interval: 5
+      when: not ansible_check_mode
+grp9@automation-host:~/lab/ansible$ 
+grp9@automation-host:~/lab/ansible$ ansible-inventory --graph
+@all:
+  |--@ungrouped:
+  |--@routers:
+  |  |--R1
+  |  |--R2
+grp9@automation-host:~/lab/ansible$ ansible-playbook site.yml -J --check -v
+Using /home/grp9/lab/ansible/ansible.cfg as config file
+Vault password: 
+
+PLAY [Deploy OSPF area 0] **********************************************************************************************
+
+TASK [L3 interfaces (resource module)] *********************************************************************************
+changed: [R1] => {"after": [{"ipv4": [{"address": "192.168.100.11/24"}], "name": "GigabitEthernet0/0"}, {"name": "GigabitEthernet0/1"}, {"name": "GigabitEthernet0/2"}, {"name": "GigabitEthernet0/3"}, {"name": "Loopback0"}], "before": [{"ipv4": [{"address": "192.168.100.11/24"}], "name": "GigabitEthernet0/0"}, {"name": "GigabitEthernet0/1"}, {"name": "GigabitEthernet0/2"}, {"name": "GigabitEthernet0/3"}, {"name": "Loopback0"}], "changed": true, "commands": ["interface GigabitEthernet0/1", "ip address 10.12.12.1 255.255.255.252", "interface loopback0", "ip address 1.1.1.1 255.255.255.255"]}
+changed: [R2] => {"after": [{"ipv4": [{"address": "192.168.100.12/24"}], "name": "GigabitEthernet0/0"}, {"name": "GigabitEthernet0/1"}, {"name": "GigabitEthernet0/2"}, {"name": "GigabitEthernet0/3"}, {"name": "Loopback0"}], "before": [{"ipv4": [{"address": "192.168.100.12/24"}], "name": "GigabitEthernet0/0"}, {"name": "GigabitEthernet0/1"}, {"name": "GigabitEthernet0/2"}, {"name": "GigabitEthernet0/3"}, {"name": "Loopback0"}], "changed": true, "commands": ["interface GigabitEthernet0/1", "ip address 10.12.12.2 255.255.255.252", "interface loopback0", "ip address 2.2.2.2 255.255.255.255"]}
+
+TASK [Enable Gi0/1 (idempotent no shutdown)] ***************************************************************************
+changed: [R1] => {"after": [{"description": "MGMT to SW-MGMT", "duplex": "auto", "enabled": true, "name": "GigabitEthernet0/0", "speed": "auto"}, {"description": "P2P to R2 (configured by Ansible)", "duplex": "auto", "enabled": false, "name": "GigabitEthernet0/1", "speed": "auto"}, {"duplex": "auto", "enabled": false, "name": "GigabitEthernet0/2", "speed": "auto"}, {"duplex": "auto", "enabled": false, "name": "GigabitEthernet0/3", "speed": "auto"}, {"enabled": true, "name": "Loopback0"}], "before": [{"description": "MGMT to SW-MGMT", "duplex": "auto", "enabled": true, "name": "GigabitEthernet0/0", "speed": "auto"}, {"description": "P2P to R2 (configured by Ansible)", "duplex": "auto", "enabled": false, "name": "GigabitEthernet0/1", "speed": "auto"}, {"duplex": "auto", "enabled": false, "name": "GigabitEthernet0/2", "speed": "auto"}, {"duplex": "auto", "enabled": false, "name": "GigabitEthernet0/3", "speed": "auto"}, {"enabled": true, "name": "Loopback0"}], "changed": true, "commands": ["interface GigabitEthernet0/1", "no shutdown"]}
+changed: [R2] => {"after": [{"description": "MGMT to SW-MGMT", "duplex": "auto", "enabled": true, "name": "GigabitEthernet0/0", "speed": "auto"}, {"description": "P2P to R1 (configured by Ansible)", "duplex": "auto", "enabled": false, "name": "GigabitEthernet0/1", "speed": "auto"}, {"duplex": "auto", "enabled": false, "name": "GigabitEthernet0/2", "speed": "auto"}, {"duplex": "auto", "enabled": false, "name": "GigabitEthernet0/3", "speed": "auto"}, {"enabled": true, "name": "Loopback0"}], "before": [{"description": "MGMT to SW-MGMT", "duplex": "auto", "enabled": true, "name": "GigabitEthernet0/0", "speed": "auto"}, {"description": "P2P to R1 (configured by Ansible)", "duplex": "auto", "enabled": false, "name": "GigabitEthernet0/1", "speed": "auto"}, {"duplex": "auto", "enabled": false, "name": "GigabitEthernet0/2", "speed": "auto"}, {"duplex": "auto", "enabled": false, "name": "GigabitEthernet0/3", "speed": "auto"}, {"enabled": true, "name": "Loopback0"}], "changed": true, "commands": ["interface GigabitEthernet0/1", "no shutdown"]}
+
+TASK [OSPF process 1] **************************************************************************************************
+[WARNING]: To ensure idempotency and correct diff the input configuration lines should be similar to how they appear if present in the running configuration on device
+changed: [R2] => {"banners": {}, "changed": true, "commands": ["router ospf 1", "router-id 2.2.2.2", "network 10.12.12.0 0.0.0.3 area 0", "network 2.2.2.2 0.0.0.0 area 0"], "updates": ["router ospf 1", "router-id 2.2.2.2", "network 10.12.12.0 0.0.0.3 area 0", "network 2.2.2.2 0.0.0.0 area 0"]}
+changed: [R1] => {"banners": {}, "changed": true, "commands": ["router ospf 1", "router-id 1.1.1.1", "network 10.12.12.0 0.0.0.3 area 0", "network 1.1.1.1 0.0.0.0 area 0"], "updates": ["router ospf 1", "router-id 1.1.1.1", "network 10.12.12.0 0.0.0.3 area 0", "network 1.1.1.1 0.0.0.0 area 0"]}
+
+TASK [Verify adjacency is FULL] ****************************************************************************************
+skipping: [R1] => {"changed": false, "false_condition": "not ansible_check_mode", "skip_reason": "Conditional result was False"}
+skipping: [R2] => {"changed": false, "false_condition": "not ansible_check_mode", "skip_reason": "Conditional result was False"}
+
+PLAY RECAP *************************************************************************************************************
+R1                         : ok=3    changed=3    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
+R2                         : ok=3    changed=3    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
+
+grp9@automation-host:~/lab/ansible$ 
+grp9@automation-host:~/lab/ansible$ ansible-playbook site.yml -J
+Vault password: 
+
+PLAY [Deploy OSPF area 0] **********************************************************************************************
+
+TASK [L3 interfaces (resource module)] *********************************************************************************
+changed: [R2]
+changed: [R1]
+
+TASK [Enable Gi0/1 (idempotent no shutdown)] ***************************************************************************
+changed: [R1]
+changed: [R2]
+
+TASK [OSPF process 1] **************************************************************************************************
+[WARNING]: To ensure idempotency and correct diff the input configuration lines should be similar to how they appear if present in the running configuration on device
+changed: [R1]
+changed: [R2]
+
+TASK [Verify adjacency is FULL] ****************************************************************************************
+ok: [R1]
+ok: [R2]
+
+PLAY RECAP *************************************************************************************************************
+R1                         : ok=4    changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+R2                         : ok=4    changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+grp9@automation-host:~/lab/ansible$ ansible-playbook site.yml -J
+Vault password: 
+
+PLAY [Deploy OSPF area 0] **********************************************************************************************
+
+TASK [L3 interfaces (resource module)] *********************************************************************************
+ok: [R1]
+ok: [R2]
+
+TASK [Enable Gi0/1 (idempotent no shutdown)] ***************************************************************************
+ok: [R1]
+ok: [R2]
+
+TASK [OSPF process 1] **************************************************************************************************
+ok: [R1]
+ok: [R2]
+
+TASK [Verify adjacency is FULL] ****************************************************************************************
+ok: [R1]
+ok: [R2]
+
+PLAY RECAP *************************************************************************************************************
+R1                         : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+R2                         : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+grp9@automation-host:~/lab/ansible$ 
+grp9@automation-host:~/lab/ansible$ ansible-playbook site.yml -J
+Vault password: 
+
+PLAY [Deploy OSPF area 0] **********************************************************************************************
+
+TASK [L3 interfaces (resource module)] *********************************************************************************
+[ERROR]: Task failed: Action failed: [Errno None] Unable to connect to port 22 on 192.168.100.12
+Origin: /home/grp9/lab/ansible/site.yml:5:7
+
+3   gather_facts: false
+4   tasks:
+5     - name: L3 interfaces (resource module)
+        ^ column 7
+
+fatal: [R2]: FAILED! => {"changed": false, "msg": "[Errno None] Unable to connect to port 22 on 192.168.100.12"}
+ok: [R1]
+
+TASK [Enable Gi0/1 (idempotent no shutdown)] ***************************************************************************
+ok: [R1]
+
+TASK [OSPF process 1] **************************************************************************************************
+ok: [R1]
+
+TASK [Verify adjacency is FULL] ****************************************************************************************
+ok: [R1]
+
+PLAY RECAP *************************************************************************************************************
+R1                         : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+R2                         : ok=0    changed=0    unreachable=0    failed=1    skipped=0    rescued=0    ignored=0   
+
+grp9@automation-host:~/lab/ansible$ 
+grp9@automation-host:~/lab/ansible$ ping -c 2 192.168.100.12
+PING 192.168.100.12 (192.168.100.12) 56(84) bytes of data.
+64 bytes from 192.168.100.12: icmp_seq=1 ttl=255 time=0.841 ms
+64 bytes from 192.168.100.12: icmp_seq=2 ttl=255 time=0.961 ms
+
+--- 192.168.100.12 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1024ms
+rtt min/avg/max/mdev = 0.841/0.901/0.961/0.060 ms
+grp9@automation-host:~/lab/ansible$ nc -zv 192.168.100.12 22
+nc: connect to 192.168.100.12 port 22 (tcp) failed: Connection refused
+grp9@automation-host:~/lab/ansible$ 
+grp9@automation-host:~/lab/ansible$ nc -zv 192.168.100.12 22
+Connection to 192.168.100.12 22 port [tcp/ssh] succeeded!
+grp9@automation-host:~/lab/ansible$ ssh-keygen -R 192.168.100.12
+# Host 192.168.100.12 found: line 2
+/home/grp9/.ssh/known_hosts updated.
+Original contents retained as /home/grp9/.ssh/known_hosts.old
+grp9@automation-host:~/lab/ansible$ ansible-playbook site.yml -J
+Vault password: 
+
+PLAY [Deploy OSPF area 0] **********************************************************************************************
+
+TASK [L3 interfaces (resource module)] *********************************************************************************
+ok: [R2]
+ok: [R1]
+
+TASK [Enable Gi0/1 (idempotent no shutdown)] ***************************************************************************
+ok: [R1]
+ok: [R2]
+
+TASK [OSPF process 1] **************************************************************************************************
+ok: [R1]
+ok: [R2]
+
+TASK [Verify adjacency is FULL] ****************************************************************************************
+ok: [R1]
+ok: [R2]
+
+PLAY RECAP *************************************************************************************************************
+R1                         : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+R2                         : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+grp9@automation-host:~/lab/ansible$ 

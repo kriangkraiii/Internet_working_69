@@ -1,0 +1,108 @@
+(admin@192.168.100.12) Password: 
+
+
+
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************
+R2#terminal length 0
+R2#terminal width 0
+R2#terminal monitor
+R2#
+R2#
+*Sep 16 23:35:32.593: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:interface GigabitEthernet0/1 
+*Sep 16 23:35:32.775: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:ip address 10.12.12.2 255.255.255.252
+*Sep 16 23:35:32.913: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:interface Loopback0 
+*Sep 16 23:35:33.077: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:ip address 2.2.2.2 255.255.255.255
+*Sep 16 23:35:33.189: %SYS-5-CONFIG_I: Configured from console by admin on vty1 (192.168.100.10)
+R2#
+*Sep 16 23:35:36.302: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:interface GigabitEthernet0/1 
+*Sep 16 23:35:36.568: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:no shutdown 
+*Sep 16 23:35:36.695: %SYS-5-CONFIG_I: Configured from console by admin on vty1 (192.168.100.10)
+R2#
+*Sep 16 23:35:38.426: %LINK-3-UPDOWN: Interface GigabitEthernet0/1, changed state to up
+*Sep 16 23:35:39.426: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/1, changed state to up
+R2#
+*Sep 16 23:35:39.486: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:router ospf 1 
+*Sep 16 23:35:39.621: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:router-id 2.2.2.2
+*Sep 16 23:35:39.788: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:network 10.12.12.0 0.0.0.3 area 0
+*Sep 16 23:35:39.949: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:network 2.2.2.2 0.0.0.0 area 0
+*Sep 16 23:35:40.061: %SYS-5-CONFIG_I: Configured from console by admin on vty1 (192.168.100.10)
+R2#
+*Sep 16 23:36:24.401: %OSPF-5-ADJCHG: Process 1, Nbr 1.1.1.1 on GigabitEthernet0/1 from LOADING to FULL, Loading Done
+R2#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+R2(config)#crypto key zeroize rsa
+% All keys will be removed.
+% All router certs issued using these keys will also be removed.
+Do you really want to remove these keys? [yes/no]: yes
+R2(config)#end
+R2#
+*Sep 16 23:39:08.454: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:crypto key zeroize rsa 
+*Sep 16 23:39:08.455: %SSH-5-DISABLED: SSH 2.0 has been disabled
+*Sep 16 23:39:09.287: %SYS-5-CONFIG_I: Configured from console by admin on vty0 (192.168.100.10)
+R2#show ip ssh
+SSH Disabled - version 2.0
+%Please create RSA keys to enable SSH (and of atleast 768 bits for SSH v2).
+Authentication methods:publickey,keyboard-interactive,password
+Authentication Publickey Algorithms:x509v3-ssh-rsa,ssh-rsa
+Hostkey Algorithms:x509v3-ssh-rsa,ssh-rsa
+Encryption Algorithms:aes128-ctr,aes192-ctr,aes256-ctr
+MAC Algorithms:hmac-sha2-256,hmac-sha2-512,hmac-sha1,hmac-sha1-96
+KEX Algorithms:diffie-hellman-group-exchange-sha1,diffie-hellman-group14-sha1
+Authentication timeout: 120 secs; Authentication retries: 3
+Minimum expected Diffie Hellman key size : 2048 bits
+IOS Keys in SECSH format(ssh-rsa, base64 encoded): NONE
+R2#show crypto key mypubkey rsa
+R2#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+R2(config)#crypto key generate rsa modulus 2048
+The name for the keys will be: R2.lab.local
+
+% The key modulus size is 2048 bits
+% Generating 2048 bit RSA keys, keys will be non-exportable...
+[OK] (elapsed time was 1 seconds)
+
+R2(config)#
+*Sep 16 23:40:16.308: %SSH-5-ENABLED: SSH 2.0 has been enabled
+*Sep 16 23:40:16.331: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:crypto key generate rsa modulus 2048
+R2(config)#end
+R2#
+*Sep 16 23:40:20.897: %SYS-5-CONFIG_I: Configured from console by admin on vty0 (192.168.100.10)
+R2#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+R2(config)#interface GigabitEthernet0/1
+R2(config-if)#shutdown
+*Sep 16 23:41:06.046: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:interface GigabitEthernet0/1 
+R2(config-if)#shutdown
+R2(config-if)#end
+R2#
+*Sep 16 23:41:07.605: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:shutdown 
+*Sep 16 23:41:07.608: %OSPF-5-ADJCHG: Process 1, Nbr 1.1.1.1 on GigabitEthernet0/1 from FULL to DOWN, Neighbor Down: Interface down or detached
+*Sep 16 23:41:08.427: %SYS-5-CONFIG_I: Configured from console by admin on vty0 (192.168.100.10)
+R2#
+*Sep 16 23:41:09.580: %LINK-5-CHANGED: Interface GigabitEthernet0/1, changed state to administratively down
+*Sep 16 23:41:10.580: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/1, changed state to down
+R2#show ip interface brief | include 0/1
+GigabitEthernet0/1         10.12.12.2      YES manual administratively down down    
+R2#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+R2(config)#interface GigabitEthernet0/1
+R2(config-if)#no shut
+*Sep 16 23:43:01.051: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:interface GigabitEthernet0/1 
+R2(config-if)#no shutdown
+R2(config-if)#end
+R2#
+*Sep 16 23:43:03.272: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:no shutdown 
+*Sep 16 23:43:03.951: %SYS-5-CONFIG_I: Configured from console by admin on vty0 (192.168.100.10)
+R2#
+*Sep 16 23:43:05.149: %LINK-3-UPDOWN: Interface GigabitEthernet0/1, changed state to up
+*Sep 16 23:43:06.149: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/1, changed state to up
+R2#
+*Sep 16 23:43:11.128: %OSPF-5-ADJCHG: Process 1, Nbr 1.1.1.1 on GigabitEthernet0/1 from LOADING to FULL, Loading Done
+R2#
