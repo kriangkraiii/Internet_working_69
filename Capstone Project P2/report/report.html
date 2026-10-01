@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<title>AAA Technical Report</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=block" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1f2937; --muted: #5b6472; --line: #d7dce3; --soft: #f4f6f9;
+    --hq: #23408e; --a: #1f6b3f; --c: #8a4316; --accent: #c2410c;
+  }
+  @page { size: A4; margin: 18mm 17mm 18mm 17mm; }
+  * { box-sizing: border-box; }
+  html, body { background: #fff; }
+  body { font-family: "Sarabun", sans-serif; font-size: 10.6pt; line-height: 1.55; color: var(--ink); margin: 0; }
+  h1, h2, h3 { line-height: 1.25; margin: 0; }
+  h2 { font-size: 16pt; color: var(--hq); margin: 17px 0 7px; padding-bottom: 4px; border-bottom: 2px solid var(--hq); break-after: avoid; }
+  h3 { font-size: 12.2pt; margin: 14px 0 5px; break-after: avoid; }
+  p { margin: 0 0 7px; }
+  ul, ol { margin: 0 0 8px; padding-left: 20px; }
+  li { margin: 1px 0; }
+  code, pre { font-family: "JetBrains Mono", Menlo, monospace; }
+  code { font-size: 8.6pt; background: var(--soft); padding: 0 3px; border-radius: 3px; }
+  pre { font-size: 8.1pt; line-height: 1.45; background: #0f172a; color: #e2e8f0; padding: 9px 11px; border-radius: 6px; margin: 4px 0 10px; white-space: pre-wrap; break-inside: avoid; }
+  pre .c { color: #94a3b8; }
+  table { width: 100%; border-collapse: collapse; margin: 4px 0 11px; font-size: 9.3pt; break-inside: auto; }
+  th, td { border: 1px solid var(--line); padding: 3.5px 6px; vertical-align: top; text-align: left; }
+  th { background: #e8edf6; font-weight: 600; }
+  tr { break-inside: avoid; }
+  td code { font-size: 8.2pt; }
+  .num { text-align: center; }
+  figure { margin: 6px 0 12px; break-inside: avoid; }
+  figure img { width: 100%; border: 1px solid var(--line); border-radius: 6px; }
+  figcaption { font-size: 9pt; color: var(--muted); text-align: center; margin-top: 4px; }
+  .note { border-left: 4px solid var(--accent); background: #fff6ef; padding: 6px 10px; margin: 6px 0 10px; font-size: 9.8pt; break-inside: avoid; }
+  .fill { color: #9a3412; font-style: italic; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .grid2 pre { font-size: 7.1pt; padding: 8px 9px; white-space: pre; overflow: hidden; }
+  .pill { display: inline-block; padding: 0 7px; border-radius: 10px; font-size: 8.8pt; font-weight: 600; color: #fff; }
+  .pa { background: var(--a); } .ph { background: var(--hq); } .pc { background: var(--c); }
+  .score5 { background: #d9f0e1; } .score4 { background: #e9f6ec; } .score3 { background: #fdf6e3; } .score2 { background: #fdeae0; } .score1 { background: #f9d9cf; }
+  .page-break { break-before: page; }
+
+  /* cover */
+  .cover { height: 255mm; display: flex; flex-direction: column; justify-content: space-between; }
+  .cover .kicker { font-size: 11pt; letter-spacing: .08em; color: var(--accent); font-weight: 700; text-transform: uppercase; }
+  .cover h1 { font-size: 27pt; color: var(--hq); margin: 10px 0 6px; }
+  .cover .sub { font-size: 14pt; color: var(--muted); }
+  .cover .band { display: flex; gap: 8px; margin: 22px 0; }
+  .cover .band span { flex: 1; height: 8px; border-radius: 4px; }
+  .cover table { font-size: 11pt; width: 75%; }
+  .cover .meta { font-size: 11pt; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<!-- ============================ COVER ============================ -->
+<section class="cover">
+  <div>
+    <div class="kicker">CP353301 Internetworking · Capstone Project Part II</div>
+    <h1>AAA Authentication บน Cisco Router<br>Local · TACACS+ · RADIUS</h1>
+    <div class="sub">รายงานสรุปทางเทคนิค: การออกแบบ การทดสอบ การฉีดข้อผิดพลาด และการวิเคราะห์เปรียบเทียบ<br>สำหรับองค์กรหลายสาขาแบบ IPv4/IPv6 dual-stack</div>
+    <div class="band"><span style="background:var(--a)"></span><span style="background:var(--hq)"></span><span style="background:var(--c)"></span></div>
+  </div>
+  <div>
+    <p style="font-weight:700;font-size:12pt;margin-bottom:6px">กลุ่ม 9</p>
+    <table>
+      <tr><th style="width:32%">รหัสนักศึกษา</th><th>ชื่อ–นามสกุล</th></tr>
+      <tr><td>663380616-4</td><td>นายเกรียงไกร ประเสริฐ</td></tr>
+      <tr><td>663380045-1</td><td>นายปิติ มูลเทพพิชัย</td></tr>
+      <tr><td>663380610-6</td><td>นางสาวภัทราวดี ส่องศรีโรจน์</td></tr>
+      <tr><td>673380577-9</td><td>นายจีรภัทร แก้วดี</td></tr>
+    </table>
+  </div>
+  <div class="meta">
+    เครื่องมือจำลอง: Cisco Packet Tracer (แลบฐาน 26.2.5 Configure AAA Authentication on Cisco Routers)<br>
+    ไฟล์ประกอบ: <code>grp9-AAA-Capstone.pkt</code> · <code>configs/</code> · <code>RUNBOOK.md</code> · สไลด์ Canva<br>
+    ตุลาคม 2569
+  </div>
+</section>
+
+<!-- ============================ 1 ============================ -->
+<h2 class="page-break">1. บทสรุป</h2>
+<p>ก่อนปรับปรุง เราเตอร์ทั้งสามสาขาใช้รหัสผ่าน console และ enable secret ชุดเดียวกัน ทุกคนที่รู้รหัสเข้าอุปกรณ์ได้เท่ากัน ไม่มีตัวตนรายบุคคล ยกเลิกสิทธิ์ใครคนเดียวไม่ได้ และไม่รู้ว่าใครเข้ามาทำอะไร กลุ่มจึงออกแบบการควบคุมการเข้าถึงระนาบการจัดการ (management plane) ด้วย AAA ใน 3 รูปแบบตามขนาดและบริบทของแต่ละสาขา</p>
+<ul>
+  <li><span class="pill pa">R1 Branch-A</span> AAA แบบ local ทั้ง console และ vty, vty รับเฉพาะ SSH v2 ผ่าน method list <code>SSH-LOGIN</code></li>
+  <li><span class="pill ph">R2 HQ</span> AAA ผ่าน TACACS+ Server (192.168.2.2) สำรองด้วยบัญชี local เมื่อเซิร์ฟเวอร์ไม่ตอบ</li>
+  <li><span class="pill pc">R3 Branch-C</span> AAA ผ่าน RADIUS Server <code>RAD-SERVER</code> (192.168.3.2) สำรองด้วยบัญชี local</li>
+</ul>
+<p>นอกจากขั้นตอนของแลบ กลุ่มได้เพิ่ม (1) IPv6 dual-stack ทุกเครือข่ายพร้อม static route (2) SSH บน vty ของ R2/R3 เพื่อทดสอบการตรวจสอบสิทธิ์ผ่านเซิร์ฟเวอร์จาก PC-B/PC-C (3) ผู้ใช้ที่มีเฉพาะบนเซิร์ฟเวอร์ (<code>netops2</code>, <code>netops3</code>) เพื่อพิสูจน์ว่าเซิร์ฟเวอร์เป็นผู้ตอบจริง และ (4) สถานการณ์ข้อผิดพลาด 3 แบบ ได้แก่ shared key ไม่ตรง ลิงก์ไปเซิร์ฟเวอร์ล่ม และ SSH ถูกปิดบน vty พร้อมขั้นตอนวินิจฉัยและกู้คืน</p>
+
+<!-- ============================ 2 ============================ -->
+<h2>2. การออกแบบเชิงแนวคิดและสถาปัตยกรรมองค์กร</h2>
+<h3>2.1 ไดรเวอร์ทางธุรกิจและกรณีการใช้งาน</h3>
+<p>สถานการณ์สมมติคือบริษัทค้าปลีกที่มีสำนักงานใหญ่ 1 แห่งและสาขา 2 แห่งเชื่อมกันด้วย WAN ทีมเครือข่ายส่วนกลางดูแลอุปกรณ์ทุกสาขา และมีผู้รับเหมาเข้ามาช่วยงานเป็นช่วง ๆ ความต้องการทางธุรกิจมีดังนี้</p>
+<table>
+  <tr><th style="width:30%">ความต้องการ</th><th>สิ่งที่ออกแบบรองรับ</th></tr>
+  <tr><td>ระบุตัวตนผู้ดูแลรายบุคคล</td><td>บัญชีผู้ใช้แยกรายคน แทนรหัสผ่านร่วมของ line</td></tr>
+  <tr><td>เพิ่ม/ยกเลิกสิทธิ์จากจุดเดียว</td><td>TACACS+ ที่ HQ และ RADIUS ที่ Branch-C เก็บบัญชีไว้ที่เซิร์ฟเวอร์</td></tr>
+  <tr><td>ยังเข้าอุปกรณ์ได้เมื่อเซิร์ฟเวอร์หรือ WAN ล่ม</td><td>method list ลงท้ายด้วย <code>local</code> และบัญชีสำรองบน router</td></tr>
+  <tr><td>ห้ามส่งรหัสผ่านเป็นข้อความธรรมดา</td><td>vty รับเฉพาะ SSH v2 ไม่รับ Telnet</td></tr>
+  <tr><td>รองรับการย้ายไป IPv6</td><td>dual-stack ทุก LAN/WAN โดยไม่กระทบเส้นทาง IPv4 เดิม</td></tr>
+  <tr><td>สาขาที่มีระบบ NAC เดิมอยู่แล้ว</td><td>Branch-C ใช้ RADIUS ซึ่งใช้ร่วมกับ 802.1X/VPN/Wi-Fi ได้</td></tr>
+</table>
+
+<h3>2.2 โทโพโลยีและบทบาทอุปกรณ์</h3>
+<figure>
+  <img src="topology.png" alt="แผนภาพโทโพโลยี 3 สาขา">
+  <figcaption>ภาพที่ 1 โทโพโลยี: Branch-A (R1, local AAA), HQ (R2, TACACS+) และ Branch-C (R3, RADIUS) เชื่อมกันด้วย serial WAN แบบ hub-and-spoke</figcaption>
+</figure>
+<table>
+  <tr><th style="width:18%">อุปกรณ์</th><th style="width:20%">บทบาท</th><th>หน้าที่ในการออกแบบ</th></tr>
+  <tr><td>R2</td><td>Hub router (HQ)</td><td>เชื่อม R1 และ R3, NAS ของ TACACS+, ตัวกลางของ static route IPv6</td></tr>
+  <tr><td>R1 / R3</td><td>Spoke router (สาขา)</td><td>R1 ตรวจสอบสิทธิ์แบบ local; R3 เป็น RADIUS client; ทั้งคู่ใช้ default route IPv6 ชี้ R2</td></tr>
+  <tr><td>S1, S2, S3</td><td>Access switch</td><td>Layer 2 ของแต่ละ LAN; S3 Fa0/1 คือพอร์ตของ RADIUS Server (ใช้ใน TS2)</td></tr>
+  <tr><td>TACACS+ Server</td><td>AAA server (HQ)</td><td>Client R2/192.168.2.1, key <code>tacacspa55</code>, ผู้ใช้ <code>Admin2</code>, <code>netops2</code></td></tr>
+  <tr><td>RADIUS Server</td><td>AAA server (Branch-C)</td><td>Client R3/192.168.3.1, key <code>radiuspa55</code>, ผู้ใช้ <code>Admin3</code>, <code>netops3</code></td></tr>
+  <tr><td>PC-A/B/C</td><td>สถานีผู้ดูแล</td><td>ใช้ SSH ทดสอบการเข้าถึงอุปกรณ์ และ ping ทดสอบ data plane</td></tr>
+</table>
+
+<h3>2.3 แผนการกำหนดแอดเดรส IPv4/IPv6</h3>
+<p>IPv4 ใช้ตามแลบ ส่วน IPv6 ใช้ prefix สำหรับเอกสาร <code>2001:db8::/32</code> (RFC 3849) แบ่งเป็น /64 ต่อเครือข่าย โดยเลข subnet ตรงกับเลขสาขา (LAN 1/2/3) และคู่ router ที่เชื่อมกัน (WAN 12/23) เพื่อให้อ่านแล้วรู้ตำแหน่งทันที router ทุกตัวกำหนด link-local แบบคงที่ <code>fe80::N</code> ตามหมายเลข router และ host ใช้ link-local นี้เป็น gateway</p>
+<table>
+  <tr><th>เครือข่าย</th><th>IPv4</th><th>IPv6</th><th>สมาชิก</th></tr>
+  <tr><td>LAN Branch-A</td><td>192.168.1.0/24</td><td>2001:db8:acad:1::/64</td><td>R1 G0/1 ::1, PC-A ::3</td></tr>
+  <tr><td>LAN HQ</td><td>192.168.2.0/24</td><td>2001:db8:acad:2::/64</td><td>R2 G0/0 ::1, TACACS+ ::2, PC-B ::3</td></tr>
+  <tr><td>LAN Branch-C</td><td>192.168.3.0/24</td><td>2001:db8:acad:3::/64</td><td>R3 G0/1 ::1, RADIUS ::2, PC-C ::3</td></tr>
+  <tr><td>WAN R1–R2</td><td>10.1.1.0/30</td><td>2001:db8:acad:12::/64</td><td>R2 S0/0/0 ::1 (.1), R1 S0/0/0 ::2 (.2, DCE)</td></tr>
+  <tr><td>WAN R2–R3</td><td>10.2.2.0/30</td><td>2001:db8:acad:23::/64</td><td>R2 S0/0/1 ::1 (.1, DCE), R3 S0/0/1 ::2 (.2)</td></tr>
+</table>
+
+<h3>2.4 ขอบเขต routing, switching และ management plane</h3>
+<ul>
+  <li><b>Routing:</b> IPv4 ใช้เส้นทางที่แลบตั้งไว้เดิม IPv6 ใช้ static route เพราะเป็น hub-and-spoke ขนาดเล็กที่มีทางออกทางเดียว R1/R3 ใช้ <code>::/0</code> ชี้ R2 และ R2 มี route เฉพาะไป acad:1 และ acad:3</li>
+  <li><b>Switching:</b> แต่ละสาขาเป็น broadcast domain เดียว ไม่มี VLAN เพิ่ม เพื่อให้จุดสนใจอยู่ที่ AAA</li>
+  <li><b>Management plane:</b> AAA ควบคุมทั้ง console และ vty ส่วนการสื่อสาร router ↔ AAA server ใช้ IPv4 เพราะ Packet Tracer ผูก Network Configuration ของเซิร์ฟเวอร์กับ IPv4 ของ client (อุปกรณ์จริงกำหนด <code>address ipv6</code> ได้)</li>
+</ul>
+
+<!-- ============================ 3 ============================ -->
+<h2>3. มาตรฐานโพรโทคอลและวิวัฒนาการทางเทคโนโลยี</h2>
+<h3>3.1 ข้อกำหนดและมาตรฐานที่เกี่ยวข้อง</h3>
+<table>
+  <tr><th style="width:22%">มาตรฐาน</th><th style="width:16%">สถานะ / ปี</th><th>สาระสำคัญต่องานนี้</th></tr>
+  <tr><td>RFC 8907 – TACACS+</td><td>Informational, 2020</td><td>บันทึกโพรโทคอล TACACS+ อย่างเป็นทางการครั้งแรก: TCP พอร์ต 49, แยก authentication/authorization/accounting, เนื้อหาถูกทำให้อ่านไม่ออก (obfuscation) ด้วย MD5 กับ shared key</td></tr>
+  <tr><td>RFC 9887 – TACACS+ over TLS 1.3</td><td>Standards Track, ธ.ค. 2025</td><td>ห่อ TACACS+ ด้วย TLS 1.3 แทน obfuscation แบบ MD5 มีการยืนยันตัวตนด้วยใบรับรองและความลับที่แท้จริง</td></tr>
+  <tr><td>RFC 2865 / 2866 – RADIUS</td><td>Draft Standard / Informational, 2000</td><td>Authentication + authorization ในคำตอบเดียวผ่าน UDP 1812, accounting ผ่าน UDP 1813; ซ่อนเฉพาะ attribute รหัสผ่าน</td></tr>
+  <tr><td>RFC 6614 / 7360 – RADIUS/TLS, RADIUS/DTLS (RadSec)</td><td>Experimental, 2012/2014</td><td>ขนส่ง RADIUS ใน TLS/DTLS; IETF กำลังยกระดับเป็น Standards Track (draft-ietf-radext-radiusdtls-bis)</td></tr>
+  <tr><td>RFC 9765 – RADIUS/1.1</td><td>Experimental, 2025</td><td>ต่อรองผ่าน ALPN บน TLS 1.3 แล้วตัด MD5 และ shared secret ออกจาก RADIUS ทั้งหมด</td></tr>
+  <tr><td>CVE-2024-3596 – Blast-RADIUS</td><td>2024</td><td>ปลอม Access-Reject เป็น Access-Accept ได้บน RADIUS/UDP ที่ไม่บังคับ Message-Authenticator</td></tr>
+  <tr><td>RFC 4251–4254 – SSH v2</td><td>Proposed Standard, 2006</td><td>ช่องทางจัดการที่เข้ารหัส; SSH บน IOS ต้องมี hostname, domain name และ RSA key</td></tr>
+  <tr><td>RFC 8200 / 4291 / 3849</td><td>Internet Standard / Draft / Informational</td><td>IPv6, สถาปัตยกรรมแอดเดรส (link-local fe80::/10), prefix สำหรับเอกสาร 2001:db8::/32</td></tr>
+</table>
+
+<h3>3.2 การปรับปรุงสมัยใหม่เทียบกับแบบเดิม</h3>
+<table>
+  <tr><th style="width:26%">หัวข้อ</th><th style="width:34%">แบบเดิม</th><th>แบบปัจจุบัน / แนวโน้ม</th></tr>
+  <tr><td>การควบคุมการเข้าถึง line</td><td><code>password</code> + <code>login</code> ต่อ line, รหัสร่วม</td><td><code>aaa new-model</code> + method list ระบุตัวบุคคล, มีลำดับ fallback</td></tr>
+  <tr><td>การเก็บรหัสผ่าน local</td><td>type 7 (อ่านกลับได้) / type 5 (MD5)</td><td>type 8 (PBKDF2-SHA256) / type 9 (scrypt) บน IOS 15.3+ (Packet Tracer รองรับเพียง MD5)</td></tr>
+  <tr><td>รูปแบบคำสั่ง</td><td><code>tacacs-server host/key</code>, <code>radius-server host</code></td><td><code>tacacs server NAME</code>, <code>radius server NAME</code> พร้อม <code>address ipv4|ipv6</code>; แลบใช้รูปแบบใหม่กับ RADIUS ได้ แต่ TACACS+ ต้องใช้แบบเดิมเพราะ Packet Tracer ยังไม่รองรับ</td></tr>
+  <tr><td>ความปลอดภัยของการขนส่ง</td><td>MD5 + shared secret (TACACS+ และ RADIUS)</td><td>TACACS+ over TLS 1.3 (RFC 9887), RadSec และ RADIUS/1.1; ระยะสั้นบังคับ Message-Authenticator ตามคำแนะนำ Blast-RADIUS</td></tr>
+  <tr><td>การเข้าถึงระยะไกล</td><td>Telnet</td><td>SSH v2 เท่านั้น (<code>transport input ssh</code>, <code>ip ssh version 2</code>)</td></tr>
+  <tr><td>แอดเดรส</td><td>IPv4 อย่างเดียว</td><td>dual-stack; AAA server รองรับ <code>address ipv6</code> บนอุปกรณ์จริง</td></tr>
+</table>
+
+<!-- ============================ 4 ============================ -->
+<h2>4. การนำไปใช้งาน การทดสอบ และการแก้ไขปัญหา</h2>
+<h3>4.1 การกำหนดค่าทีละขั้นตอน</h3>
+<p>สคริปต์ฉบับเต็มอยู่ใน <code>configs/R1.txt</code>, <code>R2.txt</code>, <code>R3.txt</code> แบ่งเป็นโมดูลเดียวกันทุกตัว: (1) บัญชี local (2) AAA server (3) method list (4) ผูกกับ line (5) SSH (6) IPv6 ด้านล่างแสดงเฉพาะส่วนสำคัญ</p>
+<div class="grid2">
+<pre><span class="c">! R1 – local AAA + SSH only</span>
+username Admin1 secret admin1pa55
+aaa new-model
+aaa authentication login default local
+aaa authentication login SSH-LOGIN local
+line console 0
+ login authentication default
+ip domain-name ccnp_v8.com
+crypto key generate rsa  <span class="c">! 1024</span>
+ip ssh version 2
+line vty 0 4
+ login authentication SSH-LOGIN
+ transport input ssh</pre>
+<pre><span class="c">! R2 – TACACS+ then local</span>
+username Admin2 secret admin2pa55
+tacacs-server host 192.168.2.2
+tacacs-server key tacacspa55
+aaa new-model
+aaa authentication login default group tacacs+ local
+line console 0
+ login authentication default
+line vty 0 4
+ login authentication default
+ transport input ssh
+<span class="c">! + domain-name, RSA 1024, ip ssh version 2</span></pre>
+</div>
+<div class="grid2">
+<pre><span class="c">! R3 – RADIUS then local</span>
+username Admin3 secret admin3pa55
+radius server RAD-SERVER
+ address ipv4 192.168.3.2
+ key radiuspa55
+aaa new-model
+aaa authentication login default group radius local
+line console 0
+ login authentication default
+line vty 0 4
+ login authentication default
+ transport input ssh</pre>
+<pre><span class="c">! IPv6 (ตัวอย่าง R2 = hub)</span>
+ipv6 unicast-routing
+interface g0/0
+ ipv6 address 2001:db8:acad:2::1/64
+ ipv6 address fe80::2 link-local
+interface s0/0/0
+ ipv6 address 2001:db8:acad:12::1/64
+interface s0/0/1
+ ipv6 address 2001:db8:acad:23::1/64
+ipv6 route 2001:db8:acad:1::/64 2001:db8:acad:12::2
+ipv6 route 2001:db8:acad:3::/64 2001:db8:acad:23::2
+<span class="c">! R1: ipv6 route ::/0 2001:db8:acad:12::1</span>
+<span class="c">! R3: ipv6 route ::/0 2001:db8:acad:23::1</span></pre>
+</div>
+
+<h3>4.2 เหตุผลของการตัดสินใจออกแบบ</h3>
+<ul>
+  <li><b>สร้าง username ก่อน <code>aaa new-model</code>:</b> เมื่อเปิด AAA แล้ว vty จะใช้ method list <code>default</code> ทันที ถ้ายังไม่มีบัญชีจะล็อกตัวเองออก</li>
+  <li><b>ใส่ <code>local</code> ท้าย method list:</b> IOS ไปลองวิธีถัดไปเฉพาะเมื่อได้ ERROR (ติดต่อไม่ได้/หมดเวลา) ไม่ใช่ FAIL (เซิร์ฟเวอร์ปฏิเสธ) จึงได้ความพร้อมใช้งานโดยไม่เปิดช่องให้เดารหัส local เมื่อเซิร์ฟเวอร์ปกติ</li>
+  <li><b>Named list <code>SSH-LOGIN</code> บน R1:</b> แยกนโยบาย vty ออกจาก console เพื่อเปลี่ยนเฉพาะ vty ไปใช้เซิร์ฟเวอร์ได้ในอนาคต</li>
+  <li><b>ผู้ใช้เฉพาะเซิร์ฟเวอร์:</b> บัญชี <code>Admin2/Admin3</code> มีทั้งสองที่ จึงพิสูจน์ไม่ได้ว่าใครตอบ <code>netops2/netops3</code> ใช้แยกผลของเซิร์ฟเวอร์ออกจาก fallback</li>
+  <li><b>Static route สำหรับ IPv6:</b> ทางออกของสาขามีทางเดียว static route จึงคาดเดาได้และไม่มี overhead ของโพรโทคอล routing</li>
+</ul>
+
+<h3>4.3 กรณีทดสอบและการตรวจสอบ</h3>
+<table>
+  <tr><th class="num" style="width:6%">ID</th><th style="width:21%">สิ่งที่พิสูจน์</th><th style="width:37%">คำสั่ง</th><th>ผลที่คาด</th><th class="num" style="width:8%">ผล</th></tr>
+  <tr><td class="num">T01</td><td>IPv4 end-to-end</td><td>PC-A <code>ping 192.168.2.3</code>, <code>ping 192.168.3.3</code></td><td>สำเร็จ</td><td class="num">☐</td></tr>
+  <tr><td class="num">T02</td><td>IPv6 end-to-end</td><td>PC-A <code>ping 2001:db8:acad:3::3</code>; PC-B <code>ping 2001:db8:acad:3::3</code></td><td>สำเร็จ</td><td class="num">☐</td></tr>
+  <tr><td class="num">T03</td><td>Control plane IPv6</td><td><code>show ipv6 route</code>, <code>show ipv6 interface brief</code></td><td>R1/R3 มี S ::/0; R2 มี S 2 เส้น; อินเทอร์เฟซ up/up</td><td class="num">☐</td></tr>
+  <tr><td class="num">T04</td><td>สถานะ AAA</td><td><code>show running-config | include aaa</code></td><td>method list ตามตารางในหัวข้อ 4.1</td><td class="num">☐</td></tr>
+  <tr><td class="num">T05</td><td>Local console</td><td>R1 login <code>Admin1</code></td><td><code>R1&gt;</code></td><td class="num">☐</td></tr>
+  <tr><td class="num">T06</td><td>SSH + local</td><td>PC-A <code>ssh -l Admin1 192.168.1.1</code>; R1 <code>show ip ssh</code></td><td><code>R1&gt;</code>; SSH version 2.0</td><td class="num">☐</td></tr>
+  <tr><td class="num">T07</td><td>ปิด Telnet</td><td>PC-A <code>telnet 192.168.1.1</code></td><td>ถูกปฏิเสธ</td><td class="num">☐</td></tr>
+  <tr><td class="num">T08</td><td>TACACS+ ตอบจริง</td><td>R2 console <code>Admin2</code>; PC-B <code>ssh -l netops2 192.168.2.1</code></td><td><code>R2&gt;</code> ทั้งคู่</td><td class="num">☐</td></tr>
+  <tr><td class="num">T09</td><td>RADIUS ตอบจริง</td><td>R3 console <code>Admin3</code>; PC-C <code>ssh -l netops3 192.168.3.1</code></td><td><code>R3&gt;</code> ทั้งคู่</td><td class="num">☐</td></tr>
+  <tr><td class="num">T10</td><td>FAIL ไม่ fallback</td><td>PC-B ssh <code>netops2</code> ด้วยรหัสผิด</td><td>ถูกปฏิเสธ</td><td class="num">☐</td></tr>
+  <tr><td class="num">T11</td><td>Packet tracing</td><td>Simulation mode, filter TACACS / RADIUS, ทำ T08/T09 ซ้ำ</td><td>เห็น PDU ระหว่าง router ↔ server</td><td class="num">☐</td></tr>
+  <tr><td class="num">T12</td><td>SSH ผ่าน IPv6 (ทางเลือก)</td><td>PC-A <code>ssh -l Admin1 2001:db8:acad:1::1</code></td><td><code>R1&gt;</code> ถ้า Packet Tracer รองรับ</td><td class="num">☐</td></tr>
+</table>
+
+<h3>4.4 การจำลองความล้มเหลวและการวินิจฉัย</h3>
+<p>ทุกสถานการณ์ใช้วิธีเดียวกัน: ฉีด → สังเกตอาการ → ตั้งสมมติฐาน → ตรวจไล่จากชั้นล่างขึ้นบน → แก้ → ตรวจซ้ำ และ<b>ค้าง session console ของ router ไว้ตลอด</b> ทดสอบ login ใหม่จาก PC ผ่าน SSH เท่านั้น เพื่อไม่ให้ล็อกตัวเองออกจากอุปกรณ์</p>
+<table>
+  <tr><th style="width:12%"></th><th style="width:30%">TS1: TACACS+ key ไม่ตรง (R2)</th><th style="width:30%">TS2: ลิงก์ RADIUS ล่ม (S3)</th><th>TS3: SSH ถูกปิด (R1)</th></tr>
+  <tr><td>ฉีด</td><td><code>tacacs-server key tacacspa5</code></td><td>S3 <code>interface f0/1</code> → <code>shutdown</code></td><td><code>line vty 0 4</code> → <code>transport input telnet</code></td></tr>
+  <tr><td>อาการ</td><td><code>netops2</code> login ไม่ได้</td><td><code>netops3</code> ไม่ได้; <code>Admin3</code> เข้าได้หลังรอ timeout</td><td>SSH ถูกปฏิเสธ แต่ ping ผ่าน</td></tr>
+  <tr><td>วินิจฉัย</td><td><code>ping 192.168.2.2</code> ผ่าน → <code>show running-config | include tacacs</code> → <code>debug aaa authentication</code> → เทียบ Secret ในเซิร์ฟเวอร์</td><td><code>ping 192.168.3.2</code> ไม่ผ่าน → <code>show ip interface brief</code> → <code>show arp</code> → S3 <code>show interfaces status</code></td><td><code>show ip ssh</code> ปกติ → <code>show running-config | begin line vty</code></td></tr>
+  <tr><td>สาเหตุ</td><td>shared secret ไม่ตรงกัน เซิร์ฟเวอร์ถอดรหัสคำขอไม่ได้</td><td>พอร์ตเซิร์ฟเวอร์ถูก shutdown</td><td>vty ไม่รับ SSH</td></tr>
+  <tr><td>แก้</td><td><code>tacacs-server key tacacspa55</code></td><td><code>no shutdown</code></td><td><code>transport input ssh</code></td></tr>
+  <tr><td>ตรวจซ้ำ</td><td>T08 ผ่าน</td><td>ping ผ่าน; T09 ผ่านโดยไม่หน่วง</td><td>T06 ผ่าน; T07 ถูกปฏิเสธ</td></tr>
+</table>
+<div class="note">TS2 แสดงคุณค่าของ fallback: แม้เซิร์ฟเวอร์ล่ม ผู้ดูแลยังเข้าอุปกรณ์ด้วยบัญชี local ได้ ส่วน TS1 แสดงความเสี่ยงของการเปลี่ยน key ที่ต้องทำให้ตรงกันทั้งสองฝั่ง ซึ่งในระบบจริงลดได้ด้วยการจัดการ config แบบรวมศูนย์หรือ TACACS+ over TLS ที่ใช้ใบรับรองแทน shared secret</div>
+
+<!-- ============================ 5 ============================ -->
+<h2>5. การวิเคราะห์เชิงเปรียบเทียบและเทคโนโลยีทางเลือก</h2>
+<h3>5.1 การประเมินแบบตัวต่อตัว</h3>
+<table>
+  <tr><th style="width:20%">หัวข้อ</th><th style="width:22%">Local AAA</th><th style="width:29%">TACACS+</th><th>RADIUS</th></tr>
+  <tr><td>ที่เก็บบัญชี</td><td>แต่ละอุปกรณ์</td><td>เซิร์ฟเวอร์กลาง</td><td>เซิร์ฟเวอร์กลาง (เชื่อม AD/LDAP ได้)</td></tr>
+  <tr><td>การขนส่ง</td><td>–</td><td>TCP 49 (มีสถานะการเชื่อมต่อ)</td><td>UDP 1812/1813 (Cisco เดิม 1645/1646)</td></tr>
+  <tr><td>การปกป้องข้อมูล</td><td>hash ในอุปกรณ์</td><td>obfuscate ทั้ง body; TLS 1.3 ตาม RFC 9887</td><td>ซ่อนเฉพาะรหัสผ่าน; ต้องบังคับ Message-Authenticator; RadSec/RADIUS 1.1</td></tr>
+  <tr><td>แยก A/A/A</td><td>ไม่มี</td><td>แยกครบ 3 ส่วน</td><td>authN + authZ รวมกัน, accounting แยก</td></tr>
+  <tr><td>อนุญาตรายคำสั่ง</td><td>ผ่าน privilege level เท่านั้น</td><td>ได้ (command authorization)</td><td>จำกัด</td></tr>
+  <tr><td>บันทึกการใช้งาน</td><td>log ในเครื่อง</td><td>accounting ทุกคำสั่ง</td><td>accounting ระดับ session</td></tr>
+  <tr><td>งานที่เหมาะ</td><td>สาขาเล็ก, บัญชีฉุกเฉิน</td><td>การจัดการอุปกรณ์เครือข่าย</td><td>การเข้าถึงเครือข่ายของผู้ใช้: 802.1X, VPN, Wi-Fi</td></tr>
+</table>
+<p>ทางเลือกที่ทันสมัยกว่าในระดับองค์กร ได้แก่แพลตฟอร์ม NAC แบบรวม (เช่น Cisco ISE, Aruba ClearPass) ที่ให้บริการทั้ง TACACS+ และ RADIUS จากที่เดียว และการยืนยันตัวตน SSH ด้วย public key/ใบรับรองร่วมกับระบบ privileged access management ซึ่งลดการใช้รหัสผ่านลงอีกขั้น</p>
+
+<h3>5.2 เมทริกซ์การแลกเปลี่ยน</h3>
+<p>คะแนน 1–5 โดย <b>5 = ดีที่สุดต่อองค์กร</b> (เช่น ความซับซ้อน 5 = ง่ายที่สุด, ต้นทุน 5 = ถูกที่สุด) ประเมินสำหรับองค์กร 3 สาขาที่จะขยายต่อ</p>
+<table>
+  <tr><th style="width:30%">เกณฑ์</th><th class="num">Local AAA</th><th class="num">TACACS+</th><th class="num">RADIUS</th><th style="width:34%">เหตุผล</th></tr>
+  <tr><td>ความซับซ้อนในการติดตั้ง</td><td class="num score5">5</td><td class="num score3">3</td><td class="num score3">3</td><td>Local ไม่ต้องมีเซิร์ฟเวอร์; อีกสองแบบต้องตั้ง key และ client ให้ตรงกัน</td></tr>
+  <tr><td>ความสามารถในการขยายขนาด</td><td class="num score1">1</td><td class="num score5">5</td><td class="num score5">5</td><td>Local ต้องแก้บัญชีทุกอุปกรณ์</td></tr>
+  <tr><td>โพสเจอร์ด้านความปลอดภัย</td><td class="num score2">2</td><td class="num score4">4</td><td class="num score3">3</td><td>TACACS+ ปกป้องทั้ง body และอนุญาตรายคำสั่ง; RADIUS/UDP มีความเสี่ยง Blast-RADIUS</td></tr>
+  <tr><td>ต้นทุน</td><td class="num score5">5</td><td class="num score3">3</td><td class="num score4">4</td><td>RADIUS มีตัวเลือกฟรีแพร่หลาย (FreeRADIUS, Windows NPS)</td></tr>
+  <tr><td>ภาระในการดำเนินงาน</td><td class="num score1">1</td><td class="num score4">4</td><td class="num score4">4</td><td>รวมศูนย์ทำให้ยกเลิกสิทธิ์และตรวจสอบย้อนหลังได้จากที่เดียว</td></tr>
+  <tr><th>รวม (เต็ม 25)</th><th class="num">14</th><th class="num">19</th><th class="num">19</th><th>คะแนนเท่ากัน แต่จุดแข็งต่างกัน</th></tr>
+</table>
+<p><b>ข้อเสนอแนะ:</b> ใช้ TACACS+ สำหรับการจัดการอุปกรณ์เครือข่ายทั้งองค์กร (ต้องการ command authorization และ accounting รายคำสั่ง) ใช้ RADIUS สำหรับการเข้าถึงเครือข่ายของผู้ใช้ (802.1X/VPN) และคงบัญชี local ไว้เป็นบัญชีฉุกเฉินบนทุกอุปกรณ์ เมื่อเซิร์ฟเวอร์รองรับ ให้ย้ายไป TACACS+ over TLS 1.3 และ RadSec พร้อมวางเซิร์ฟเวอร์อย่างน้อย 2 ตัวต่อ server group</p>
+
+<!-- ============================ 6 ============================ -->
+<h2>6. บันทึกการตรวจสอบความถูกต้องหลังการแก้ไข</h2>
+<p>บันทึกจากการซ้อมใน Packet Tracer กรอกผลจริงและแนบภาพหน้าจอ (ไฟล์ <code>configs/running/</code> เก็บ running-config ฉบับสุดท้ายของทุก router)</p>
+<table>
+  <tr><th style="width:12%">สถานการณ์</th><th style="width:38%">คำสั่งยืนยัน</th><th>ผลจริง</th><th style="width:16%">วันที่/ผู้ทดสอบ</th></tr>
+  <tr><td>Baseline</td><td>Check Results ของแลบ 26.2.5</td><td class="fill">____ %</td><td></td></tr>
+  <tr><td>Baseline</td><td>T01–T12</td><td class="fill">ผ่าน ___ / 12 ข้อ</td><td></td></tr>
+  <tr><td>TS1</td><td><code>show running-config | include tacacs</code>; PC-B <code>ssh -l netops2 192.168.2.1</code></td><td class="fill">key = tacacspa55; login สำเร็จ ☐ · Admin2 ระหว่างที่ key ผิด: a ☐ / b ☐</td><td></td></tr>
+  <tr><td>TS2</td><td>R3 <code>ping 192.168.3.2</code>; PC-C <code>ssh -l netops3 192.168.3.1</code></td><td class="fill">ping __/5; login สำเร็จ ☐ · timeout ที่สังเกตได้ ≈ __ วินาที</td><td></td></tr>
+  <tr><td>TS3</td><td>PC-A <code>ssh -l Admin1 192.168.1.1</code>; <code>telnet 192.168.1.1</code></td><td class="fill">SSH สำเร็จ ☐; Telnet ถูกปฏิเสธ ☐</td><td></td></tr>
+</table>
+
+<h2>7. ข้อจำกัดของการจำลอง</h2>
+<ul>
+  <li>Packet Tracer ไม่รองรับ <code>tacacs server</code> รูปแบบใหม่ และ Check Results ให้คะแนนคำสั่ง <code>radius server</code> ไม่ถูกต้อง (แลบระบุไว้เอง)</li>
+  <li>รองรับเฉพาะ hash MD5 สำหรับ <code>secret</code>; อุปกรณ์จริงควรใช้ <code>algorithm-type scrypt</code></li>
+  <li>คำสั่ง debug บางตัวและพฤติกรรม timeout/fallback อาจต่างจาก IOS จริง กลุ่มจดผลจริงในหัวข้อ 6 และใช้โหมด Simulation ช่วยยืนยัน</li>
+  <li>ไม่มี TLS สำหรับ TACACS+/RADIUS, ไม่มี accounting และไม่มีเซิร์ฟเวอร์สำรอง จึงอธิบายเป็นข้อเสนอแนะแทนการสาธิต</li>
+</ul>
+
+<h2>8. เอกสารอ้างอิง</h2>
+<ol style="font-size:8.8pt;line-height:1.35">
+  <li>Cisco Networking Academy. <i>26.2.5 Packet Tracer – Configure AAA Authentication on Cisco Routers</i> (Instructor Lab Manual).</li>
+  <li>T. Dahm et al. RFC 8907, <i>The Terminal Access Controller Access-Control System Plus (TACACS+) Protocol</i>, 2020.</li>
+  <li>RFC 9887, <i>TACACS+ over TLS 1.3</i>, 2025. https://datatracker.ietf.org/doc/rfc9887/</li>
+  <li>C. Rigney et al. RFC 2865, <i>RADIUS</i>; RFC 2866, <i>RADIUS Accounting</i>, 2000.</li>
+  <li>RFC 6614, <i>TLS Encryption for RADIUS</i>, 2012; RFC 7360, <i>DTLS as a Transport Layer for RADIUS</i>, 2014.</li>
+  <li>A. DeKok. RFC 9765, <i>RADIUS/1.1: Leveraging ALPN to Remove MD5</i>, 2025.</li>
+  <li>Cisco. <i>Blast-RADIUS Protocol Spoofing Mitigation (CVE-2024-3596)</i>.</li>
+  <li>RFC 4251–4254, <i>The Secure Shell (SSH) Protocol</i>, 2006.</li>
+  <li>RFC 8200, <i>IPv6 Specification</i>; RFC 4291, <i>IPv6 Addressing Architecture</i>; RFC 3849, <i>IPv6 Address Prefix Reserved for Documentation</i>.</li>
+  <li>Cisco. <i>Security Configuration Guide: AAA (Cisco IOS)</i> – Configuring Authentication, method lists.</li>
+</ol>
+
+</body>
+</html>

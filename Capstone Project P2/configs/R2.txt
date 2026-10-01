@@ -1,0 +1,73 @@
+! ==============================================================
+!--- Capstone Part II (Group 9) - AAA Authentication on Cisco Routers
+!--- ROUTER R2  (HQ: server-based AAA via TACACS+, local fallback)
+!--- Usage: paste the whole file at the R2> prompt (console password
+!---        ciscoconpa55, enable secret ciscoenpa55 are pre-configured).
+!--- Lines beginning with "!" are comments; IOS ignores them.
+! ==============================================================
+
+enable
+configure terminal
+
+! --------------------------------------------------------------
+!--- Part 3: TACACS+ authentication with local backup (lab 26.2.5)
+! --------------------------------------------------------------
+!--- Backup account, only used when the TACACS+ server does not answer.
+username Admin2 secret admin2pa55
+!--- Must match TACACS+ Server > Services > AAA > Network Configuration.
+tacacs-server host 192.168.2.2
+tacacs-server key tacacspa55
+aaa new-model
+aaa authentication login default group tacacs+ local
+line console 0
+ login authentication default
+ exit
+
+! --------------------------------------------------------------
+!--- Extension: SSH on vty so PC-B can verify TACACS+ remotely
+!--- (vty uses the same "default" list: tacacs+ first, then local)
+! --------------------------------------------------------------
+ip domain-name ccnp_v8.com
+crypto key generate rsa
+1024
+ip ssh version 2
+line vty 0 4
+ login authentication default
+ transport input ssh
+ exit
+
+! --------------------------------------------------------------
+!--- Extension: IPv6 dual-stack (static routing)
+!--- LAN-HQ  2001:db8:acad:2::/64   R2 = ::1   link-local fe80::2
+!--- WAN-12  2001:db8:acad:12::/64  R2 = ::1 (R1 = ::2)
+!--- WAN-23  2001:db8:acad:23::/64  R2 = ::1 (R3 = ::2)
+! --------------------------------------------------------------
+ipv6 unicast-routing
+interface g0/0
+ ipv6 address 2001:db8:acad:2::1/64
+ ipv6 address fe80::2 link-local
+ exit
+interface s0/0/0
+ ipv6 address 2001:db8:acad:12::1/64
+ ipv6 address fe80::2 link-local
+ exit
+interface s0/0/1
+ ipv6 address 2001:db8:acad:23::1/64
+ ipv6 address fe80::2 link-local
+ exit
+ipv6 route 2001:db8:acad:1::/64 2001:db8:acad:12::2
+ipv6 route 2001:db8:acad:3::/64 2001:db8:acad:23::2
+
+end
+copy running-config startup-config
+
+! ==============================================================
+!--- Verification
+!---   ping 192.168.2.2                       -> TACACS+ Server reachable
+!---   show running-config | include tacacs   -> host 192.168.2.2 + key
+!---   show running-config | include aaa      -> default = group tacacs+ local
+!---   R2 console: Admin2 / admin2pa55        -> R2>
+!---   PC-B> ssh -l netops2 192.168.2.1       -> netops2pa55 -> R2>
+!---          (netops2 exists ONLY on the server -> proves TACACS+ answered)
+!---   show ipv6 route                        -> 2 static routes (acad:1, acad:3)
+! ==============================================================

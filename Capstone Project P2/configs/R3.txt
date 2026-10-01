@@ -1,0 +1,71 @@
+! ==============================================================
+!--- Capstone Part II (Group 9) - AAA Authentication on Cisco Routers
+!--- ROUTER R3  (Branch-C: server-based AAA via RADIUS, local fallback)
+!--- Usage: paste the whole file at the R3> prompt (console password
+!---        ciscoconpa55, enable secret ciscoenpa55 are pre-configured).
+!--- Lines beginning with "!" are comments; IOS ignores them.
+! ==============================================================
+
+enable
+configure terminal
+
+! --------------------------------------------------------------
+!--- Part 4: RADIUS authentication with local backup (lab 26.2.5)
+! --------------------------------------------------------------
+!--- Backup account, only used when the RADIUS server does not answer.
+username Admin3 secret admin3pa55
+!--- Must match RADIUS Server > Services > AAA > Network Configuration.
+radius server RAD-SERVER
+ address ipv4 192.168.3.2
+ key radiuspa55
+ exit
+!--- The lab warns Check Results does not score "radius server".
+!--- If the score stays below 100%, add the legacy form as well:
+!---   radius-server host 192.168.3.2 key radiuspa55
+aaa new-model
+aaa authentication login default group radius local
+line console 0
+ login authentication default
+ exit
+
+! --------------------------------------------------------------
+!--- Extension: SSH on vty so PC-C can verify RADIUS remotely
+! --------------------------------------------------------------
+ip domain-name ccnp_v8.com
+crypto key generate rsa
+1024
+ip ssh version 2
+line vty 0 4
+ login authentication default
+ transport input ssh
+ exit
+
+! --------------------------------------------------------------
+!--- Extension: IPv6 dual-stack (static routing)
+!--- LAN-C   2001:db8:acad:3::/64   R3 = ::1   link-local fe80::3
+!--- WAN-23  2001:db8:acad:23::/64  R2 = ::1, R3 = ::2
+! --------------------------------------------------------------
+ipv6 unicast-routing
+interface g0/1
+ ipv6 address 2001:db8:acad:3::1/64
+ ipv6 address fe80::3 link-local
+ exit
+interface s0/0/1
+ ipv6 address 2001:db8:acad:23::2/64
+ ipv6 address fe80::3 link-local
+ exit
+ipv6 route ::/0 2001:db8:acad:23::1
+
+end
+copy running-config startup-config
+
+! ==============================================================
+!--- Verification
+!---   ping 192.168.3.2                       -> RADIUS Server reachable
+!---   show running-config | begin radius     -> RAD-SERVER, address + key
+!---   show running-config | include aaa      -> default = group radius local
+!---   R3 console: Admin3 / admin3pa55        -> R3>
+!---   PC-C> ssh -l netops3 192.168.3.1       -> netops3pa55 -> R3>
+!---          (netops3 exists ONLY on the server -> proves RADIUS answered)
+!---   show ipv6 route                        -> S ::/0 via 2001:db8:acad:23::1
+! ==============================================================

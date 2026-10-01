@@ -1,0 +1,34 @@
+! ==============================================================
+!--- TS3 (backup scenario) - SSH refused on R1
+!--- Real-world cause: vty transport changed by mistake (e.g. a
+!---   template that only allows telnet) - remote management is lost.
+!--- SAFETY: work from the R1 console; test from PC-A.
+! ==============================================================
+
+! ---- 1) INJECT (on the R1 console, privileged mode) ------------
+configure terminal
+line vty 0 4
+ transport input telnet
+ end
+
+! ---- 2) SYMPTOM (on PC-A > Command Prompt) ----------------------
+!--- ssh -l Admin1 192.168.1.1  -> "% Connection refused by remote host"
+!--- ping 192.168.1.1           -> !!!! (so it is NOT a reachability problem)
+
+! ---- 3) DIAGNOSE (on the R1 console) ---------------------------
+show ip ssh
+!---    -> SSH Enabled - version 2.0 (keys and SSH service are fine)
+show running-config | begin line vty
+!---    -> "transport input telnet"  <- root cause
+!---    -> "login authentication SSH-LOGIN" is still there
+
+! ---- 4) FIX ----------------------------------------------------
+configure terminal
+line vty 0 4
+ transport input ssh
+ end
+copy running-config startup-config
+
+! ---- 5) VERIFY -------------------------------------------------
+!--- PC-A> ssh -l Admin1 192.168.1.1   -> admin1pa55 -> R1>
+!--- PC-A> telnet 192.168.1.1          -> refused (only SSH allowed)

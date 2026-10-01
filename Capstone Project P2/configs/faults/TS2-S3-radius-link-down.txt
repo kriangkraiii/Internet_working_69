@@ -1,0 +1,44 @@
+! ==============================================================
+!--- TS2 - RADIUS Server unreachable (access port down on S3)
+!--- Real-world cause: server port disabled during maintenance,
+!---   cable pulled, or port err-disabled.
+!--- Goal: prove the "local" fallback keeps admins in, then restore.
+!--- SAFETY: stay logged in on the R3 console; test from PC-C (SSH).
+! ==============================================================
+
+! ---- 1) INJECT (on the S3 console, privileged mode) ------------
+configure terminal
+interface f0/1
+ shutdown
+ end
+
+! ---- 2) SYMPTOM (on PC-C > Command Prompt) ----------------------
+!--- ssh -l netops3 192.168.3.1  (pw netops3pa55) -> FAILS (server-only user)
+!--- ssh -l Admin3  192.168.3.1  (pw admin3pa55)  -> succeeds after a pause
+!---    (the pause = RADIUS timeout, then fallback to the local database)
+
+! ---- 3) DIAGNOSE (on the R3 console) ---------------------------
+ping 192.168.3.2
+!---    -> ..... = server unreachable
+show ip interface brief
+!---    -> G0/1 up/up, so the router side is fine
+show arp
+!---    -> no entry for 192.168.3.2 (Layer 2 problem towards the server)
+debug aaa authentication
+!---    (if Packet Tracer accepts it, also: debug radius)
+undebug all
+!--- Then on the S3 console:
+!---   show interfaces status            (or: show ip interface brief)
+!---   -> Fa0/1 "disabled" / administratively down
+!--- Root cause: S3 Fa0/1 (RADIUS Server access port) is shut down.
+
+! ---- 4) FIX (on the S3 console) --------------------------------
+configure terminal
+interface f0/1
+ no shutdown
+ end
+
+! ---- 5) VERIFY (on the R3 console, then PC-C) ------------------
+ping 192.168.3.2
+!---    -> !!!!!  (first ping may lose 1 packet while ARP resolves)
+!--- PC-C> ssh -l netops3 192.168.3.1 -> netops3pa55 -> R3>  (no pause)

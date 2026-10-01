@@ -1,0 +1,61 @@
+! ==============================================================
+!--- Capstone Part II (Group 9) - AAA Authentication on Cisco Routers
+!--- ROUTER R1  (Branch-A: local AAA, SSH-only management)
+!--- Usage: paste the whole file at the R1> prompt (console password
+!---        ciscoconpa55, enable secret ciscoenpa55 are pre-configured).
+!--- Lines beginning with "!" are comments; IOS ignores them.
+! ==============================================================
+
+enable
+configure terminal
+
+! --------------------------------------------------------------
+!--- Part 1: Local AAA for console access (lab 26.2.5)
+! --------------------------------------------------------------
+username Admin1 secret admin1pa55
+aaa new-model
+aaa authentication login default local
+line console 0
+ login authentication default
+ exit
+
+! --------------------------------------------------------------
+!--- Part 2: Local AAA for vty lines, SSH only (lab 26.2.5)
+! --------------------------------------------------------------
+ip domain-name ccnp_v8.com
+crypto key generate rsa
+1024
+ip ssh version 2
+aaa authentication login SSH-LOGIN local
+line vty 0 4
+ login authentication SSH-LOGIN
+ transport input ssh
+ exit
+
+! --------------------------------------------------------------
+!--- Extension: IPv6 dual-stack (static routing)
+!--- LAN-A   2001:db8:acad:1::/64   R1 = ::1   link-local fe80::1
+!--- WAN-12  2001:db8:acad:12::/64  R2 = ::1, R1 = ::2
+! --------------------------------------------------------------
+ipv6 unicast-routing
+interface g0/1
+ ipv6 address 2001:db8:acad:1::1/64
+ ipv6 address fe80::1 link-local
+ exit
+interface s0/0/0
+ ipv6 address 2001:db8:acad:12::2/64
+ ipv6 address fe80::1 link-local
+ exit
+ipv6 route ::/0 2001:db8:acad:12::1
+
+end
+copy running-config startup-config
+
+! ==============================================================
+!--- Verification
+!---   show running-config | include aaa   -> aaa new-model, default + SSH-LOGIN = local
+!---   show ip ssh                         -> SSH Enabled - version 2.0
+!---   show ipv6 interface brief           -> G0/1 + S0/0/0 up/up with global + fe80::1
+!---   show ipv6 route                     -> S ::/0 via 2001:db8:acad:12::1
+!---   PC-A> ssh -l Admin1 192.168.1.1     -> Password: admin1pa55 -> R1>
+! ==============================================================

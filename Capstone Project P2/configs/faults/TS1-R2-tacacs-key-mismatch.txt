@@ -1,0 +1,47 @@
+! ==============================================================
+!--- TS1 - TACACS+ shared-key mismatch on R2
+!--- Real-world cause: key typo during a key rotation / change window.
+!--- SAFETY: stay logged in on the R2 console for the whole scenario.
+!---         Test new logins from PC-B (SSH) only, so you can never
+!---         lock yourself out of the console.
+! ==============================================================
+
+! ---- 1) INJECT (on the R2 console, privileged mode) ------------
+configure terminal
+tacacs-server key tacacspa5
+end
+
+! ---- 2) SYMPTOM (on PC-B > Command Prompt) ----------------------
+!--- ssh -l netops2 192.168.2.1   (pw netops2pa55) -> login FAILS
+!--- ssh -l Admin2  192.168.2.1   (pw admin2pa55)  -> observe and record:
+!---    a) succeeds -> server reply was unusable, IOS fell back to local
+!---    b) fails    -> the server rejected the request (no fallback)
+!--- Either way: a server-only user can no longer log in = service outage.
+
+! ---- 3) DIAGNOSE (on the R2 console) ---------------------------
+!--- Layer 3 first: is the server reachable?
+ping 192.168.2.2
+!---    -> !!!!! = path is fine, the problem is above Layer 3
+!--- What does the router send?
+show running-config | include tacacs
+show running-config | include aaa
+!--- Watch an authentication attempt while PC-B retries the SSH login
+debug aaa authentication
+!---    (if Packet Tracer accepts it, also: debug tacacs)
+!--- Packet Tracer Simulation mode: Edit Filters -> show TACACS only,
+!---    retry from PC-B, open the TACACS PDU between R2 and the server.
+undebug all
+!--- Compare with TACACS+ Server > Services > AAA > Network Configuration:
+!---    Client R2 / 192.168.2.1 / Secret tacacspa55 / ServerType TACACS
+!--- Root cause: router key "tacacspa5" <> server secret "tacacspa55".
+
+! ---- 4) FIX ----------------------------------------------------
+configure terminal
+tacacs-server key tacacspa55
+end
+copy running-config startup-config
+
+! ---- 5) VERIFY -------------------------------------------------
+show running-config | include tacacs
+!--- PC-B> ssh -l netops2 192.168.2.1 -> netops2pa55 -> R2>  (server answered)
+!--- PC-B> ssh -l Admin2  192.168.2.1 -> admin2pa55  -> R2>
