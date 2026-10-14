@@ -1,0 +1,8 @@
+-Current configuration : 4995 bytes
+-!
++Current configuration : 5064 bytes
++!
+-username admin privilege 15 secret 9 $9$YjycmtpNCbagmc$pLPQ.P2H1WfnEZZaBBV0q/dH08jMo0ssZiYZH4MllGg
++username admin privilege 15 secret 9 $9$H7fiG99y6gna1c$ADFOZt6EhaNX1pSI48a7NU38QTbExxQPM7/RnsygJmI
+-ntp authentication-key 1 md5 080F585E221C1C54405E5A5D 7
++ntp authentication-key 1 md5 09625A1932000E5159595273 7

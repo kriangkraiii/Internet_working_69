@@ -1,0 +1,902 @@
+ *** R2-BR1 | KKU Capstone P3 | Authorized access only - all activity is logged *** 
+
+
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************
+R2-BR1#
+R2-BR1#terminal width 511
+R2-BR1#terminal length 0
+R2-BR1#
+R2-BR1#
+R2-BR1#
+R2-BR1#
+R2-BR1#
+R2-BR1#show running-config
+Building configuration...
+
+  
+Current configuration : 8517 bytes
+!
+! Last configuration change at 02:40:05 ICT Thu Oct 15 2026 by admin
+! NVRAM config last updated at 02:10:54 ICT Thu Oct 15 2026 by admin
+!
+version 15.9
+service timestamps debug datetime msec localtime show-timezone
+service timestamps log datetime msec localtime show-timezone
+service password-encryption
+!
+hostname R2-BR1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+security passwords min-length 8
+logging buffered 64000
+enable secret 9 $9$zzUoPK.IRmPsmt$pyo.vTGKSaDs3LNOCAZuwyN0ErBL22zsCfWusASdxuw
+!
+aaa new-model
+!
+!
+aaa authentication login default local
+aaa authorization exec default local 
+!
+!
+!
+!
+!
+aaa session-id common
+!
+!
+!
+clock timezone ICT 7 0
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ip domain name kku.lab
+ip cef
+login block-for 120 attempts 5 within 60
+login on-failure log
+login on-success log
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+flow record FNF-RECORD
+ match ipv4 source address
+ match ipv4 destination address
+ match ipv4 protocol
+ match transport source-port
+ match transport destination-port
+ match interface input
+ collect counter bytes
+ collect counter packets
+ collect timestamp sys-uptime first
+ collect timestamp sys-uptime last
+!
+!
+flow exporter FNF-EXPORTER
+ destination 10.10.20.50
+ source GigabitEthernet0/3
+ transport udp 2055
+!
+!
+flow monitor FNF-MONITOR
+ exporter FNF-EXPORTER
+ cache timeout active 60
+ record FNF-RECORD
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+archive
+ log config
+  logging enable
+  notify syslog contenttype plaintext
+  hidekeys
+file prompt quiet
+username admin privilege 15 secret 9 $9$HJcOyFv/bTfHq6$85U7o7Z0KAxZ14UwIP.7haVfc.0iupxLrSwRqH7lE.E
+!
+redundancy
+!
+!
+!
+class-map match-all CM-COPP-MGMT
+ match access-group name CoPP-MGMT
+class-map match-all CM-COPP-ICMP
+ match access-group name CoPP-ICMP
+class-map match-all CM-COPP-IPSEC
+ match access-group name CoPP-IPSEC
+class-map match-all CM-COPP-ROUTING
+ match access-group name CoPP-ROUTING
+!
+policy-map PM-COPP
+ class CM-COPP-ROUTING
+  police cir 256000 conform-action transmit  exceed-action transmit 
+ class CM-COPP-IPSEC
+  police cir 128000 conform-action transmit  exceed-action drop 
+ class CM-COPP-MGMT
+  police cir 512000 conform-action transmit  exceed-action drop 
+ class CM-COPP-ICMP
+  police cir 32000 conform-action transmit  exceed-action drop 
+ class class-default
+  police cir 64000 conform-action transmit  exceed-action drop 
+!
+! 
+!
+!
+!
+!
+crypto isakmp policy 10
+ encr aes 256
+ hash sha256
+ authentication pre-share
+ group 14
+crypto isakmp key KKU-Capstone-PSK address 203.0.113.1    
+crypto isakmp keepalive 10 3 periodic
+!
+!
+crypto ipsec transform-set TS-AES256-SHA256 esp-aes 256 esp-sha256-hmac 
+ mode transport
+!
+crypto ipsec profile IPSEC-PROFILE
+ set transform-set TS-AES256-SHA256 
+ set pfs group14
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description ROUTER-ID
+ ip address 10.0.0.2 255.255.255.255
+ ipv6 address 2001:DB8:0:2::1/128
+ ipv6 ospf 1 area 0
+!
+interface Tunnel12
+ description GRE-IPsec-to-R1-HQ
+ ip address 172.16.12.2 255.255.255.252
+ ip mtu 1400
+ ip flow monitor FNF-MONITOR input
+ ip tcp adjust-mss 1360
+ ip ospf network point-to-point
+ ip ospf dead-interval 20
+ ip ospf hello-interval 5
+ ipv6 address 2001:DB8:12::2/64
+ ipv6 ospf 1 area 0
+ ipv6 ospf network point-to-point
+ tunnel source GigabitEthernet0/0
+ tunnel destination 203.0.113.1
+ tunnel protection ipsec profile IPSEC-PROFILE
+!
+interface GigabitEthernet0/0
+ description WAN-to-R0-ISP
+ ip address 203.0.113.5 255.255.255.252
+ ip access-group ACL-WAN-IN in
+ duplex auto
+ speed auto
+ media-type rj45
+ ipv6 address 2001:DB8:FFFF:2::1/64
+!
+interface GigabitEthernet0/1
+ description LAN-R2-BR1
+ ip address 10.2.10.1 255.255.255.0
+ ip flow monitor FNF-MONITOR input
+ duplex auto
+ speed auto
+ media-type rj45
+ ipv6 address 2001:DB8:2:10::1/64
+ ipv6 ospf 1 area 0
+!
+interface GigabitEthernet0/2
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/3
+ description OOB-MGMT
+ ip address 10.10.20.183 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+router ospf 1
+ router-id 2.2.2.2
+ passive-interface default
+ no passive-interface Tunnel12
+ network 10.0.0.2 0.0.0.0 area 0
+ network 10.2.10.1 0.0.0.0 area 0
+ network 172.16.12.2 0.0.0.0 area 0
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip route 0.0.0.0 0.0.0.0 203.0.113.6 name UNDERLAY-DEFAULT
+ip route 10.10.0.0 255.255.0.0 10.10.20.254
+ip route 192.168.0.0 255.255.0.0 10.10.20.254
+ip ssh time-out 60
+ip ssh version 2
+!
+ip access-list standard ACL-SNMP
+ permit 10.10.20.50
+ deny   any log
+!
+ip access-list extended ACL-MGMT-SSH
+ permit tcp any any eq 22
+ remark ** allow SSH only from OOB management subnet **
+ permit tcp 10.10.20.0 0.0.0.255 any eq 22
+ deny   ip any any log
+ip access-list extended ACL-WAN-IN
+ remark ** IKE / NAT-T / ESP from known peers only **
+ permit udp host 203.0.113.1 host 203.0.113.5 eq isakmp
+ permit udp host 203.0.113.1 host 203.0.113.5 eq non500-isakmp
+ permit esp host 203.0.113.1 host 203.0.113.5
+ permit icmp any any echo-reply
+ permit icmp any any unreachable
+ permit icmp any any time-exceeded
+ permit icmp any any echo
+ deny   ip any any log
+ip access-list extended CoPP-ICMP
+ permit icmp any any
+ip access-list extended CoPP-IPSEC
+ permit udp any any eq isakmp
+ permit udp any any eq non500-isakmp
+ permit esp any any
+ip access-list extended CoPP-MGMT
+ permit tcp 10.10.20.0 0.0.0.255 any eq 22
+ permit udp 10.10.20.0 0.0.0.255 any eq snmp
+ permit udp 10.10.20.0 0.0.0.255 any eq ntp
+ permit udp 10.10.20.0 0.0.0.255 eq ntp any
+ permit tcp any any eq 22
+ip access-list extended CoPP-ROUTING
+ permit ospf any any
+!
+logging source-interface GigabitEthernet0/3
+logging host 10.10.20.50
+ipv6 router ospf 1
+ router-id 2.2.2.2
+ passive-interface default
+ no passive-interface Tunnel12
+!
+ipv6 ioam timestamp
+!
+snmp-server group SNMPV3-GRP v3 priv read V3-VIEW access ACL-SNMP
+snmp-server view V3-VIEW iso included
+snmp-server location R2-BR1-GNS3
+snmp-server contact capstone@kku.lab
+snmp-server chassis-id 
+snmp-server enable traps snmp linkdown linkup
+snmp-server enable traps config
+snmp-server host 10.10.20.50 version 3 priv snmpadmin 
+!
+!
+!
+!
+control-plane
+ service-policy input PM-COPP
+!
+banner exec ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner incoming ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner login ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner motd ^C *** R2-BR1 | KKU Capstone P3 | Authorized access only - all activity is logged *** ^C
+!
+line con 0
+ exec-timeout 15 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ access-class ACL-MGMT-SSH in
+ logging synchronous
+ transport input ssh
+!
+no scheduler allocate
+ntp authentication-key 1 md5 12371107390E1547787E7271 7
+ntp authenticate
+ntp trusted-key 1
+ntp source GigabitEthernet0/3
+ntp server 10.10.20.181 key 1 prefer
+!
+end
+
+R2-BR1#
+R2-BR1#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+R2-BR1(config)#
+R2-BR1(config)#hostname R2-BR1
+R2-BR1(config)#service timestamps debug datetime msec localtime show-timezone
+R2-BR1(config)#service timestamps log datetime msec localtime show-timezone
+R2-BR1(config)#service password-encryption
+R2-BR1(config)#security passwords min-length 8
+R2-BR1(config)#clock timezone ICT 7 0
+R2-BR1(config)#ip domain-name kku.lab
+R2-BR1(config)#no ip domain-lookup
+R2-BR1(config)#no ip http server
+R2-BR1(config)#no ip http secure-server
+R2-BR1(config)#file prompt quiet
+R2-BR1(config)#aaa new-model
+R2-BR1(config)#aaa authentication login default local
+R2-BR1(config)#aaa authorization exec default local
+R2-BR1(config)#username admin privilege 15 secret ********
+R2-BR1(config)#login block-for 120 attempts 5 within 60
+R2-BR1(config)#login on-failure log
+R2-BR1(config)#login on-success log
+R2-BR1(config)#ip ssh version 2
+R2-BR1(config)#ip ssh time-out 60
+R2-BR1(config)#ip ssh authentication-retries 3
+R2-BR1(config)#ip access-list extended ACL-MGMT-SSH
+R2-BR1(config-ext-nacl)# permit tcp any any eq 22
+R2-BR1(config-ext-nacl)# remark ** allow SSH only from OOB management subnet **
+R2-BR1(config-ext-nacl)# permit tcp 10.10.20.0 0.0.0.255 any eq 22
+R2-BR1(config-ext-nacl)# deny   ip any any log
+R2-BR1(config-ext-nacl)#line vty 0 4
+R2-BR1(config-line)# access-class ACL-MGMT-SSH in
+R2-BR1(config-line)# transport input ssh
+R2-BR1(config-line)# exec-timeout 10 0
+R2-BR1(config-line)# logging synchronous
+R2-BR1(config-line)#line con 0
+R2-BR1(config-line)# exec-timeout 15 0
+R2-BR1(config-line)# logging synchronous
+R2-BR1(config-line)#banner motd # *** R2-BR1 | KKU Capstone P3 | Authorized access only - all activity is logged *** #
+R2-BR1(config)#interface GigabitEthernet0/3
+R2-BR1(config-if)# description OOB-MGMT
+R2-BR1(config-if)# ip address 10.10.20.183 255.255.255.0
+R2-BR1(config-if)# no shutdown
+R2-BR1(config-if)#logging buffered 64000 debugging
+R2-BR1(config)#logging source-interface GigabitEthernet0/3
+R2-BR1(config)#logging trap informational
+R2-BR1(config)#logging host 10.10.20.50
+R2-BR1(config)#archive
+R2-BR1(config-archive)# log config
+R2-BR1(config-archive-log-cfg)#  logging enable
+R2-BR1(config-archive-log-cfg)#  notify syslog contenttype plaintext
+R2-BR1(config-archive-log-cfg)#  hidekeys
+R2-BR1(config-archive-log-cfg)#ntp authentication-key 1 md5 NtpKey#2569
+R2-BR1(config)#ntp trusted-key 1
+%NTP trusted-key is invalid : key already configured 
+R2-BR1(config)#ntp authenticate
+R2-BR1(config)#ntp source GigabitEthernet0/3
+R2-BR1(config)#ntp server 10.10.20.181 key 1 prefer
+R2-BR1(config)#ip access-list standard ACL-SNMP
+R2-BR1(config-std-nacl)# permit 10.10.20.50
+R2-BR1(config-std-nacl)# deny   any log
+R2-BR1(config-std-nacl)#snmp-server view V3-VIEW iso included
+R2-BR1(config)#snmp-server group SNMPV3-GRP v3 priv read V3-VIEW access ACL-SNMP
+R2-BR1(config)#snmp-server user snmpadmin SNMPV3-GRP v3 auth sha SnmpAuth#2569 priv aes 128 SnmpPriv#2569
+R2-BR1(config)#snmp-server location R2-BR1-GNS3
+R2-BR1(config)#snmp-server contact capstone@kku.lab
+R2-BR1(config)#snmp-server enable traps snmp linkdown linkup
+R2-BR1(config)#snmp-server enable traps config
+R2-BR1(config)#snmp-server host 10.10.20.50 version 3 priv snmpadmin
+R2-BR1(config)#ip route 10.10.0.0 255.255.0.0 10.10.20.254
+R2-BR1(config)#ip route 192.168.0.0 255.255.0.0 10.10.20.254
+R2-BR1(config)#ipv6 unicast-routing
+R2-BR1(config)#interface Loopback0
+R2-BR1(config-if)# description ROUTER-ID
+R2-BR1(config-if)# ip address 10.0.0.2 255.255.255.255
+R2-BR1(config-if)# ipv6 address 2001:db8:0:2::1/128
+R2-BR1(config-if)#interface GigabitEthernet0/0
+R2-BR1(config-if)# description WAN-to-R0-ISP
+R2-BR1(config-if)# ip address 203.0.113.5 255.255.255.252
+R2-BR1(config-if)# ipv6 address 2001:db8:ffff:2::1/64
+R2-BR1(config-if)# no shutdown
+R2-BR1(config-if)#interface GigabitEthernet0/1
+R2-BR1(config-if)# description LAN-R2-BR1
+R2-BR1(config-if)# ip address 10.2.10.1 255.255.255.0
+R2-BR1(config-if)# ipv6 address 2001:db8:2:10::1/64
+R2-BR1(config-if)# no shutdown
+R2-BR1(config-if)#no ip route 0.0.0.0 0.0.0.0 10.10.20.254
+%No matching route to delete
+R2-BR1(config)#ip route 0.0.0.0 0.0.0.0 203.0.113.6 name UNDERLAY-DEFAULT
+R2-BR1(config)#crypto isakmp policy 10
+R2-BR1(config-isakmp)# encryption aes 256
+R2-BR1(config-isakmp)# hash sha256
+R2-BR1(config-isakmp)# authentication pre-share
+R2-BR1(config-isakmp)# group 14
+R2-BR1(config-isakmp)# lifetime 86400
+R2-BR1(config-isakmp)#crypto isakmp key KKU-Capstone-PSK address 203.0.113.1
+A pre-shared key for address mask 203.0.113.1 255.255.255.255 already exists!
+
+R2-BR1(config)#crypto isakmp keepalive 10 3 periodic
+R2-BR1(config)#crypto ipsec transform-set TS-AES256-SHA256 esp-aes 256 esp-sha256-hmac
+R2-BR1(cfg-crypto-trans)# mode transport
+R2-BR1(cfg-crypto-trans)#crypto ipsec profile IPSEC-PROFILE
+R2-BR1(ipsec-profile)# set transform-set TS-AES256-SHA256
+R2-BR1(ipsec-profile)# set pfs group14
+R2-BR1(ipsec-profile)#interface Tunnel12
+R2-BR1(config-if)# description GRE-IPsec-to-R1-HQ
+R2-BR1(config-if)# ip address 172.16.12.2 255.255.255.252
+R2-BR1(config-if)# ipv6 address 2001:db8:12::2/64
+R2-BR1(config-if)# ip mtu 1400
+R2-BR1(config-if)# ip tcp adjust-mss 1360
+R2-BR1(config-if)# ip ospf network point-to-point
+R2-BR1(config-if)# ip ospf hello-interval 5
+R2-BR1(config-if)# ip ospf dead-interval 20
+R2-BR1(config-if)# ipv6 ospf network point-to-point
+R2-BR1(config-if)# ipv6 ospf 1 area 0
+R2-BR1(config-if)# tunnel source GigabitEthernet0/0
+R2-BR1(config-if)# tunnel destination 203.0.113.1
+R2-BR1(config-if)# tunnel protection ipsec profile IPSEC-PROFILE
+R2-BR1(config-if)#router ospf 1
+R2-BR1(config-router)# router-id 2.2.2.2
+R2-BR1(config-router)# passive-interface default
+R2-BR1(config-router)# no passive-interface Tunnel12
+R2-BR1(config-router)# network 10.0.0.2 0.0.0.0 area 0
+R2-BR1(config-router)# network 10.2.10.1 0.0.0.0 area 0
+R2-BR1(config-router)# network 172.16.12.2 0.0.0.0 area 0
+R2-BR1(config-router)#ipv6 router ospf 1
+R2-BR1(config-rtr)# router-id 2.2.2.2
+R2-BR1(config-rtr)# passive-interface default
+R2-BR1(config-rtr)# no passive-interface Tunnel12
+R2-BR1(config-rtr)#interface Loopback0
+R2-BR1(config-if)# ipv6 ospf 1 area 0
+R2-BR1(config-if)#interface GigabitEthernet0/1
+R2-BR1(config-if)# ipv6 ospf 1 area 0
+R2-BR1(config-if)#ip access-list extended ACL-WAN-IN
+R2-BR1(config-ext-nacl)# remark ** IKE / NAT-T / ESP from known peers only **
+R2-BR1(config-ext-nacl)# permit udp host 203.0.113.1 host 203.0.113.5 eq isakmp
+R2-BR1(config-ext-nacl)# permit udp host 203.0.113.1 host 203.0.113.5 eq non500-isakmp
+R2-BR1(config-ext-nacl)# permit esp host 203.0.113.1 host 203.0.113.5
+R2-BR1(config-ext-nacl)# permit icmp any any echo-reply
+R2-BR1(config-ext-nacl)# permit icmp any any unreachable
+R2-BR1(config-ext-nacl)# permit icmp any any time-exceeded
+R2-BR1(config-ext-nacl)# permit icmp any any echo
+R2-BR1(config-ext-nacl)# deny   ip any any log
+R2-BR1(config-ext-nacl)#interface GigabitEthernet0/0
+R2-BR1(config-if)# ip access-group ACL-WAN-IN in
+R2-BR1(config-if)#ip access-list extended CoPP-ROUTING
+R2-BR1(config-ext-nacl)# permit ospf any any
+R2-BR1(config-ext-nacl)#ip access-list extended CoPP-IPSEC
+R2-BR1(config-ext-nacl)# permit udp any any eq isakmp
+R2-BR1(config-ext-nacl)# permit udp any any eq non500-isakmp
+R2-BR1(config-ext-nacl)# permit esp any any
+R2-BR1(config-ext-nacl)#ip access-list extended CoPP-MGMT
+R2-BR1(config-ext-nacl)# permit tcp any any eq 22
+R2-BR1(config-ext-nacl)# permit tcp 10.10.20.0 0.0.0.255 any eq 22
+R2-BR1(config-ext-nacl)# permit udp 10.10.20.0 0.0.0.255 any eq snmp
+R2-BR1(config-ext-nacl)# permit udp 10.10.20.0 0.0.0.255 any eq ntp
+R2-BR1(config-ext-nacl)# permit udp 10.10.20.0 0.0.0.255 eq ntp any
+R2-BR1(config-ext-nacl)#ip access-list extended CoPP-ICMP
+R2-BR1(config-ext-nacl)# permit icmp any any
+R2-BR1(config-ext-nacl)#class-map match-all CM-COPP-ROUTING
+R2-BR1(config-cmap)# match access-group name CoPP-ROUTING
+R2-BR1(config-cmap)#class-map match-all CM-COPP-IPSEC
+R2-BR1(config-cmap)# match access-group name CoPP-IPSEC
+R2-BR1(config-cmap)#class-map match-all CM-COPP-MGMT
+R2-BR1(config-cmap)# match access-group name CoPP-MGMT
+R2-BR1(config-cmap)#class-map match-all CM-COPP-ICMP
+R2-BR1(config-cmap)# match access-group name CoPP-ICMP
+R2-BR1(config-cmap)#policy-map PM-COPP
+R2-BR1(config-pmap)# class CM-COPP-ROUTING
+R2-BR1(config-pmap-c)#  police cir 256000 conform-action transmit exceed-action transmit
+R2-BR1(config-pmap-c-police)# class CM-COPP-IPSEC
+R2-BR1(config-pmap-c)#  police cir 128000 conform-action transmit exceed-action drop
+R2-BR1(config-pmap-c-police)# class CM-COPP-MGMT
+R2-BR1(config-pmap-c)#  police cir 512000 conform-action transmit exceed-action drop
+R2-BR1(config-pmap-c-police)# class CM-COPP-ICMP
+R2-BR1(config-pmap-c)#  police cir 32000 conform-action transmit exceed-action drop
+R2-BR1(config-pmap-c-police)# class class-default
+R2-BR1(config-pmap-c)#  police cir 64000 conform-action transmit exceed-action drop
+R2-BR1(config-pmap-c-police)#control-plane
+R2-BR1(config-cp)# service-policy input PM-COPP
+R2-BR1(config-cp)#flow record FNF-RECORD
+R2-BR1(config-flow-record)# match ipv4 source address
+R2-BR1(config-flow-record)# match ipv4 destination address
+R2-BR1(config-flow-record)# match ipv4 protocol
+R2-BR1(config-flow-record)# match transport source-port
+R2-BR1(config-flow-record)# match transport destination-port
+R2-BR1(config-flow-record)# match interface input
+R2-BR1(config-flow-record)# collect counter bytes
+R2-BR1(config-flow-record)# collect counter packets
+R2-BR1(config-flow-record)# collect timestamp sys-uptime first
+R2-BR1(config-flow-record)# collect timestamp sys-uptime last
+R2-BR1(config-flow-record)#flow exporter FNF-EXPORTER
+R2-BR1(config-flow-exporter)# destination 10.10.20.50
+R2-BR1(config-flow-exporter)# source GigabitEthernet0/3
+R2-BR1(config-flow-exporter)# transport udp 2055
+R2-BR1(config-flow-exporter)# export-protocol netflow-v9
+R2-BR1(config-flow-exporter)#flow monitor FNF-MONITOR
+R2-BR1(config-flow-monitor)# record FNF-RECORD
+R2-BR1(config-flow-monitor)# exporter FNF-EXPORTER
+R2-BR1(config-flow-monitor)# cache timeout active 60
+R2-BR1(config-flow-monitor)#interface GigabitEthernet0/1
+R2-BR1(config-if)# ip flow monitor FNF-MONITOR input
+R2-BR1(config-if)#interface Tunnel12
+R2-BR1(config-if)# ip flow monitor FNF-MONITOR input
+R2-BR1(config-if)#
+R2-BR1(config-if)#end
+R2-BR1#
+R2-BR1#
+R2-BR1#
+R2-BR1#
+R2-BR1#write mem
+Building configuration...
+
+  [OK]
+R2-BR1#
+R2-BR1#
+R2-BR1#
+R2-BR1#show running-config
+Building configuration...
+
+  
+Current configuration : 8517 bytes
+!
+! Last configuration change at 02:46:07 ICT Thu Oct 15 2026 by admin
+! NVRAM config last updated at 02:46:09 ICT Thu Oct 15 2026 by admin
+!
+version 15.9
+service timestamps debug datetime msec localtime show-timezone
+service timestamps log datetime msec localtime show-timezone
+service password-encryption
+!
+hostname R2-BR1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+security passwords min-length 8
+logging buffered 64000
+enable secret 9 $9$zzUoPK.IRmPsmt$pyo.vTGKSaDs3LNOCAZuwyN0ErBL22zsCfWusASdxuw
+!
+aaa new-model
+!
+!
+aaa authentication login default local
+aaa authorization exec default local 
+!
+!
+!
+!
+!
+aaa session-id common
+!
+!
+!
+clock timezone ICT 7 0
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain lookup
+ip domain name kku.lab
+ip cef
+login block-for 120 attempts 5 within 60
+login on-failure log
+login on-success log
+ipv6 unicast-routing
+ipv6 cef
+!
+!
+flow record FNF-RECORD
+ match ipv4 source address
+ match ipv4 destination address
+ match ipv4 protocol
+ match transport source-port
+ match transport destination-port
+ match interface input
+ collect counter bytes
+ collect counter packets
+ collect timestamp sys-uptime first
+ collect timestamp sys-uptime last
+!
+!
+flow exporter FNF-EXPORTER
+ destination 10.10.20.50
+ source GigabitEthernet0/3
+ transport udp 2055
+!
+!
+flow monitor FNF-MONITOR
+ exporter FNF-EXPORTER
+ cache timeout active 60
+ record FNF-RECORD
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+archive
+ log config
+  logging enable
+  notify syslog contenttype plaintext
+  hidekeys
+file prompt quiet
+username admin privilege 15 secret 9 $9$8go5l01J0XrSo6$6cGB0NMl7hw8w.qUXXm6fX5ZZ.NzU3cVIwVgOYMSiKo
+!
+redundancy
+!
+!
+!
+class-map match-all CM-COPP-MGMT
+ match access-group name CoPP-MGMT
+class-map match-all CM-COPP-ICMP
+ match access-group name CoPP-ICMP
+class-map match-all CM-COPP-IPSEC
+ match access-group name CoPP-IPSEC
+class-map match-all CM-COPP-ROUTING
+ match access-group name CoPP-ROUTING
+!
+policy-map PM-COPP
+ class CM-COPP-ROUTING
+  police cir 256000 conform-action transmit  exceed-action transmit 
+ class CM-COPP-IPSEC
+  police cir 128000 conform-action transmit  exceed-action drop 
+ class CM-COPP-MGMT
+  police cir 512000 conform-action transmit  exceed-action drop 
+ class CM-COPP-ICMP
+  police cir 32000 conform-action transmit  exceed-action drop 
+ class class-default
+  police cir 64000 conform-action transmit  exceed-action drop 
+!
+! 
+!
+!
+!
+!
+crypto isakmp policy 10
+ encr aes 256
+ hash sha256
+ authentication pre-share
+ group 14
+crypto isakmp key KKU-Capstone-PSK address 203.0.113.1    
+crypto isakmp keepalive 10 3 periodic
+!
+!
+crypto ipsec transform-set TS-AES256-SHA256 esp-aes 256 esp-sha256-hmac 
+ mode transport
+!
+crypto ipsec profile IPSEC-PROFILE
+ set transform-set TS-AES256-SHA256 
+ set pfs group14
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ description ROUTER-ID
+ ip address 10.0.0.2 255.255.255.255
+ ipv6 address 2001:DB8:0:2::1/128
+ ipv6 ospf 1 area 0
+!
+interface Tunnel12
+ description GRE-IPsec-to-R1-HQ
+ ip address 172.16.12.2 255.255.255.252
+ ip mtu 1400
+ ip flow monitor FNF-MONITOR input
+ ip tcp adjust-mss 1360
+ ip ospf network point-to-point
+ ip ospf dead-interval 20
+ ip ospf hello-interval 5
+ ipv6 address 2001:DB8:12::2/64
+ ipv6 ospf 1 area 0
+ ipv6 ospf network point-to-point
+ tunnel source GigabitEthernet0/0
+ tunnel destination 203.0.113.1
+ tunnel protection ipsec profile IPSEC-PROFILE
+!
+interface GigabitEthernet0/0
+ description WAN-to-R0-ISP
+ ip address 203.0.113.5 255.255.255.252
+ ip access-group ACL-WAN-IN in
+ duplex auto
+ speed auto
+ media-type rj45
+ ipv6 address 2001:DB8:FFFF:2::1/64
+!
+interface GigabitEthernet0/1
+ description LAN-R2-BR1
+ ip address 10.2.10.1 255.255.255.0
+ ip flow monitor FNF-MONITOR input
+ duplex auto
+ speed auto
+ media-type rj45
+ ipv6 address 2001:DB8:2:10::1/64
+ ipv6 ospf 1 area 0
+!
+interface GigabitEthernet0/2
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/3
+ description OOB-MGMT
+ ip address 10.10.20.183 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+router ospf 1
+ router-id 2.2.2.2
+ passive-interface default
+ no passive-interface Tunnel12
+ network 10.0.0.2 0.0.0.0 area 0
+ network 10.2.10.1 0.0.0.0 area 0
+ network 172.16.12.2 0.0.0.0 area 0
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip route 0.0.0.0 0.0.0.0 203.0.113.6 name UNDERLAY-DEFAULT
+ip route 10.10.0.0 255.255.0.0 10.10.20.254
+ip route 192.168.0.0 255.255.0.0 10.10.20.254
+ip ssh time-out 60
+ip ssh version 2
+!
+ip access-list standard ACL-SNMP
+ permit 10.10.20.50
+ deny   any log
+!
+ip access-list extended ACL-MGMT-SSH
+ permit tcp any any eq 22
+ remark ** allow SSH only from OOB management subnet **
+ permit tcp 10.10.20.0 0.0.0.255 any eq 22
+ deny   ip any any log
+ip access-list extended ACL-WAN-IN
+ remark ** IKE / NAT-T / ESP from known peers only **
+ permit udp host 203.0.113.1 host 203.0.113.5 eq isakmp
+ permit udp host 203.0.113.1 host 203.0.113.5 eq non500-isakmp
+ permit esp host 203.0.113.1 host 203.0.113.5
+ permit icmp any any echo-reply
+ permit icmp any any unreachable
+ permit icmp any any time-exceeded
+ permit icmp any any echo
+ deny   ip any any log
+ip access-list extended CoPP-ICMP
+ permit icmp any any
+ip access-list extended CoPP-IPSEC
+ permit udp any any eq isakmp
+ permit udp any any eq non500-isakmp
+ permit esp any any
+ip access-list extended CoPP-MGMT
+ permit tcp 10.10.20.0 0.0.0.255 any eq 22
+ permit udp 10.10.20.0 0.0.0.255 any eq snmp
+ permit udp 10.10.20.0 0.0.0.255 any eq ntp
+ permit udp 10.10.20.0 0.0.0.255 eq ntp any
+ permit tcp any any eq 22
+ip access-list extended CoPP-ROUTING
+ permit ospf any any
+!
+logging source-interface GigabitEthernet0/3
+logging host 10.10.20.50
+ipv6 router ospf 1
+ router-id 2.2.2.2
+ passive-interface default
+ no passive-interface Tunnel12
+!
+ipv6 ioam timestamp
+!
+snmp-server group SNMPV3-GRP v3 priv read V3-VIEW access ACL-SNMP
+snmp-server view V3-VIEW iso included
+snmp-server location R2-BR1-GNS3
+snmp-server contact capstone@kku.lab
+snmp-server chassis-id 
+snmp-server enable traps snmp linkdown linkup
+snmp-server enable traps config
+snmp-server host 10.10.20.50 version 3 priv snmpadmin 
+!
+!
+!
+!
+control-plane
+ service-policy input PM-COPP
+!
+banner exec ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner incoming ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner login ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner motd ^C *** R2-BR1 | KKU Capstone P3 | Authorized access only - all activity is logged *** ^C
+!
+line con 0
+ exec-timeout 15 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ access-class ACL-MGMT-SSH in
+ logging synchronous
+ transport input ssh
+!
+no scheduler allocate
+ntp authentication-key 1 md5 0525121F0A49574A4B50414B 7
+ntp authenticate
+ntp trusted-key 1
+ntp source GigabitEthernet0/3
+ntp server 10.10.20.181 key 1 prefer
+!
+end
+
+R2-BR1#
+R2-BR1#exit

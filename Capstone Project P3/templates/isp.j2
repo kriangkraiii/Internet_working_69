@@ -1,0 +1,11 @@
+{#- ===== R0-ISP: จำลอง Internet / Underlay (ไม่รู้จักเครือข่ายภายในองค์กร) ===== -#}
+{% include 'base.j2' %}
+!
+ipv6 unicast-routing
+{% for i in interfaces %}
+interface {{ i.name }}
+ description {{ i.desc }}
+ ip address {{ i.ip }} {{ i.mask }}
+ ipv6 address {{ i.ipv6 }}
+ no shutdown
+{% endfor %}

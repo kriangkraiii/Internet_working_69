@@ -1,0 +1,98 @@
+
+****
+CML2 Console Server
+Copyright (c) 2019-2024 Cisco Systems, Inc. and/or its affiliates
+****
+
+tab completion works
+list available nodes and node labels / IDs with "list"
+it's also possible to do a "open /Lab at Wed 22:21 PM/iosv-0/0" command
+or to directly connect via UUID "connect 697bb5b8-7181-49c5-8e85-540eacf9deac"
+(e.g. lab name followed by node name and line number
+
+[J[2K
+consoles> [J[2K
+consoles> [J[2K
+consoles> 
+[J[2K
+consoles> [J[2K
+consoles> o[J[2K
+consoles> op[J[2K
+consoles> ope[J[2K
+consoles> open[J[2K
+consoles> open [J[2K
+consoles> open /[J[2K
+consoles> open /C[J[2K
+consoles> open /Ca[J[2K
+consoles> open /Cap[J[2K
+consoles> open /Caps[J[2K
+consoles> open /Capst[J[2K
+consoles> open /Capsto[J[2K
+consoles> open /Capston[J[2K
+consoles> open /Capstone[J[2K
+consoles> open /Capstone-[J[2K
+consoles> open /Capstone-P[J[2K
+consoles> open /Capstone-P3[J[2K
+consoles> open /Capstone-P3/[J[2K
+consoles> open /Capstone-P3/R[J[2K
+consoles> open /Capstone-P3/R0[J[2K
+consoles> open /Capstone-P3/R0-[J[2K
+consoles> open /Capstone-P3/R0-I[J[2K
+consoles> open /Capstone-P3/R0-IS[J[2K
+consoles> open /Capstone-P3/R0-ISP[J[2K
+consoles> open /Capstone-P3/R0-ISP/[J[2K
+consoles> open /Capstone-P3/R0-ISP/0[J[2K
+consoles> open /Capstone-P3/R0-ISP/0[J[2K
+consoles> open /Capstone-P3/R0-ISP/0
+Connecting to console for R0-ISP
+Connected to CML terminalserver.
+Escape character is '^]'.
+
+R0-ISP>
+R0-ISP>terminal width 511
+R0-ISP>terminal length 0
+R0-ISP>
+R0-ISP>
+R0-ISP>enable
+Password: 
+R0-ISP#
+R0-ISP#
+R0-ISP#
+R0-ISP#show crypto key mypubkey rsa
+% Key pair was generated at: 16:43:54 UTC Oct 14 2026
+Key name: R0-ISP.kku.lab
+Key type: RSA KEYS
+ Storage Device: private-config
+ Usage: General Purpose Key
+ Key is not exportable.
+ Key Data:
+  30820122 300D0609 2A864886 F70D0101 01050003 82010F00 3082010A 02820101 
+  00C46BBC 57643A15 9EEB3D4F E45850D9 83D374F7 E78352C5 4F2B56CE 64641371 
+  52E71533 A1DBB8E2 B9ED9263 B1606EFE FA2EEA8F 106E8EEB 6001BC41 2296A665 
+  78DE15C4 207401EE 373E4BF3 C435D0A7 848E130B 7AF08C5D BE99FB7A 67141E61 
+  4DD84B58 75875785 08EB08EA 865C2CFB D5043F7A 9E7A7C17 1A20243F 97C138F7 
+  A6F16A36 4938B729 58BF31BE 6B84257F F0E82C75 F142D0BE EAB57F7F 4BB8799B 
+  B3B93ECD D2DE3727 65E3A9E7 DDE4D827 D072D34E 6E5AFD90 D29AEEFB A8FD0F6B 
+  A56B0D6B 8F74697D D1367AB4 5835C072 F2A3A7A7 6D3424C1 7F9AEE95 678DA4DB 
+  4F1CCA56 77648E2D CDA30008 1ABE7242 97002D73 7E58FD04 3F4EC3D1 7E5F4EB5 
+  4D020301 0001
+% Key pair was generated at: 16:47:15 UTC Oct 14 2026
+Key name: R0-ISP.kku.lab.server
+Key type: RSA KEYS
+Temporary key
+ Usage: Encryption Key
+ Key is not exportable.
+ Key Data:
+  307C300D 06092A86 4886F70D 01010105 00036B00 30680261 00B64573 713511BA 
+  9B99EEBF C6321C07 ECD51DBC 1CCA0170 C1692866 FFE9DB9B 5D42875E 2721B5D6 
+  54A5207B 456272CB 5026A08F 80DA19E4 2635E807 6BFF977B FF93E5C0 21C8DB86 
+  5FEF2A2D 97E66B57 C2BDA5DA 0E29F548 310E2A5C F5849D21 D7020301 0001
+R0-ISP#
+R0-ISP#
+R0-ISP#
+R0-ISP#write mem
+Building configuration...
+
+  [OK]
+R0-ISP#
+R0-ISP#exit

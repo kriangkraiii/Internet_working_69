@@ -1,0 +1,36 @@
+ *** R2-BR1 | KKU Capstone P3 | Authorized access only - all activity is logged *** 
+
+
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************
+R2-BR1#
+R2-BR1#terminal width 511
+R2-BR1#terminal length 0
+R2-BR1#
+R2-BR1#
+R2-BR1#
+R2-BR1#
+R2-BR1#
+R2-BR1#show clock
+02:01:56.343 ICT Thu Oct 15 2026
+R2-BR1#debug ip ospf adj
+OSPF adjacency debugging is on
+R2-BR1#
+R2-BR1#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+R2-BR1(config)#
+R2-BR1(config)#interface Tunnel12
+R2-BR1(config-if)#ip mtu 1300
+R2-BR1(config-if)#shutdown
+R2-BR1(config-if)#no shutdown
+R2-BR1(config-if)#
+R2-BR1(config-if)#end
+R2-BR1#
+R2-BR1#
+R2-BR1#exit

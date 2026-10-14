@@ -1,0 +1,97 @@
+
+****
+CML2 Console Server
+Copyright (c) 2019-2024 Cisco Systems, Inc. and/or its affiliates
+****
+
+tab completion works
+list available nodes and node labels / IDs with "list"
+it's also possible to do a "open /Lab at Wed 22:21 PM/iosv-0/0" command
+or to directly connect via UUID "connect 697bb5b8-7181-49c5-8e85-540eacf9deac"
+(e.g. lab name followed by node name and line number
+
+[J[2K
+consoles> [J[2K
+consoles> [J[2K
+consoles> 
+[J[2K
+consoles> [J[2K
+consoles> o[J[2K
+consoles> op[J[2K
+consoles> ope[J[2K
+consoles> open[J[2K
+consoles> open [J[2K
+consoles> open /[J[2K
+consoles> open /C[J[2K
+consoles> open /Ca[J[2K
+consoles> open /Cap[J[2K
+consoles> open /Caps[J[2K
+consoles> open /Capst[J[2K
+consoles> open /Capsto[J[2K
+consoles> open /Capston[J[2K
+consoles> open /Capstone[J[2K
+consoles> open /Capstone-[J[2K
+consoles> open /Capstone-P[J[2K
+consoles> open /Capstone-P3[J[2K
+consoles> open /Capstone-P3/[J[2K
+consoles> open /Capstone-P3/R[J[2K
+consoles> open /Capstone-P3/R1[J[2K
+consoles> open /Capstone-P3/R1-[J[2K
+consoles> open /Capstone-P3/R1-H[J[2K
+consoles> open /Capstone-P3/R1-HQ[J[2K
+consoles> open /Capstone-P3/R1-HQ/[J[2K
+consoles> open /Capstone-P3/R1-HQ/0[J[2K
+consoles> open /Capstone-P3/R1-HQ/0[J[2K
+consoles> open /Capstone-P3/R1-HQ/0
+Connecting to console for R1-HQ
+Connected to CML terminalserver.
+Escape character is '^]'.
+
+R1-HQ>
+R1-HQ>terminal width 511
+R1-HQ>terminal length 0
+R1-HQ>
+R1-HQ>
+R1-HQ>enable
+Password: 
+R1-HQ#
+R1-HQ#
+R1-HQ#
+R1-HQ#show crypto key mypubkey rsa
+% Key pair was generated at: 16:43:36 UTC Oct 14 2026
+Key name: R1-HQ.kku.lab
+Key type: RSA KEYS
+ Storage Device: private-config
+ Usage: General Purpose Key
+ Key is not exportable.
+ Key Data:
+  30820122 300D0609 2A864886 F70D0101 01050003 82010F00 3082010A 02820101 
+  0088B570 322D4E1A 52480BFE 760714FD 13C55577 9BA91AEE D54485EE 14BD8E7E 
+  ACF5CC6D 92E92CDC CD54EF2D 2554A009 79BF9885 E78D678A B4491DEA FB9732E1 
+  B6DFF864 3DFE8511 BAD67CFC 72903900 B5F0B571 5E1A34F1 1D148B97 34C8D741 
+  EEC87FAB 1FB0E0CF E5D1FB5C 92F7B32C 63163899 EA88B895 B213C545 F61DA1B2 
+  801E0D2F 74FDCC24 ABA9BA77 A4AF4A05 BF1FDCBE D3FA5B98 6557AC8A 49F7C7B7 
+  253BB878 375F941B 465C03C6 CEFD1481 A715AAA9 85C1343A 782DCCD2 E38E17D3 
+  775E1279 3516CB85 BA6E06B2 4D0B634E 13C86F8D E5EAA834 FBCAB8C9 46E737A4 
+  B9BDADA7 54668D91 8297B106 C4326B55 4E26A3FA 44B92D96 BB3A1D44 ED03E68A 
+  13020301 0001
+% Key pair was generated at: 16:46:57 UTC Oct 14 2026
+Key name: R1-HQ.kku.lab.server
+Key type: RSA KEYS
+Temporary key
+ Usage: Encryption Key
+ Key is not exportable.
+ Key Data:
+  307C300D 06092A86 4886F70D 01010105 00036B00 30680261 00BC695F 1899C503 
+  3BFF0768 884F42DD D3CB8324 03D5D915 E3A2E58D FE92EE53 7BB5BD91 03F97599 
+  C248610D 83F8C953 AC78B86E 7D133F23 D27BA381 984F46F2 25E0A26C 6A2C86F4 
+  857DA5FF 2E34D34E 9B338234 0C1FEC2F D52BF790 1AD3F4E4 71020301 0001
+R1-HQ#
+R1-HQ#
+R1-HQ#
+R1-HQ#write mem
+Building configuration...
+
+  [OK]
+R1-HQ#
+R1-HQ#exit

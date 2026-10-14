@@ -1,0 +1,26 @@
+ *** R1-HQ | KKU Capstone P3 | Authorized access only - all activity is logged *** 
+
+
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************
+R1-HQ#
+R1-HQ#terminal width 511
+R1-HQ#terminal length 0
+R1-HQ#
+R1-HQ#
+R1-HQ#
+R1-HQ#
+R1-HQ#
+R1-HQ#show ip ospf neighbor
+
+Neighbor ID     Pri   State           Dead Time   Address         Interface
+3.3.3.3           0   FULL/  -        00:00:19    172.16.13.2     Tunnel13
+2.2.2.2           0   FULL/  -        00:00:17    172.16.12.2     Tunnel12
+R1-HQ#
+R1-HQ#exit

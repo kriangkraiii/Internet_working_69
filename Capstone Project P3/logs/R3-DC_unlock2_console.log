@@ -1,0 +1,112 @@
+
+****
+CML2 Console Server
+Copyright (c) 2019-2024 Cisco Systems, Inc. and/or its affiliates
+****
+
+tab completion works
+list available nodes and node labels / IDs with "list"
+it's also possible to do a "open /Lab at Wed 22:21 PM/iosv-0/0" command
+or to directly connect via UUID "connect 697bb5b8-7181-49c5-8e85-540eacf9deac"
+(e.g. lab name followed by node name and line number
+
+[J[2K
+consoles> [J[2K
+consoles> [J[2K
+consoles> 
+[J[2K
+consoles> [J[2K
+consoles> o[J[2K
+consoles> op[J[2K
+consoles> ope[J[2K
+consoles> open[J[2K
+consoles> open [J[2K
+consoles> open /[J[2K
+consoles> open /C[J[2K
+consoles> open /Ca[J[2K
+consoles> open /Cap[J[2K
+consoles> open /Caps[J[2K
+consoles> open /Capst[J[2K
+consoles> open /Capsto[J[2K
+consoles> open /Capston[J[2K
+consoles> open /Capstone[J[2K
+consoles> open /Capstone-[J[2K
+consoles> open /Capstone-P[J[2K
+consoles> open /Capstone-P3[J[2K
+consoles> open /Capstone-P3/[J[2K
+consoles> open /Capstone-P3/R[J[2K
+consoles> open /Capstone-P3/R3[J[2K
+consoles> open /Capstone-P3/R3-[J[2K
+consoles> open /Capstone-P3/R3-D[J[2K
+consoles> open /Capstone-P3/R3-DC[J[2K
+consoles> open /Capstone-P3/R3-DC/[J[2K
+consoles> open /Capstone-P3/R3-DC/0[J[2K
+consoles> open /Capstone-P3/R3-DC/0[J[2K
+consoles> open /Capstone-P3/R3-DC/0
+Connecting to console for R3-DC
+Connected to CML terminalserver.
+Escape character is '^]'.
+ *** R3-DC | KKU Capstone P3 | Authorized access only - all activity is logged *** 
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************
+
+User Access Verification
+
+Username: 
+Username: admin
+Password: 
+
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************
+R3-DC>
+*Oct 15 00:58:20.048 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: UNKNOWN] [localport: 0] at 00:58:20 ICT Thu Oct 15 2026
+R3-DC>********
+% Bad IP address or host name
+% Unknown command or computer name, or unable to find computer address
+R3-DC>enable
+Password: 
+R3-DC#end
+Translating "end"
+
+Translating "end"
+
+Translating "end"
+
+% Bad IP address or host name
+% Unknown command or computer name, or unable to find computer address
+R3-DC#
+*Oct 15 00:58:24.539 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:!exec: enable
+R3-DC#terminal length 0
+R3-DC#terminal width 511
+R3-DC#
+R3-DC#
+R3-DC#
+R3-DC#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+R3-DC(config)#ip route 10.10.0.0 255.255.0.0 10.10.20.254
+R3-DC(config)#ip route 192.168.0.0 255.255.0.0 10.10.20.254
+R3-DC(config)#ip access-list extended ACL-MGMT-SSH
+R3-DC(config-ext-nacl)#5 permit tcp any any eq 22
+R3-DC(config-ext-nacl)#
+*Oct 15 00:58:29.362 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:ip route 10.10.0.0 255.255.0.0 10.10.20.254
+*Oct 15 00:58:29.846 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:ip route 192.168.0.0 255.255.0.0 10.10.20.254
+*Oct 15 00:58:30.357 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:ip access-list extended ACL-MGMT-SSH
+R3-DC(config-ext-nacl)#end
+R3-DC#write memory
+Building configuration...
+
+  
+*Oct 15 00:58:30.909 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:5 permit tcp any any eq 22 
+*Oct 15 00:58:31.389 ICT: %SYS-5-CONFIG_I: Configured from console by admin on consoleexit

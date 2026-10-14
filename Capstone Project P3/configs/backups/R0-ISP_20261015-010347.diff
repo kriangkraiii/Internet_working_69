@@ -1,0 +1,4 @@
+-username admin privilege 15 secret 9 $9$H7fiG99y6gna1c$ADFOZt6EhaNX1pSI48a7NU38QTbExxQPM7/RnsygJmI
++username admin privilege 15 secret 9 $9$D7jdemOCDIvFD6$ooIeNQmwe32FylXy2HYTgZQ8WPrp9yFGaMWDs9VIhbc
+-ntp authentication-key 1 md5 09625A1932000E5159595273 7
++ntp authentication-key 1 md5 080F585E221C1C54405E5A5D 7

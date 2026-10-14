@@ -1,0 +1,37 @@
+ *** R0-ISP | KKU Capstone P3 | Authorized access only - all activity is logged *** 
+
+
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************
+R0-ISP#
+R0-ISP#terminal width 511
+R0-ISP#terminal length 0
+R0-ISP#
+R0-ISP#
+R0-ISP#
+R0-ISP#
+R0-ISP#show ip interface brief
+Interface                  IP-Address      OK? Method Status                Protocol
+GigabitEthernet0/0         203.0.113.2     YES manual up                    up      
+GigabitEthernet0/1         203.0.113.6     YES manual up                    up      
+GigabitEthernet0/2         203.0.113.10    YES manual up                    up      
+GigabitEthernet0/3         10.10.20.181    YES TFTP   up                    up      
+R0-ISP#
+R0-ISP#
+R0-ISP#show ntp status
+Clock is synchronized, stratum 3, reference is 127.127.1.1    
+nominal freq is 1000.0003 Hz, actual freq is 1000.0003 Hz, precision is 2**16
+ntp uptime is 802400 (1/100 of seconds), resolution is 1000
+reference time is EE7A5CB5.FCC03A91 (02:55:33.987 ICT Thu Oct 15 2026)
+clock offset is 0.0000 msec, root delay is 0.00 msec
+root dispersion is 0.38 msec, peer dispersion is 0.24 msec
+loopfilter state is 'CTRL' (Normal Controlled Loop), drift is 0.000000000 s/s
+system poll interval is 16, last update was 9 sec ago.
+R0-ISP#
+R0-ISP#exit

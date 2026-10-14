@@ -1,0 +1,42 @@
+ *** R1-HQ | KKU Capstone P3 | Authorized access only - all activity is logged *** 
+
+
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************
+R1-HQ#
+R1-HQ#terminal width 511
+R1-HQ#terminal length 0
+R1-HQ#
+R1-HQ#
+R1-HQ#
+R1-HQ#
+R1-HQ#show ip route static
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area 
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+       a - application route
+       + - replicated route, % - next hop override, p - overrides from PfR
+
+Gateway of last resort is 203.0.113.2 to network 0.0.0.0
+
+S*    0.0.0.0/0 [1/0] via 203.0.113.2
+                [1/0] via 10.10.20.254
+      10.0.0.0/8 is variably subnetted, 6 subnets, 3 masks
+S        10.10.0.0/16 [1/0] via 10.10.20.254
+S     192.168.0.0/16 [1/0] via 10.10.20.254
+R1-HQ#
+R1-HQ#
+R1-HQ#ping 203.0.113.5
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 203.0.113.5, timeout is 2 seconds:
+....

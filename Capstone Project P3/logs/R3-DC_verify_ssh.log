@@ -1,0 +1,138 @@
+ *** R3-DC | KKU Capstone P3 | Authorized access only - all activity is logged *** 
+
+
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************
+R3-DC#
+R3-DC#terminal width 511
+R3-DC#terminal length 0
+R3-DC#
+R3-DC#
+R3-DC#
+R3-DC#
+R3-DC#show ip interface brief
+Interface                  IP-Address      OK? Method Status                Protocol
+GigabitEthernet0/0         203.0.113.9     YES manual up                    up      
+GigabitEthernet0/1         10.3.10.1       YES manual up                    up      
+GigabitEthernet0/2         unassigned      YES unset  administratively down down    
+GigabitEthernet0/3         10.10.20.184    YES TFTP   up                    up      
+Loopback0                  10.0.0.3        YES manual up                    up      
+NVI0                       203.0.113.9     YES unset  up                    up      
+Tunnel13                   172.16.13.2     YES manual up                    up      
+R3-DC#
+R3-DC#
+R3-DC#show ip ospf neighbor
+
+Neighbor ID     Pri   State           Dead Time   Address         Interface
+1.1.1.1           0   FULL/  -        00:00:17    172.16.13.1     Tunnel13
+R3-DC#
+R3-DC#
+R3-DC#show ipv6 ospf neighbor
+
+            OSPFv3 Router with ID (3.3.3.3) (Process ID 1)
+
+Neighbor ID     Pri   State           Dead Time   Interface ID    Interface
+1.1.1.1           0   FULL/  -        00:00:38    14              Tunnel13
+R3-DC#
+R3-DC#
+R3-DC#show crypto isakmp sa
+IPv4 Crypto ISAKMP SA
+dst             src             state          conn-id status
+203.0.113.9     203.0.113.1     QM_IDLE           1001 ACTIVE
+203.0.113.1     203.0.113.9     QM_IDLE           1002 ACTIVE
+
+IPv6 Crypto ISAKMP SA
+
+R3-DC#
+R3-DC#
+R3-DC#
+R3-DC#show crypto ipsec sa
+
+interface: Tunnel13
+    Crypto map tag: Tunnel13-head-0, local addr 203.0.113.9
+
+   protected vrf: (none)
+   local  ident (addr/mask/prot/port): (203.0.113.9/255.255.255.255/47/0)
+   remote ident (addr/mask/prot/port): (203.0.113.1/255.255.255.255/47/0)
+   current_peer 203.0.113.1 port 500
+     PERMIT, flags={origin_is_acl,}
+    #pkts encaps: 2676, #pkts encrypt: 2676, #pkts digest: 2676
+    #pkts decaps: 2757, #pkts decrypt: 2757, #pkts verify: 2757
+    #pkts compressed: 0, #pkts decompressed: 0
+    #pkts not compressed: 0, #pkts compr. failed: 0
+    #pkts not decompressed: 0, #pkts decompress failed: 0
+    #send errors 0, #recv errors 0
+
+     local crypto endpt.: 203.0.113.9, remote crypto endpt.: 203.0.113.1
+     plaintext mtu 1458, path mtu 1500, ip mtu 1500, ip mtu idb GigabitEthernet0/0
+     current outbound spi: 0x5905120E(1493504526)
+     PFS (Y/N): Y, DH group: group14
+
+     inbound esp sas:
+      spi: 0x78B9B1CA(2025435594)
+        transform: esp-256-aes esp-sha256-hmac ,
+        in use settings ={Transport, }
+        conn id: 5, flow_id: SW:5, sibling_flags 80004000, crypto map: Tunnel13-head-0
+        sa timing: remaining key lifetime (k/sec): (4309853/735)
+        IV size: 16 bytes
+        replay detection support: Y
+        Status: ACTIVE(ACTIVE)
+
+     inbound ah sas:
+
+     inbound pcp sas:
+
+     outbound esp sas:
+      spi: 0x5905120E(1493504526)
+        transform: esp-256-aes esp-sha256-hmac ,
+        in use settings ={Transport, }
+        conn id: 6, flow_id: SW:6, sibling_flags 80004000, crypto map: Tunnel13-head-0
+        sa timing: remaining key lifetime (k/sec): (4309860/735)
+        IV size: 16 bytes
+        replay detection support: Y
+        Status: ACTIVE(ACTIVE)
+
+     outbound ah sas:
+
+     outbound pcp sas:
+R3-DC#
+R3-DC#
+R3-DC#
+R3-DC#ping 10.0.0.1 source Loopback0 repeat 5
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 10.0.0.1, timeout is 2 seconds:
+Packet sent with a source address of 10.0.0.3 
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 3/4/5 ms
+R3-DC#
+R3-DC#
+R3-DC#ping ipv6 2001:db8:0:1::1 source Loopback0 repeat 5
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 2001:DB8:0:1::1, timeout is 2 seconds:
+Packet sent with a source address of 2001:DB8:0:3::1
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 5/5/5 ms
+R3-DC#
+R3-DC#
+R3-DC#ping 10.0.0.2 source Loopback0 repeat 5
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 10.0.0.2, timeout is 2 seconds:
+Packet sent with a source address of 10.0.0.3 
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 5/7/11 ms
+R3-DC#
+R3-DC#
+R3-DC#ping ipv6 2001:db8:0:2::1 source Loopback0 repeat 5
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 2001:DB8:0:2::1, timeout is 2 seconds:
+Packet sent with a source address of 2001:DB8:0:3::1
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 6/6/8 ms
+R3-DC#
+R3-DC#exit

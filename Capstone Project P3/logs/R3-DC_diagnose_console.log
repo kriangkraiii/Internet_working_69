@@ -1,0 +1,172 @@
+
+****
+CML2 Console Server
+Copyright (c) 2019-2024 Cisco Systems, Inc. and/or its affiliates
+****
+
+tab completion works
+list available nodes and node labels / IDs with "list"
+it's also possible to do a "open /Lab at Wed 22:21 PM/iosv-0/0" command
+or to directly connect via UUID "connect 697bb5b8-7181-49c5-8e85-540eacf9deac"
+(e.g. lab name followed by node name and line number
+
+[J[2K
+consoles> [J[2K
+consoles> [J[2K
+consoles> 
+[J[2K
+consoles> [J[2K
+consoles> o[J[2K
+consoles> op[J[2K
+consoles> ope[J[2K
+consoles> open[J[2K
+consoles> open [J[2K
+consoles> open /[J[2K
+consoles> open /C[J[2K
+consoles> open /Ca[J[2K
+consoles> open /Cap[J[2K
+consoles> open /Caps[J[2K
+consoles> open /Capst[J[2K
+consoles> open /Capsto[J[2K
+consoles> open /Capston[J[2K
+consoles> open /Capstone[J[2K
+consoles> open /Capstone-[J[2K
+consoles> open /Capstone-P[J[2K
+consoles> open /Capstone-P3[J[2K
+consoles> open /Capstone-P3/[J[2K
+consoles> open /Capstone-P3/R[J[2K
+consoles> open /Capstone-P3/R3[J[2K
+consoles> open /Capstone-P3/R3-[J[2K
+consoles> open /Capstone-P3/R3-D[J[2K
+consoles> open /Capstone-P3/R3-DC[J[2K
+consoles> open /Capstone-P3/R3-DC/[J[2K
+consoles> open /Capstone-P3/R3-DC/0[J[2K
+consoles> open /Capstone-P3/R3-DC/0[J[2K
+consoles> open /Capstone-P3/R3-DC/0
+Connecting to console for R3-DC
+Connected to CML terminalserver.
+Escape character is '^]'.
+ *** R3-DC | KKU Capstone P3 | Authorized access only - all activity is logged *** 
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************
+
+User Access Verification
+
+Username: 
+Oct 15 02:54:01.144 ICT: %SEC-6-IPACCESSLOGNP: list ACL-VTY-LOCKOUT denied 0 192.168.254.11 -> 0.0.0.0, 1 packet  
+Username: 
+Username: admin
+Password: 
+
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************
+R3-DC>
+Oct 15 02:54:05.580 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: UNKNOWN] [localport: 0] at 02:54:05 ICT Thu Oct 15 2026
+R3-DC>********
+% Bad IP address or host name
+% Unknown command or computer name, or unable to find computer address
+R3-DC>enable
+Password: 
+R3-DC#end
+Translating "end"
+
+Translating "end"
+
+Translating "end"
+
+% Bad IP address or host name
+% Unknown command or computer name, or unable to find computer address
+R3-DC#
+Oct 15 02:54:10.040 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:!exec: enable
+R3-DC#terminal length 0
+R3-DC#terminal width 511
+R3-DC#
+R3-DC#
+R3-DC#
+R3-DC#
+R3-DC#show running-config | section line vty
+line vty 0 4
+ access-class ACL-VTY-LOCKOUT in
+ logging synchronous
+ transport input ssh
+R3-DC#
+R3-DC#
+R3-DC#
+R3-DC#show ip access-lists ACL-VTY-LOCKOUT
+Standard IP access list ACL-VTY-LOCKOUT
+    10 permit 10.10.20.181
+    20 deny   any log (1 match)
+R3-DC#
+R3-DC#
+R3-DC#show logging | include SEC|ACCESS|SSH
+Oct 15 01:27:08.207 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:ip access-list extended CoPP-IPSEC
+Oct 15 01:27:21.056 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:class-map match-all CM-COPP-IPSEC
+Oct 15 01:27:22.115 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:match access-group name CoPP-IPSEC
+Oct 15 01:27:29.292 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:class CM-COPP-IPSEC
+Oct 15 01:28:57.312 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: 192.168.254.11] [localport: 22] at 01:28:57 ICT Thu Oct 15 2026
+Oct 15 01:32:20.807 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: 192.168.254.11] [localport: 22] at 01:32:20 ICT Thu Oct 15 2026
+Oct 15 01:32:45.422 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:ip access-list extended ACL-MGMT-SSH
+Oct 15 01:32:47.529 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:remark ** allow SSH only from OOB management subnet **
+Oct 15 01:32:50.606 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:access-class ACL-MGMT-SSH in 
+.Oct 15 01:33:50.005 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:crypto ipsec profile IPSEC-PROFILE
+.Oct 15 01:34:02.562 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:tunnel protection ipsec profile IPSEC-PROFILE
+.Oct 15 01:34:25.847 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:ip access-list extended CoPP-IPSEC
+.Oct 15 01:34:38.808 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:class-map match-all CM-COPP-IPSEC
+.Oct 15 01:34:39.767 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:match access-group name CoPP-IPSEC
+.Oct 15 01:34:47.032 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:class CM-COPP-IPSEC
+Oct 15 01:39:47.991 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: 192.168.254.11] [localport: 22] at 01:39:47 ICT Thu Oct 15 2026
+Oct 15 01:40:17.026 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:ip access-list extended ACL-MGMT-SSH
+Oct 15 01:40:19.090 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:remark ** allow SSH only from OOB management subnet **
+Oct 15 01:40:22.155 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:access-class ACL-MGMT-SSH in 
+.Oct 15 01:41:18.712 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:crypto ipsec profile IPSEC-PROFILE
+.Oct 15 01:41:31.761 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:tunnel protection ipsec profile IPSEC-PROFILE
+
+.Oct 15 01:41:56.924 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:ip access-list extended CoPP-IPSEC
+.Oct 15 01:42:09.858 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:class-map match-all CM-COPP-IPSEC
+.Oct 15 01:42:10.873 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:match access-group name CoPP-IPSEC
+.Oct 15 01:42:18.079 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:class CM-COPP-IPSEC
+Oct 15 01:43:30.987 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: 192.168.254.11] [localport: 22] at 01:43:30 ICT Thu Oct 15 2026
+Oct 15 01:46:25.934 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: 192.168.254.11] [localport: 22] at 01:46:25 ICT Thu Oct 15 2026
+Oct 15 01:47:55.813 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: 192.168.254.11] [localport: 22] at 01:47:55 ICT Thu Oct 15 2026
+Oct 15 01:48:21.713 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: 192.168.254.11] [localport: 22] at 01:48:21 ICT Thu Oct 15 2026
+Oct 15 01:52:06.286 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: 192.168.254.11] [localport: 22] at 01:52:06 ICT Thu Oct 15 2026
+Oct 15 02:01:14.464 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: 192.168.254.11] [localport: 22] at 02:01:14 ICT Thu Oct 15 2026
+Oct 15 02:04:33.867 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: 192.168.254.11] [localport: 22] at 02:04:33 ICT Thu Oct 15 2026
+Oct 15 02:05:08.194 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: 192.168.254.11] [localport: 22] at 02:05:08 ICT Thu Oct 15 2026
+Oct 15 02:05:45.480 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: 192.168.254.11] [localport: 22] at 02:05:45 ICT Thu Oct 15 2026
+Oct 15 02:06:07.508 ICT: %SEC-6-IPACCESSLOGNP: list ACL-VTY-LOCKOUT denied 0 192.168.254.11 -> 0.0.0.0, 1 packet  
+Oct 15 02:06:20.502 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: UNKNOWN] [localport: 0] at 02:06:20 ICT Thu Oct 15 2026
+Oct 15 02:07:09.385 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: UNKNOWN] [localport: 0] at 02:07:09 ICT Thu Oct 15 2026
+Oct 15 02:07:20.405 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:access-class ACL-MGMT-SSH in 
+Oct 15 02:07:30.168 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: 192.168.254.11] [localport: 22] at 02:07:30 ICT Thu Oct 15 2026
+Oct 15 02:11:44.537 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: 192.168.254.11] [localport: 22] at 02:11:44 ICT Thu Oct 15 2026
+Oct 15 02:13:49.379 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: 192.168.254.11] [localport: 22] at 02:13:49 ICT Thu Oct 15 2026
+Oct 15 02:14:12.379 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: 192.168.254.11] [localport: 22] at 02:14:12 ICT Thu Oct 15 2026
+Oct 15 02:14:46.602 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: 192.168.254.11] [localport: 22] at 02:14:46 ICT Thu Oct 15 2026
+Oct 15 02:15:57.553 ICT: %SEC-6-IPACCESSLOGNP: list ACL-VTY-LOCKOUT denied 0 192.168.254.11 -> 0.0.0.0, 1 packet  
+Oct 15 02:15:59.294 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: UNKNOWN] [localport: 0] at 02:15:59 ICT Thu Oct 15 2026
+
+Oct 15 02:16:10.518 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:access-class ACL-MGMT-SSH in 
+Oct 15 02:16:37.139 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: 192.168.254.11] [localport: 22] at 02:16:37 ICT Thu Oct 15 2026
+Oct 15 02:46:37.669 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: 192.168.254.11] [localport: 22] at 02:46:37 ICT Thu Oct 15 2026
+Oct 15 02:48:30.124 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: 192.168.254.11] [localport: 22] at 02:48:30 ICT Thu Oct 15 2026
+
+Oct 15 02:51:59.893 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: 192.168.254.11] [localport: 22] at 02:51:59 ICT Thu Oct 15 2026
+Oct 15 02:53:06.046 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: 192.168.254.11] [localport: 22] at 02:53:06 ICT Thu Oct 15 2026
+Oct 15 02:53:36.230 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: 192.168.254.11] [localport: 22] at 02:53:36 ICT Thu Oct 15 2026
+Oct 15 02:54:01.144 ICT: %SEC-6-IPACCESSLOGNP: list ACL-VTY-LOCKOUT denied 0 192.168.254.11 -> 0.0.0.0, 1 packet  
+Oct 15 02:54:05.580 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: UNKNOWN] [localport: 0] at 02:54:05 ICT Thu Oct 15 2026
+R3-DC#
+R3-DC#exit

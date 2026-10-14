@@ -1,0 +1,94 @@
+
+****
+CML2 Console Server
+Copyright (c) 2019-2024 Cisco Systems, Inc. and/or its affiliates
+****
+
+tab completion works
+list available nodes and node labels / IDs with "list"
+it's also possible to do a "open /Lab at Wed 22:21 PM/iosv-0/0" command
+or to directly connect via UUID "connect 697bb5b8-7181-49c5-8e85-540eacf9deac"
+(e.g. lab name followed by node name and line number
+
+[J[2K
+consoles> [J[2K
+consoles> [J[2K
+consoles> 
+[J[2K
+consoles> [J[2K
+consoles> o[J[2K
+consoles> op[J[2K
+consoles> ope[J[2K
+consoles> open[J[2K
+consoles> open [J[2K
+consoles> open /[J[2K
+consoles> open /C[J[2K
+consoles> open /Ca[J[2K
+consoles> open /Cap[J[2K
+consoles> open /Caps[J[2K
+consoles> open /Capst[J[2K
+consoles> open /Capsto[J[2K
+consoles> open /Capston[J[2K
+consoles> open /Capstone[J[2K
+consoles> open /Capstone-[J[2K
+consoles> open /Capstone-P[J[2K
+consoles> open /Capstone-P3[J[2K
+consoles> open /Capstone-P3/[J[2K
+consoles> open /Capstone-P3/R[J[2K
+consoles> open /Capstone-P3/R0[J[2K
+consoles> open /Capstone-P3/R0-[J[2K
+consoles> open /Capstone-P3/R0-I[J[2K
+consoles> open /Capstone-P3/R0-IS[J[2K
+consoles> open /Capstone-P3/R0-ISP[J[2K
+consoles> open /Capstone-P3/R0-ISP/[J[2K
+consoles> open /Capstone-P3/R0-ISP/0[J[2K
+consoles> open /Capstone-P3/R0-ISP/0[J[2K
+consoles> open /Capstone-P3/R0-ISP/0
+Connecting to console for R0-ISP
+Connected to CML terminalserver.
+Escape character is '^]'.
+
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************
+R0-ISP>
+R0-ISP>terminal width 511
+R0-ISP>terminal length 0
+R0-ISP>
+R0-ISP>
+R0-ISP>enable
+Password: 
+R0-ISP#
+R0-ISP#
+R0-ISP#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+R0-ISP(config)#
+R0-ISP(config)#ip route 0.0.0.0 0.0.0.0 10.10.20.254
+R0-ISP(config)#
+R0-ISP(config)#end
+R0-ISP#
+R0-ISP#
+R0-ISP#
+R0-ISP#
+*Oct 14 17:11:29.445: %SYS-5-CONFIG_I: Configured from console by console
+R0-ISP#show ip route static
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area 
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       o - ODR, P - periodic downloaded static route, H - NHRP, l - LISP
+       a - application route
+       + - replicated route, % - next hop override, p - overrides from PfR
+
+Gateway of last resort is 10.10.20.254 to network 0.0.0.0
+
+S*    0.0.0.0/0 [1/0] via 10.10.20.254
+R0-ISP#
+R0-ISP#exit

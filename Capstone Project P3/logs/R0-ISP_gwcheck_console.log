@@ -1,0 +1,98 @@
+
+****
+CML2 Console Server
+Copyright (c) 2019-2024 Cisco Systems, Inc. and/or its affiliates
+****
+
+tab completion works
+list available nodes and node labels / IDs with "list"
+it's also possible to do a "open /Lab at Wed 22:21 PM/iosv-0/0" command
+or to directly connect via UUID "connect 697bb5b8-7181-49c5-8e85-540eacf9deac"
+(e.g. lab name followed by node name and line number
+
+[J[2K
+consoles> [J[2K
+consoles> [J[2K
+consoles> 
+[J[2K
+consoles> [J[2K
+consoles> o[J[2K
+consoles> op[J[2K
+consoles> ope[J[2K
+consoles> open[J[2K
+consoles> open [J[2K
+consoles> open /[J[2K
+consoles> open /C[J[2K
+consoles> open /Ca[J[2K
+consoles> open /Cap[J[2K
+consoles> open /Caps[J[2K
+consoles> open /Capst[J[2K
+consoles> open /Capsto[J[2K
+consoles> open /Capston[J[2K
+consoles> open /Capstone[J[2K
+consoles> open /Capstone-[J[2K
+consoles> open /Capstone-P[J[2K
+consoles> open /Capstone-P3[J[2K
+consoles> open /Capstone-P3/[J[2K
+consoles> open /Capstone-P3/R[J[2K
+consoles> open /Capstone-P3/R0[J[2K
+consoles> open /Capstone-P3/R0-[J[2K
+consoles> open /Capstone-P3/R0-I[J[2K
+consoles> open /Capstone-P3/R0-IS[J[2K
+consoles> open /Capstone-P3/R0-ISP[J[2K
+consoles> open /Capstone-P3/R0-ISP/[J[2K
+consoles> open /Capstone-P3/R0-ISP/0[J[2K
+consoles> open /Capstone-P3/R0-ISP/0[J[2K
+consoles> open /Capstone-P3/R0-ISP/0
+Connecting to console for R0-ISP
+Connected to CML terminalserver.
+Escape character is '^]'.
+
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************
+R0-ISP>
+R0-ISP>terminal width 511
+R0-ISP>terminal length 0
+R0-ISP>
+R0-ISP>
+R0-ISP>enable
+Password: 
+R0-ISP#
+R0-ISP#
+R0-ISP#
+R0-ISP#ping 10.10.20.1 repeat 2
+Type escape sequence to abort.
+Sending 2, 100-byte ICMP Echos to 10.10.20.1, timeout is 2 seconds:
+..
+Success rate is 0 percent (0/2)
+R0-ISP#
+R0-ISP#
+R0-ISP#ping 10.10.20.254 repeat 2
+Type escape sequence to abort.
+Sending 2, 100-byte ICMP Echos to 10.10.20.254, timeout is 2 seconds:
+!!
+Success rate is 100 percent (2/2), round-trip min/avg/max = 2/2/2 ms
+R0-ISP#
+R0-ISP#
+R0-ISP#ping 10.10.20.50 repeat 2
+Type escape sequence to abort.
+Sending 2, 100-byte ICMP Echos to 10.10.20.50, timeout is 2 seconds:
+..
+Success rate is 0 percent (0/2)
+R0-ISP#
+R0-ISP#
+R0-ISP#show ip arp
+Protocol  Address          Age (min)  Hardware Addr   Type   Interface
+Internet  10.10.20.1              0   Incomplete      ARPA   
+Internet  10.10.20.50             0   Incomplete      ARPA   
+Internet  10.10.20.161            2   0050.56bf.74dc  ARPA   GigabitEthernet0/3
+Internet  10.10.20.181            -   5254.000f.99c5  ARPA   GigabitEthernet0/3
+Internet  10.10.20.254           15   0050.56bf.002a  ARPA   GigabitEthernet0/3
+R0-ISP#
+R0-ISP#exit

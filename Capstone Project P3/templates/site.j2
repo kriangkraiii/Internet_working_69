@@ -1,0 +1,163 @@
+{#- ===== R1-HQ / R2-BR1 / R3-DC: Dual-stack + GRE over IPsec + OSPFv2/OSPFv3 + CoPP + FNF ===== -#}
+{% include 'base.j2' %}
+!
+ipv6 unicast-routing
+!
+! ---------- Interfaces (IPv4/IPv6 Dual-Stack) ----------
+interface Loopback0
+ description ROUTER-ID
+ ip address {{ loopback.ip }} 255.255.255.255
+ ipv6 address {{ loopback.ipv6 }}
+interface {{ wan.name }}
+ description WAN-to-R0-ISP
+ ip address {{ wan.ip }} {{ wan.mask }}
+ ipv6 address {{ wan.ipv6 }}
+ no shutdown
+interface {{ lan.name }}
+ description LAN-{{ name }}
+ ip address {{ lan.ip }} {{ lan.mask }}
+ ipv6 address {{ lan.ipv6 }}
+ no shutdown
+no ip route 0.0.0.0 0.0.0.0 10.10.20.254
+ip route 0.0.0.0 0.0.0.0 {{ wan.gw }} name UNDERLAY-DEFAULT
+!
+! ---------- IPsec (IKEv1, AES-256/SHA-256/DH14, transport mode) ----------
+crypto isakmp policy 10
+ encryption aes 256
+ hash sha256
+ authentication pre-share
+ group 14
+ lifetime 86400
+{% for t in tunnels %}
+crypto isakmp key {{ ipsec_psk }} address {{ t.peer }}
+{% endfor %}
+crypto isakmp keepalive 10 3 periodic
+crypto ipsec transform-set TS-AES256-SHA256 esp-aes 256 esp-sha256-hmac
+ mode transport
+crypto ipsec profile IPSEC-PROFILE
+ set transform-set TS-AES256-SHA256
+ set pfs group14
+!
+! ---------- GRE over IPsec tunnels (Hub-and-Spoke) ----------
+{% for t in tunnels %}
+interface Tunnel{{ t.id }}
+ description GRE-IPsec-to-{{ t.peer_name }}
+ ip address {{ t.ip }} 255.255.255.252
+ ipv6 address {{ t.ipv6 }}
+ ip mtu 1400
+ ip tcp adjust-mss 1360
+ ip ospf network point-to-point
+ ip ospf hello-interval 5
+ ip ospf dead-interval 20
+ ipv6 ospf network point-to-point
+ ipv6 ospf 1 area 0
+ tunnel source {{ wan.name }}
+ tunnel destination {{ t.peer }}
+ tunnel protection ipsec profile IPSEC-PROFILE
+{% endfor %}
+!
+! ---------- OSPFv2 (IPv4) — WAN ไม่อยู่ใน OSPF เพื่อกัน recursive routing ----------
+router ospf 1
+ router-id {{ router_id }}
+ passive-interface default
+{% for t in tunnels %}
+ no passive-interface Tunnel{{ t.id }}
+{% endfor %}
+ network {{ loopback.ip }} 0.0.0.0 area 0
+ network {{ lan.ip }} 0.0.0.0 area 0
+{% for t in tunnels %}
+ network {{ t.ip }} 0.0.0.0 area 0
+{% endfor %}
+!
+! ---------- OSPFv3 (IPv6) ----------
+ipv6 router ospf 1
+ router-id {{ router_id }}
+ passive-interface default
+{% for t in tunnels %}
+ no passive-interface Tunnel{{ t.id }}
+{% endfor %}
+interface Loopback0
+ ipv6 ospf 1 area 0
+interface {{ lan.name }}
+ ipv6 ospf 1 area 0
+!
+! ---------- Extended ACL: WAN inbound (อนุญาตเฉพาะ IPsec จาก peer ที่รู้จัก) ----------
+ip access-list extended ACL-WAN-IN
+ remark ** IKE / NAT-T / ESP from known peers only **
+{% for t in tunnels %}
+ permit udp host {{ t.peer }} host {{ wan.ip }} eq isakmp
+ permit udp host {{ t.peer }} host {{ wan.ip }} eq non500-isakmp
+ permit esp host {{ t.peer }} host {{ wan.ip }}
+{% endfor %}
+ permit icmp any any echo-reply
+ permit icmp any any unreachable
+ permit icmp any any time-exceeded
+ permit icmp any any echo
+ deny   ip any any log
+interface {{ wan.name }}
+ ip access-group ACL-WAN-IN in
+!
+! ---------- CoPP (Control Plane Policing) ----------
+ip access-list extended CoPP-ROUTING
+ permit ospf any any
+ip access-list extended CoPP-IPSEC
+ permit udp any any eq isakmp
+ permit udp any any eq non500-isakmp
+ permit esp any any
+ip access-list extended CoPP-MGMT
+ permit tcp any any eq 22
+ permit tcp {{ mgmt_subnet }} {{ mgmt_wildcard }} any eq 22
+ permit udp {{ mgmt_subnet }} {{ mgmt_wildcard }} any eq snmp
+ permit udp {{ mgmt_subnet }} {{ mgmt_wildcard }} any eq ntp
+ permit udp {{ mgmt_subnet }} {{ mgmt_wildcard }} eq ntp any
+ip access-list extended CoPP-ICMP
+ permit icmp any any
+class-map match-all CM-COPP-ROUTING
+ match access-group name CoPP-ROUTING
+class-map match-all CM-COPP-IPSEC
+ match access-group name CoPP-IPSEC
+class-map match-all CM-COPP-MGMT
+ match access-group name CoPP-MGMT
+class-map match-all CM-COPP-ICMP
+ match access-group name CoPP-ICMP
+policy-map PM-COPP
+ class CM-COPP-ROUTING
+  police cir 256000 conform-action transmit exceed-action transmit
+ class CM-COPP-IPSEC
+  police cir 128000 conform-action transmit exceed-action drop
+ class CM-COPP-MGMT
+  police cir 512000 conform-action transmit exceed-action drop
+ class CM-COPP-ICMP
+  police cir 32000 conform-action transmit exceed-action drop
+ class class-default
+  police cir 64000 conform-action transmit exceed-action drop
+control-plane
+ service-policy input PM-COPP
+!
+! ---------- Flexible NetFlow ----------
+flow record FNF-RECORD
+ match ipv4 source address
+ match ipv4 destination address
+ match ipv4 protocol
+ match transport source-port
+ match transport destination-port
+ match interface input
+ collect counter bytes
+ collect counter packets
+ collect timestamp sys-uptime first
+ collect timestamp sys-uptime last
+flow exporter FNF-EXPORTER
+ destination {{ collector }}
+ source {{ mgmt_if }}
+ transport udp 2055
+ export-protocol netflow-v9
+flow monitor FNF-MONITOR
+ record FNF-RECORD
+ exporter FNF-EXPORTER
+ cache timeout active 60
+interface {{ lan.name }}
+ ip flow monitor FNF-MONITOR input
+{% for t in tunnels %}
+interface Tunnel{{ t.id }}
+ ip flow monitor FNF-MONITOR input
+{% endfor %}

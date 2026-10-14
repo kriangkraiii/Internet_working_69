@@ -1,0 +1,97 @@
+
+****
+CML2 Console Server
+Copyright (c) 2019-2024 Cisco Systems, Inc. and/or its affiliates
+****
+
+tab completion works
+list available nodes and node labels / IDs with "list"
+it's also possible to do a "open /Lab at Wed 22:21 PM/iosv-0/0" command
+or to directly connect via UUID "connect 697bb5b8-7181-49c5-8e85-540eacf9deac"
+(e.g. lab name followed by node name and line number
+
+[J[2K
+consoles> [J[2K
+consoles> [J[2K
+consoles> 
+[J[2K
+consoles> [J[2K
+consoles> o[J[2K
+consoles> op[J[2K
+consoles> ope[J[2K
+consoles> open[J[2K
+consoles> open [J[2K
+consoles> open /[J[2K
+consoles> open /C[J[2K
+consoles> open /Ca[J[2K
+consoles> open /Cap[J[2K
+consoles> open /Caps[J[2K
+consoles> open /Capst[J[2K
+consoles> open /Capsto[J[2K
+consoles> open /Capston[J[2K
+consoles> open /Capstone[J[2K
+consoles> open /Capstone-[J[2K
+consoles> open /Capstone-P[J[2K
+consoles> open /Capstone-P3[J[2K
+consoles> open /Capstone-P3/[J[2K
+consoles> open /Capstone-P3/R[J[2K
+consoles> open /Capstone-P3/R3[J[2K
+consoles> open /Capstone-P3/R3-[J[2K
+consoles> open /Capstone-P3/R3-D[J[2K
+consoles> open /Capstone-P3/R3-DC[J[2K
+consoles> open /Capstone-P3/R3-DC/[J[2K
+consoles> open /Capstone-P3/R3-DC/0[J[2K
+consoles> open /Capstone-P3/R3-DC/0[J[2K
+consoles> open /Capstone-P3/R3-DC/0
+Connecting to console for R3-DC
+Connected to CML terminalserver.
+Escape character is '^]'.
+
+R3-DC>
+R3-DC>terminal width 511
+R3-DC>terminal length 0
+R3-DC>
+R3-DC>
+R3-DC>enable
+Password: 
+R3-DC#
+R3-DC#
+R3-DC#
+R3-DC#show crypto key mypubkey rsa
+% Key pair was generated at: 16:43:49 UTC Oct 14 2026
+Key name: R3-DC.kku.lab
+Key type: RSA KEYS
+ Storage Device: private-config
+ Usage: General Purpose Key
+ Key is not exportable.
+ Key Data:
+  30820122 300D0609 2A864886 F70D0101 01050003 82010F00 3082010A 02820101 
+  00A74644 975A4F2D 5A9E4355 A107D8E7 43E66E93 1D10855C 7E4B4BA5 0071FFF1 
+  D07BB460 6CE38319 AA977922 B9270E66 CB6D905C FE70624A A8FFEAD0 3F768014 
+  3BBD2961 63D609C9 080D0D38 CA30061F 42E4FD86 A92DCB30 F0B77DB1 5E1E156A 
+  FAE95B58 6B0D438D 93F4CB1E D78107BD 7D5A5B11 2D804C3D 62A059D4 B7AAE060 
+  F982DD7A 9961A3D8 9764B7E9 1498087B EB81891F B06964FB 9535704F B255A7DF 
+  E2AFF896 DFC7D940 6AF931E0 ED17CCE3 F97997FA 59FA2F3F A94BF9C2 4D3FB33D 
+  1F8D8881 B1A2E6EA 7029F9A0 EA49400A DB695376 81645A4C 1DDE6786 7BC27481 
+  DE0993E7 D75632B9 F4C68449 99798021 F9A05BC7 8C026C5E 3DCB9DA1 79627773 
+  2D020301 0001
+% Key pair was generated at: 16:47:09 UTC Oct 14 2026
+Key name: R3-DC.kku.lab.server
+Key type: RSA KEYS
+Temporary key
+ Usage: Encryption Key
+ Key is not exportable.
+ Key Data:
+  307C300D 06092A86 4886F70D 01010105 00036B00 30680261 00B2146E 0180E119 
+  98CC766C 5D3AF928 3D3E9241 5106D79F 732864FA 68E2E85D B791D203 5B8DE4E7 
+  8749534F 847421AE D06BD049 EA1A247F 9FCAEDC9 6C87C740 15C90C2F 1A99A094 
+  31F4EF71 DCC15B15 CAD2249A EAA57A3C 98727D71 611B5DE3 FD020301 0001
+R3-DC#
+R3-DC#
+R3-DC#
+R3-DC#write mem
+Building configuration...
+
+  [OK]
+R3-DC#
+R3-DC#exit

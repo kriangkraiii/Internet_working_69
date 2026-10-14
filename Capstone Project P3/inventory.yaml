@@ -1,0 +1,74 @@
+# Inventory ของโปรเจค — แก้ค่าตรงนี้ที่เดียว แล้ว template + script จะใช้ตาม
+# แพลตฟอร์ม: Cisco DevNet Sandbox "Cisco Modeling Labs" (CML) ผ่าน VPN
+# Credentials override ด้วย env var: NET_USER / NET_PASS / NET_SECRET (router) และ CML_USER / CML_PASS (CML)
+# Management: External Connector (bridge0) -> วง sandbox 10.10.20.0/24
+#   หลีกเลี่ยง .1 .50 (devbox) .161 (CML) และ .170-.178 (default lab ของ sandbox)
+# Loopback0 = 10.0.0.x/32 (private) ส่วน router-id = x.x.x.x เพื่ออ่านง่าย
+
+defaults:
+  device_type: cisco_ios
+  username: admin
+  password: Cisco123!
+  secret: Cisco123!
+  domain: kku.lab
+  mgmt_if: GigabitEthernet0/3
+  mgmt_mask: 255.255.255.0
+  mgmt_subnet: 10.10.20.0
+  mgmt_wildcard: 0.0.0.255
+  collector: 10.10.20.50         # devbox ของ sandbox = automation host (Netmiko + Syslog + NetFlow)
+  ntp_server: 10.10.20.181       # R0-ISP เป็น NTP master
+  snmp_user: snmpadmin
+  snmp_auth: SnmpAuth#2569
+  snmp_priv: SnmpPriv#2569
+  ipsec_psk: KKU-Capstone-PSK
+  ntp_key: NtpKey#2569
+  flash: "flash0:"               # IOSv = flash0:  |  IOL = unix:
+  cml:
+    host: 10.10.20.161             # ดู IP ของ CML ในหน้า "Instructions" ของ sandbox
+    lab: Capstone-P3               # ชื่อ lab (ห้ามมีช่องว่าง — ใช้เป็น path ของ console server)
+    username: developer            # ค่าเริ่มต้นของ DevNet sandbox — override ด้วย CML_USER
+    password: C1sco12345           # override ด้วย CML_PASS
+    node_definition: iosv
+
+devices:
+  R0-ISP:
+    role: isp
+    mgmt_ip: 10.10.20.181
+    interfaces:
+      - {name: GigabitEthernet0/0, ip: 203.0.113.2,  mask: 255.255.255.252, ipv6: "2001:db8:ffff:1::2/64", desc: "to R1-HQ"}
+      - {name: GigabitEthernet0/1, ip: 203.0.113.6,  mask: 255.255.255.252, ipv6: "2001:db8:ffff:2::2/64", desc: "to R2-BR1"}
+      - {name: GigabitEthernet0/2, ip: 203.0.113.10, mask: 255.255.255.252, ipv6: "2001:db8:ffff:3::2/64", desc: "to R3-DC"}
+
+  R1-HQ:
+    role: hub
+    mgmt_ip: 10.10.20.182
+    router_id: 1.1.1.1
+    expected_ospf: 2
+    loopback: {ip: 10.0.0.1, ipv6: "2001:db8:0:1::1/128"}
+    wan: {name: GigabitEthernet0/0, ip: 203.0.113.1, mask: 255.255.255.252, ipv6: "2001:db8:ffff:1::1/64", gw: 203.0.113.2}
+    lan: {name: GigabitEthernet0/1, ip: 10.1.10.1, mask: 255.255.255.0, ipv6: "2001:db8:1:10::1/64"}
+    tunnels:
+      - {id: 12, ip: 172.16.12.1, ipv6: "2001:db8:12::1/64", peer: 203.0.113.5, peer_name: R2-BR1}
+      - {id: 13, ip: 172.16.13.1, ipv6: "2001:db8:13::1/64", peer: 203.0.113.9, peer_name: R3-DC}
+
+  R2-BR1:
+    role: spoke
+    mgmt_ip: 10.10.20.183
+    router_id: 2.2.2.2
+    expected_ospf: 1
+    loopback: {ip: 10.0.0.2, ipv6: "2001:db8:0:2::1/128"}
+    wan: {name: GigabitEthernet0/0, ip: 203.0.113.5, mask: 255.255.255.252, ipv6: "2001:db8:ffff:2::1/64", gw: 203.0.113.6}
+    lan: {name: GigabitEthernet0/1, ip: 10.2.10.1, mask: 255.255.255.0, ipv6: "2001:db8:2:10::1/64"}
+    tunnels:
+      - {id: 12, ip: 172.16.12.2, ipv6: "2001:db8:12::2/64", peer: 203.0.113.1, peer_name: R1-HQ}
+
+  R3-DC:
+    role: spoke
+    mgmt_ip: 10.10.20.184
+    router_id: 3.3.3.3
+    expected_ospf: 1
+    loopback: {ip: 10.0.0.3, ipv6: "2001:db8:0:3::1/128"}
+    wan: {name: GigabitEthernet0/0, ip: 203.0.113.9, mask: 255.255.255.252, ipv6: "2001:db8:ffff:3::1/64", gw: 203.0.113.10}
+    lan: {name: GigabitEthernet0/1, ip: 10.3.10.1, mask: 255.255.255.0, ipv6: "2001:db8:3:10::1/64"}
+    tunnels:
+      - {id: 13, ip: 172.16.13.2, ipv6: "2001:db8:13::2/64", peer: 203.0.113.1, peer_name: R1-HQ}

@@ -1,0 +1,34 @@
+ *** R2-BR1 | KKU Capstone P3 | Authorized access only - all activity is logged *** 
+
+
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************
+R2-BR1#
+R2-BR1#terminal width 511
+R2-BR1#terminal length 0
+R2-BR1#
+R2-BR1#
+R2-BR1#
+R2-BR1#
+R2-BR1#show clock
+02:49:04.434 ICT Thu Oct 15 2026
+R2-BR1#debug crypto isakmp
+Crypto ISAKMP debugging is on
+R2-BR1#
+R2-BR1#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+R2-BR1(config)#
+R2-BR1(config)#no crypto isakmp key KKU-Capstone-PSK address 203.0.113.1
+R2-BR1(config)#crypto isakmp key WRONG-KEY-2569 address 203.0.113.1
+R2-BR1(config)#
+R2-BR1(config)#end
+R2-BR1#
+R2-BR1#clear crypto session
+R2-BR1#
+R2-BR1#exit

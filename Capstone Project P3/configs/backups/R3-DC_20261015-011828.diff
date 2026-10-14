@@ -1,0 +1,10 @@
+-Current configuration : 8526 bytes
+-!
++Current configuration : 8514 bytes
++!
+-username admin privilege 15 secret 9 $9$hD0q78mC9yO/qM$Ic4B.NpDPdjl69n0iNYA4MK/qzQTPLArs4hSByN54KY
++username admin privilege 15 secret 9 $9$WNHzPFUpT5fpDc$pfnxHP09tko37IwwOXxeKaNNZerzv8gnjV6hYf9j3oI
+-ip route 0.0.0.0 0.0.0.0 10.10.20.254
++ permit tcp any any eq 22
+-ntp authentication-key 1 md5 09625A1932000E5159595273 7
++ntp authentication-key 1 md5 032A4F1B2D0A380F1C5C4F5C 7

@@ -1,0 +1,85 @@
+{#- ===== Management / Security plane — ใช้กับทุก router ===== -#}
+hostname {{ name }}
+service timestamps debug datetime msec localtime show-timezone
+service timestamps log datetime msec localtime show-timezone
+service password-encryption
+security passwords min-length 8
+clock timezone ICT 7 0
+ip domain-name {{ domain }}
+no ip domain-lookup
+no ip http server
+no ip http secure-server
+file prompt quiet
+!
+! ---------- AAA (local) ----------
+aaa new-model
+aaa authentication login default local
+aaa authorization exec default local
+username {{ username }} privilege 15 secret {{ password }}
+login block-for 120 attempts 5 within 60
+login on-failure log
+login on-success log
+!
+! ---------- SSH + VTY (Extended ACL จำกัดเฉพาะ mgmt subnet) ----------
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+ip access-list extended ACL-MGMT-SSH
+ permit tcp any any eq 22
+ remark ** allow SSH only from OOB management subnet **
+ permit tcp {{ mgmt_subnet }} {{ mgmt_wildcard }} any eq 22
+ deny   ip any any log
+line vty 0 4
+ access-class ACL-MGMT-SSH in
+ transport input ssh
+ exec-timeout 10 0
+ logging synchronous
+line con 0
+ exec-timeout 15 0
+ logging synchronous
+!
+banner motd # *** {{ name }} | KKU Capstone P3 | Authorized access only - all activity is logged *** #
+!
+! ---------- Management interface (OOB) ----------
+interface {{ mgmt_if }}
+ description OOB-MGMT
+ ip address {{ mgmt_ip }} {{ mgmt_mask }}
+ no shutdown
+!
+! ---------- Syslog ----------
+logging buffered 64000 debugging
+logging source-interface {{ mgmt_if }}
+logging trap informational
+logging host {{ collector }}
+archive
+ log config
+  logging enable
+  notify syslog contenttype plaintext
+  hidekeys
+!
+! ---------- NTP (authenticated) ----------
+ntp authentication-key 1 md5 {{ ntp_key }}
+ntp trusted-key 1
+ntp authenticate
+ntp source {{ mgmt_if }}
+{% if role == 'isp' %}
+ntp master 3
+{% else %}
+ntp server {{ ntp_server }} key 1 prefer
+{% endif %}
+!
+! ---------- SNMPv3 (authPriv, จำกัดด้วย ACL) ----------
+ip access-list standard ACL-SNMP
+ permit {{ collector }}
+ deny   any log
+snmp-server view V3-VIEW iso included
+snmp-server group SNMPV3-GRP v3 priv read V3-VIEW access ACL-SNMP
+snmp-server user {{ snmp_user }} SNMPV3-GRP v3 auth sha {{ snmp_auth }} priv aes 128 {{ snmp_priv }}
+snmp-server location {{ name }}-GNS3
+snmp-server contact capstone@{{ domain }}
+snmp-server enable traps snmp linkdown linkup
+snmp-server enable traps config
+snmp-server host {{ collector }} version 3 priv {{ snmp_user }}
+!
+ip route 10.10.0.0 255.255.0.0 10.10.20.254
+ip route 192.168.0.0 255.255.0.0 10.10.20.254

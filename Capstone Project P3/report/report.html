@@ -1,0 +1,774 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Capstone P3 Runbook &amp; Report</title>
+<style>
+@font-face{font-family:"Sarabun";font-weight:400;src:url(fonts/sarabun-thai-400-normal.woff2) format("woff2");unicode-range:U+0E01-0E5B,U+200C-200D,U+25CC}
+@font-face{font-family:"Sarabun";font-weight:400;src:url(fonts/sarabun-latin-400-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+2000-206F,U+2190-21FF,U+2212,U+2215}
+@font-face{font-family:"Sarabun";font-weight:600;src:url(fonts/sarabun-thai-600-normal.woff2) format("woff2");unicode-range:U+0E01-0E5B,U+200C-200D,U+25CC}
+@font-face{font-family:"Sarabun";font-weight:600;src:url(fonts/sarabun-latin-600-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+2000-206F,U+2190-21FF}
+@font-face{font-family:"Sarabun";font-weight:700;src:url(fonts/sarabun-thai-700-normal.woff2) format("woff2");unicode-range:U+0E01-0E5B,U+200C-200D,U+25CC}
+@font-face{font-family:"Sarabun";font-weight:700;src:url(fonts/sarabun-latin-700-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+2000-206F,U+2190-21FF}
+@font-face{font-family:"Plex Thai";font-weight:600;src:url(fonts/ibm-plex-sans-thai-thai-600-normal.woff2) format("woff2");unicode-range:U+0E01-0E5B,U+200C-200D,U+25CC}
+@font-face{font-family:"Plex Thai";font-weight:600;src:url(fonts/ibm-plex-sans-thai-latin-600-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:"Plex Thai";font-weight:700;src:url(fonts/ibm-plex-sans-thai-thai-700-normal.woff2) format("woff2");unicode-range:U+0E01-0E5B,U+200C-200D,U+25CC}
+@font-face{font-family:"Plex Thai";font-weight:700;src:url(fonts/ibm-plex-sans-thai-latin-700-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:"JB Mono";font-weight:400;src:url(fonts/jetbrains-mono-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"JB Mono";font-weight:600;src:url(fonts/jetbrains-mono-latin-600-normal.woff2) format("woff2")}
+
+:root{
+  --ink:#16202c; --muted:#5a6675; --line:#d9dee5; --soft:#f3f5f8;
+  --navy:#0f2a47; --accent:#c8641b; --ok:#1f7a4d; --bad:#b3261e; --warn:#9a6a00;
+  --code-bg:#f5f7fa;
+}
+@page{size:A4;margin:18mm 17mm 18mm 17mm}
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;background:#fff;color:var(--ink);font:400 10.6pt/1.62 "Sarabun","Loma",sans-serif}
+main{max-width:180mm;margin:0 auto}
+h1,h2,h3,h4{font-family:"Plex Thai","Sarabun",sans-serif;color:var(--navy);line-height:1.3;break-after:avoid}
+h1{font-size:20pt;margin:0 0 4mm}
+h2{font-size:14.5pt;margin:8mm 0 3mm;padding-bottom:1.5mm;border-bottom:1.5px solid var(--navy)}
+h3{font-size:12pt;margin:6mm 0 2mm}
+h4{font-size:10.8pt;margin:4mm 0 1.5mm;color:var(--ink)}
+p{margin:0 0 2.6mm}
+ul,ol{margin:0 0 3mm;padding-left:6mm}
+li{margin:0.6mm 0}
+code,pre,kbd{font-family:"JB Mono",ui-monospace,monospace}
+code{font-size:8.9pt;background:var(--soft);padding:0 1.2mm;border-radius:2px}
+pre{font-size:8.3pt;line-height:1.5;background:var(--code-bg);border:1px solid var(--line);border-left:3px solid var(--navy);
+    padding:2.6mm 3.2mm;margin:1.5mm 0 3.5mm;white-space:pre-wrap;word-break:break-word;break-inside:avoid}
+pre .c{color:#6b7787} pre .p{color:var(--accent);font-weight:600} pre .ok{color:var(--ok);font-weight:600} pre .bad{color:var(--bad);font-weight:600}
+table{width:100%;border-collapse:collapse;margin:1.5mm 0 4mm;font-size:9.3pt;break-inside:auto}
+th,td{border:1px solid var(--line);padding:1.3mm 2mm;text-align:left;vertical-align:top}
+th{background:var(--navy);color:#fff;font-family:"Plex Thai","Sarabun",sans-serif;font-weight:600}
+tr{break-inside:avoid}
+tbody tr:nth-child(even) td{background:#fafbfc}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+td.best{background:#e9f5ee!important;font-weight:700;color:var(--ok)}
+.mono{font-family:"JB Mono",monospace;font-size:8.6pt}
+.page{break-before:page}
+.lead{font-size:11.2pt;color:var(--muted)}
+.tag{display:inline-block;font:600 8pt "Plex Thai",sans-serif;padding:0.3mm 2mm;border-radius:10px;background:var(--soft);color:var(--navy);border:1px solid var(--line)}
+.tag.high{background:#fdecea;color:var(--bad);border-color:#f3c5c1}
+.tag.med{background:#fff4e0;color:var(--warn);border-color:#f0d9a8}
+.note{border-left:3px solid var(--accent);background:#fdf6ef;padding:2.2mm 3.2mm;margin:2mm 0 4mm;break-inside:avoid}
+.note b:first-child{color:var(--accent)}
+.check{border:1px solid var(--line);border-radius:3px;padding:2mm 3mm;margin:2mm 0 4mm;background:#f6fbf8;break-inside:avoid}
+.check b:first-child{color:var(--ok)}
+.step{display:grid;grid-template-columns:11mm 1fr;gap:2mm;margin:0 0 2mm}
+.step .n{font:700 15pt "Plex Thai",sans-serif;color:var(--accent);line-height:1.2}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:4mm}
+.kv{display:grid;grid-template-columns:34mm 1fr;gap:0.8mm 3mm;font-size:9.6pt;margin:1mm 0 3mm}
+.kv dt{color:var(--muted)} .kv dd{margin:0}
+figure{margin:2mm 0 5mm;break-inside:avoid}
+figcaption{font-size:9pt;color:var(--muted);margin-top:1.2mm}
+figure.shot img{width:100%;border:1px solid var(--line)}
+figure.shot .ph{height:46mm;border:1.5px dashed #aab4c0;border-radius:3px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  color:var(--muted);background:repeating-linear-gradient(135deg,#fafbfc 0 8px,#f3f5f8 8px 16px);font-size:9.4pt;text-align:center;padding:0 6mm}
+figure.shot .ph b{color:var(--navy)}
+figure.shot img + .ph{display:none}
+figure.shot.small .ph{height:32mm}
+.toc{columns:2;column-gap:8mm;font-size:10pt}
+.toc div{break-inside:avoid;margin:0 0 1.2mm}
+.toc .p{font-weight:700;color:var(--navy);font-family:"Plex Thai",sans-serif;margin-top:2mm}
+/* cover */
+.cover{height:257mm;display:flex;flex-direction:column;justify-content:space-between;padding:6mm 0}
+.cover .band{border-top:5px solid var(--navy);padding-top:6mm}
+.cover .kicker{font:600 10pt "Plex Thai",sans-serif;letter-spacing:.12em;color:var(--accent);text-transform:uppercase}
+.cover h1{font-size:27pt;margin:4mm 0 3mm;line-height:1.2}
+.cover .sub{font-size:13.5pt;color:var(--muted);max-width:150mm}
+.cover .meta{border-top:1px solid var(--line);padding-top:5mm}
+.cover .chips{display:flex;gap:2mm;flex-wrap:wrap;margin-top:8mm}
+.rubric td.num{width:16mm}
+@media screen{
+  body{background:#e9ecf0}
+  main{background:#fff;padding:16mm 17mm;margin:8mm auto;box-shadow:0 1px 6px rgba(0,0,0,.12)}
+}
+@media screen and (max-width:700px){
+  main{padding:16px;margin:0} .grid2{grid-template-columns:1fr} .toc{columns:1}
+  table{display:block;overflow-x:auto}
+}
+</style>
+</head>
+<body>
+<main>
+
+<!-- ============================ COVER ============================ -->
+<section class="cover">
+  <div class="band">
+    <div class="kicker">Capstone Project Part III · Challenge Lab</div>
+    <h1>Network Automation ด้วย Netmiko<br>บน Real IOS แบบ Multi-Branch</h1>
+    <div class="sub">Demo Runbook &amp; Technical Report: ต่อยอดจาก Lab 28.1.3 “Use the Netmiko Python Module to Configure a Router” ไปสู่การ Deploy, Verify, Fault Injection และ Root Cause Analysis แบบอัตโนมัติบน Cisco IOSv ใน Cisco Modeling Labs (DevNet Sandbox)</div>
+    <div class="chips">
+      <span class="tag">Cisco IOSv 15.9 · CML (DevNet Sandbox)</span><span class="tag">Python 3 · Netmiko 4 · Jinja2 · TextFSM · CML API</span>
+      <span class="tag">GRE over IPsec · OSPFv2/v3</span><span class="tag">AAA · CoPP · SNMPv3 · NetFlow</span>
+      <span class="tag">Wireshark</span>
+    </div>
+  </div>
+  <div class="meta">
+    <dl class="kv">
+      <dt>รายวิชา</dt><dd>Internetworking · วิทยาลัยการคอมพิวเตอร์ มหาวิทยาลัยขอนแก่น</dd>
+      <dt>ผู้จัดทำ</dt><dd>663380616-4 นายเกรียงไกร ประเสริฐ
+663380045-1 นายปิติ มูลเทพพิชัย
+663380610-6 นางสาวภัทราวดี ส่องศรีโรจน์
+673380577-9 นายจีรภัทร แก้วดี</dd>
+      
+      <dt>นำเสนอ / ส่งงาน</dt><dd>15 ตุลาคม 2569 </dd>
+      <dt>Repository</dt><dd><code>Capstone Project P3/</code> (scripts, templates, configs, evidence, pcap)</dd>
+    </dl>
+  </div>
+</section>
+
+<!-- ============================ TOC ============================ -->
+<section class="page">
+<h1>สารบัญ</h1>
+<div class="toc">
+  <div class="p">ส่วนที่ A · Demo Runbook</div>
+  <div>A1 ภาพรวมและสิ่งที่ต้องเตรียม</div>
+  <div>A2 Topology และแผนผังแอดเดรส</div>
+  <div>A3 ขั้นตอนรันทีละเฟส (Phase 0–10)</div>
+  <div>A4 แผน Wireshark Capture</div>
+  <div>A5 สคริปต์ Live Demo 15 นาที + แผนสำรอง</div>
+  <div>A6 ปัญหาที่พบบ่อยและวิธีแก้</div>
+  <div class="p">ส่วนที่ B · Technical Report</div>
+  <div>B1 บทสรุปผู้บริหาร</div>
+  <div>B2 การออกแบบ (Topology, Addressing, Security, Automation)</div>
+  <div>B3 Real IOS Configuration &amp; Verification</div>
+  <div>B4 Fault Injection &amp; Root Cause Analysis (4 เหตุการณ์)</div>
+  <div>B5 Comparative Analysis &amp; Trade-off Matrix</div>
+  <div>B6 บทเรียนและงานต่อยอด</div>
+  <div class="p">ภาคผนวก</div>
+  <div>ก. เตรียมตอบ Technical Q&amp;A</div>
+  <div>ข. Mapping ใบงาน 28.1.3 → โปรเจค</div>
+  <div>ค. รายการสิ่งส่งมอบ (Deliverables Checklist)</div>
+</div>
+
+<h2>ความสอดคล้องกับเกณฑ์การประเมิน</h2>
+<table class="rubric">
+<thead><tr><th>หมวด (คะแนน)</th><th>หลักฐานในงานนี้</th><th>อยู่ที่</th></tr></thead>
+<tbody>
+<tr><td>Topology Design &amp; Addressing (20)</td><td>Hub-and-Spoke HQ/Branch/DC, OOB management, Dual-Stack ตามแผนเลขที่อธิบายเหตุผลได้, ตารางพอร์ตครบทุกอุปกรณ์</td><td>A2, B2</td></tr>
+<tr><td>Real IOS Configuration &amp; Verification (25)</td><td>Config สร้างจาก template ตัวเดียว push ผ่าน Netmiko และ verify อัตโนมัติ 19 รายการต่อ router ทั้ง Control, Data และ Management plane</td><td>A3, B3</td></tr>
+<tr><td>Fault Injection &amp; Troubleshooting (20)</td><td>4 scenario ที่ inject ได้ซ้ำ เก็บ timeline, syslog และ debug อัตโนมัติ มี RCA แบบ 5-Whys และกู้คืนได้ 2 วิธี (targeted fix / configure replace)</td><td>A3 Phase 9, B4</td></tr>
+<tr><td>Comparative Analysis &amp; Trade-off (15)</td><td>Weighted Trade-off Matrix 4 ชุด: Automation tool, VPN overlay, IGP, Emulation platform</td><td>B5</td></tr>
+<tr><td>Live Demo &amp; Technical Q&amp;A (20)</td><td>สคริปต์เดโมแบ่งตามนาที มีแผนสำรอง และเตรียมคำตอบ Q&amp;A 12 ข้อ</td><td>A5, ภาคผนวก ก</td></tr>
+</tbody>
+</table>
+</section>
+
+<!-- ============================ PART A ============================ -->
+<section class="page">
+<div class="kicker" style="font:600 9pt 'Plex Thai';letter-spacing:.12em;color:var(--accent)">ส่วนที่ A</div>
+<h1>Demo Runbook</h1>
+<p class="lead">คู่มือรันคำสั่งตั้งแต่เตรียมเครื่องจนจบการเดโม ทุกขั้นมี <b>Checkpoint</b> ให้ตรวจก่อนไปขั้นถัดไป</p>
+
+<h2>A1 ภาพรวมและสิ่งที่ต้องเตรียม</h2>
+<p>ใบงาน 28.1.3 ต้นฉบับใช้ Netmiko ต่อเข้า CSR1000v ตัวเดียวใน DEVASC VM ผ่าน SSH ส่ง <code>show</code> แล้วสร้าง Loopback ด้วย <code>send_config_set()</code> โปรเจคนี้ใช้หลักการเดียวกันแต่ขยายเป็น <b>pipeline</b> ครบวงจร:</p>
+<pre>inventory.yaml ──► Jinja2 templates ──► deploy.py (backup → push → save → diff)
+   (source of truth)                          │
+                                              ▼
+           evidence/*.md ◄── verify.py (19 checks/router) ◄── fault.py (inject → diagnose → recover)</pre>
+
+<h3>แพลตฟอร์มที่เลือก: Cisco DevNet Sandbox – Cisco Modeling Labs</h3>
+<p>เครื่องผู้จัดทำเป็น MacBook ชิป Apple Silicon ซึ่งรัน image x86 อย่าง IOSv/IOL ได้ไม่ดี จึงให้ <b>Emulator รันบน cloud</b> คือ CML ของ DevNet Sandbox ซึ่งรัน Real IOSv บนฮาร์ดแวร์ x86 ของ Cisco ส่วน Mac ใช้แค่ VPN, เบราว์เซอร์ และ Wireshark ทั้งนี้อาจารย์อนุญาตให้ส่งไฟล์ topology เป็น <code>.yaml</code> ของ CML แทน <code>.gns3project</code>/<code>.unl</code> แล้ว</p>
+<table>
+<thead><tr><th style="width:26%">องค์ประกอบใน Sandbox</th><th style="width:22%">ที่อยู่</th><th>ใช้ทำอะไร</th></tr></thead>
+<tbody>
+<tr><td>CML controller</td><td class="mono">10.10.20.161*</td><td>Web UI / REST API (<code>cml_lab.py</code>) / Console server (ใช้กู้คืนแบบ out-of-band)</td></tr>
+<tr><td>devbox (Linux)</td><td class="mono">10.10.20.50</td><td>Automation host: รัน Netmiko, Syslog/NetFlow collector</td></tr>
+<tr><td>External Connector <code>bridge0</code></td><td class="mono">10.10.20.0/24</td><td>เชื่อม Gi0/3 ของ router เข้าวง sandbox โดย router ใช้ .181–.184 (หลบ .1, .50, .161 และ .170–.178 ที่ default lab ใช้อยู่)</td></tr>
+<tr><td>Mac ของผู้จัดทำ</td><td>VPN client</td><td>เปิด CML UI, SSH ไป devbox, เปิดไฟล์ <code>.pcap</code> ด้วย Wireshark</td></tr>
+</tbody>
+</table>
+<p style="font-size:9.2pt;color:var(--muted)">* ให้ดู IP และ credential จริงในหน้า <i>Instructions</i> ของ sandbox ที่จองได้ แล้วแก้ใน <code>inventory.yaml → defaults.cml</code> ข้อจำกัดของ sandbox คือรับการเชื่อมต่อขาเข้าได้อย่างเดียว node ออก Internet ไม่ได้ และเวลาจองมีจำกัด จึงควรจองล่วงหน้าและต่อเวลาก่อนวันเดโม</p>
+
+<h3>ซอฟต์แวร์และ Image</h3>
+<table>
+<thead><tr><th>รายการ</th><th>เวอร์ชัน</th><th>หมายเหตุ</th></tr></thead>
+<tbody>
+<tr><td>Cisco IOSv (node definition <code>iosv</code>)</td><td>15.9(3)M ตามที่ CML มีให้</td><td>Real IOS kernel, ประมาณ 512 MB RAM ต่อ node</td></tr>
+<tr><td>Cisco Modeling Labs</td><td>2.x (ตามที่ sandbox ให้)</td><td>ดูเวอร์ชันได้จากเมนู About และติดตั้ง <code>virl2-client</code> ให้เลขรุ่นตรงกัน</td></tr>
+<tr><td>Python</td><td>3.9 ขึ้นไป</td><td><code>pip install -r requirements.txt</code> (netmiko 4, ntc-templates, jinja2, pyyaml, virl2-client)</td></tr>
+<tr><td>Wireshark</td><td>4.x บน Mac</td><td>เปิดไฟล์ <code>.pcap</code> ที่ดึงจาก CML ด้วย <code>cml_lab.py capture</code></td></tr>
+<tr><td>Cisco Packet Tracer</td><td>8.2 / 9.0</td><td><b>Bare minimum:</b> ใช้วาด topology draft (<code>topology-draft.pkt</code>) เท่านั้น</td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="page">
+<h2>A2 Topology และแผนผังแอดเดรส</h2>
+<figure>
+<svg viewBox="0 0 780 445" width="100%" role="img" aria-label="Topology: R0-ISP เชื่อม R1-HQ, R2-BR1, R3-DC; GRE/IPsec tunnel จาก R1 ไป R2 และ R3; OOB management ผ่าน SW-MGMT และ External Connector">
+  <style>
+    .r{fill:#0f2a47}.rt{fill:#fff;font:600 13px 'Plex Thai',sans-serif;text-anchor:middle}
+    .l{stroke:#5a6675;stroke-width:2}.t{stroke:#c8641b;stroke-width:3;stroke-dasharray:8 5;fill:none}
+    .m{stroke:#9aa6b4;stroke-width:1.4;stroke-dasharray:3 3;fill:none}
+    .s{font:11px 'JB Mono',monospace;fill:#16202c}.sm{font:10px 'JB Mono',monospace;fill:#5a6675}
+    .lbl{font:600 11.5px 'Plex Thai',sans-serif;fill:#c8641b;text-anchor:middle}.lan{fill:#eef2f6;stroke:#9aa6b4}
+  </style>
+  <!-- OOB mgmt (วาดก่อนให้อยู่ด้านหลัง) -->
+  <path class="m" d="M320 40 H10 V374 H250"/>
+  <line class="m" x1="150" y1="190" x2="290" y2="360"/>
+  <line class="m" x1="380" y1="190" x2="380" y2="360"/>
+  <line class="m" x1="640" y1="190" x2="480" y2="360"/>
+  <line class="m" x1="510" y1="374" x2="590" y2="410"/>
+  <!-- WAN -->
+  <line class="l" x1="380" y1="60" x2="150" y2="170"/>
+  <line class="l" x1="380" y1="60" x2="380" y2="170"/>
+  <line class="l" x1="380" y1="60" x2="640" y2="170"/>
+  <text class="s" x="268" y="110" text-anchor="end">203.0.113.0/30</text>
+  <text class="s" x="388" y="122">203.0.113.4/30</text>
+  <text class="s" x="512" y="110">203.0.113.8/30</text>
+  <!-- tunnels -->
+  <path class="t" d="M170 210 Q268 265 365 210"/>
+  <path class="t" d="M150 210 Q395 380 640 210"/>
+  <text class="lbl" x="300" y="254">Tunnel12</text>
+  <text class="lbl" x="395" y="316">Tunnel13</text>
+  <!-- LAN -->
+  <line class="l" x1="110" y1="170" x2="73" y2="138"/><rect class="lan" x="24" y="110" width="98" height="28" rx="4"/>
+  <text class="s" x="32" y="128">10.1.10.0/24</text>
+  <line class="l" x1="440" y1="190" x2="452" y2="190"/><rect class="lan" x="452" y="176" width="98" height="28" rx="4"/>
+  <text class="s" x="460" y="194">10.2.10.0/24</text>
+  <line class="l" x1="680" y1="170" x2="721" y2="138"/><rect class="lan" x="672" y="110" width="98" height="28" rx="4"/>
+  <text class="s" x="680" y="128">10.3.10.0/24</text>
+  <!-- routers -->
+  <rect class="r" x="320" y="20" width="120" height="40" rx="6"/><text class="rt" x="380" y="45">R0-ISP</text>
+  <text class="sm" x="450" y="36">NTP master (stratum 3)</text>
+  <rect class="r" x="90" y="170" width="120" height="40" rx="6"/><text class="rt" x="150" y="195">R1-HQ (Hub)</text>
+  <rect class="r" x="320" y="170" width="120" height="40" rx="6"/><text class="rt" x="380" y="195">R2-BR1</text>
+  <rect class="r" x="580" y="170" width="120" height="40" rx="6"/><text class="rt" x="640" y="195">R3-DC</text>
+  <!-- mgmt switch + devbox -->
+  <rect x="250" y="360" width="260" height="28" rx="4" fill="#fff" stroke="#9aa6b4"/>
+  <text class="s" x="260" y="378">SW-MGMT → EXT (bridge0) 10.10.20.0/24</text>
+  <rect x="590" y="392" width="170" height="40" rx="4" fill="#fdf6ef" stroke="#c8641b"/>
+  <text class="s" x="598" y="409">devbox (automation)</text><text class="sm" x="598" y="424">10.10.20.50 · Netmiko</text>
+</svg>
+<figcaption>รูปที่ 1 Topology: Hub-and-Spoke GRE over IPsec ข้าม Internet จำลอง (R0-ISP) และ OSPFv2/OSPFv3 วิ่งเฉพาะในอุโมงค์ ส่วน Management แยกเป็น Out-of-Band</figcaption>
+</figure>
+
+<table>
+<thead><tr><th>อุปกรณ์</th><th>Interface</th><th>IPv4</th><th>IPv6</th><th>หน้าที่</th></tr></thead>
+<tbody class="mono">
+<tr><td rowspan="4">R0-ISP</td><td>Gi0/0</td><td>203.0.113.2/30</td><td>2001:db8:ffff:1::2/64</td><td>→ R1-HQ</td></tr>
+<tr><td>Gi0/1</td><td>203.0.113.6/30</td><td>2001:db8:ffff:2::2/64</td><td>→ R2-BR1</td></tr>
+<tr><td>Gi0/2</td><td>203.0.113.10/30</td><td>2001:db8:ffff:3::2/64</td><td>→ R3-DC</td></tr>
+<tr><td>Gi0/3</td><td>10.10.20.181/24</td><td>–</td><td>OOB mgmt</td></tr>
+<tr><td rowspan="6">R1-HQ</td><td>Gi0/0</td><td>203.0.113.1/30</td><td>2001:db8:ffff:1::1/64</td><td>WAN</td></tr>
+<tr><td>Gi0/1</td><td>10.1.10.1/24</td><td>2001:db8:1:10::1/64</td><td>LAN HQ</td></tr>
+<tr><td>Gi0/3</td><td>10.10.20.182/24</td><td>–</td><td>OOB mgmt</td></tr>
+<tr><td>Lo0</td><td>10.0.0.1/32</td><td>2001:db8:0:1::1/128</td><td>RID 1.1.1.1</td></tr>
+<tr><td>Tunnel12</td><td>172.16.12.1/30</td><td>2001:db8:12::1/64</td><td>→ R2 (dst 203.0.113.5)</td></tr>
+<tr><td>Tunnel13</td><td>172.16.13.1/30</td><td>2001:db8:13::1/64</td><td>→ R3 (dst 203.0.113.9)</td></tr>
+<tr><td rowspan="5">R2-BR1</td><td>Gi0/0</td><td>203.0.113.5/30</td><td>2001:db8:ffff:2::1/64</td><td>WAN</td></tr>
+<tr><td>Gi0/1</td><td>10.2.10.1/24</td><td>2001:db8:2:10::1/64</td><td>LAN Branch</td></tr>
+<tr><td>Gi0/3</td><td>10.10.20.183/24</td><td>–</td><td>OOB mgmt</td></tr>
+<tr><td>Lo0</td><td>10.0.0.2/32</td><td>2001:db8:0:2::1/128</td><td>RID 2.2.2.2</td></tr>
+<tr><td>Tunnel12</td><td>172.16.12.2/30</td><td>2001:db8:12::2/64</td><td>→ R1 (dst 203.0.113.1)</td></tr>
+<tr><td rowspan="5">R3-DC</td><td>Gi0/0</td><td>203.0.113.9/30</td><td>2001:db8:ffff:3::1/64</td><td>WAN</td></tr>
+<tr><td>Gi0/1</td><td>10.3.10.1/24</td><td>2001:db8:3:10::1/64</td><td>LAN Data Center</td></tr>
+<tr><td>Gi0/3</td><td>10.10.20.184/24</td><td>–</td><td>OOB mgmt</td></tr>
+<tr><td>Lo0</td><td>10.0.0.3/32</td><td>2001:db8:0:3::1/128</td><td>RID 3.3.3.3</td></tr>
+<tr><td>Tunnel13</td><td>172.16.13.2/30</td><td>2001:db8:13::2/64</td><td>→ R1 (dst 203.0.113.1)</td></tr>
+<tr><td>devbox</td><td>eth</td><td>10.10.20.50/24</td><td>–</td><td>Netmiko, Syslog, NetFlow</td></tr>
+</tbody>
+</table>
+<p style="font-size:9.4pt;color:var(--muted)">การต่อสายใน CML (สร้างให้อัตโนมัติด้วย <code>cml_lab.py build</code>): Gi0/0 ของ R1/R2/R3 ต่อกับ Gi0/0/1/2 ของ R0, Gi0/1 ต่อกับ unmanaged switch ของแต่ละ site (ใส่ <code>--with-pcs</code> ถ้าต้องการ PC ไว้สร้างทราฟฟิก), Gi0/3 ทุกตัวต่อกับ <code>SW-MGMT</code> → <code>EXT-MGMT</code> (bridge0)</p>
+</section>
+
+<section class="page">
+<h2>A3 ขั้นตอนรันทีละเฟส</h2>
+
+<h3>Phase 0 — จอง Sandbox และต่อ VPN</h3>
+<ol>
+<li>เข้า <code>developer.cisco.com/sandbox</code> → ค้นหา <b>Cisco Modeling Labs</b> → Reserve (ตั้งเวลาให้ครอบคลุมช่วงเดโม)</li>
+<li>เมื่ออีเมลแจ้งว่าพร้อม ให้ต่อ VPN ตามข้อมูลในอีเมลด้วย Cisco Secure Client (AnyConnect) หรือ <code>openconnect</code> บน Mac</li>
+<li>ถ้า default lab ของ sandbox กำลังรัน และไม่ได้ใช้ ให้ Stop ทิ้งเพื่อคืนทรัพยากร</li>
+</ol>
+<pre><span class="p">mac$</span> ping -c2 10.10.20.161 &amp;&amp; ping -c2 10.10.20.50       <span class="c"># CML และ devbox ต้องตอบ</span>
+<span class="p">mac$</span> open https://10.10.20.161                              <span class="c"># CML UI → ดูเวอร์ชันที่เมนู About</span></pre>
+
+<h3>Phase 1 — ติดตั้งโปรเจคบน devbox</h3>
+<pre><span class="p">mac$</span> scp -r "Capstone Project P3" developer@10.10.20.50:~/capstone
+<span class="p">mac$</span> ssh developer@10.10.20.50
+<span class="p">$</span> cd ~/capstone &amp;&amp; python3 --version                     <span class="c"># ต้อง ≥ 3.9</span>
+<span class="p">$</span> python3 -m venv .venv &amp;&amp; source .venv/bin/activate
+<span class="p">$</span> pip install -r requirements.txt "virl2-client==2.8.*"   <span class="c"># เลขรุ่นให้ตรงกับ CML</span>
+<span class="p">$</span> export NET_USER=admin NET_PASS='&lt;รหัสจริง&gt;' NET_SECRET='&lt;รหัสจริง&gt;'   <span class="c"># ไม่ต้องเปิดรหัสบนจอตอนเดโม</span></pre>
+<div class="note"><b>ถ้า Python บน devbox เก่ากว่า 3.9:</b> ให้รันสคริปต์ทั้งหมดจาก Mac แทน เพราะ VPN เข้าถึง 10.10.20.x ได้ แล้วรันเฉพาะ <code>collector.py</code> บน devbox (ใช้แค่ standard library) เพราะ router ส่ง syslog ไปหาเครื่อง Mac ผ่าน VPN ไม่ได้</div>
+
+<h3>Phase 2 — Dry-run: render config โดยยังไม่แตะอุปกรณ์</h3>
+<pre><span class="p">$</span> python scripts/deploy.py --dry-run
+[render] R0-ISP: 79 lines -&gt; configs/rendered/R0-ISP.cfg
+[render] R1-HQ: 214 lines -&gt; configs/rendered/R1-HQ.cfg
+...</pre>
+<p>Jinja2 ตั้ง <code>StrictUndefined</code> ไว้ ถ้าตัวแปรใน inventory หายไป จะ error ตั้งแต่ขั้นนี้ ไม่มี config ครึ่งๆ กลางๆ หลุดไปถึงอุปกรณ์</p>
+
+<h3>Phase 3 — สร้าง Lab บน CML ด้วย API (Infrastructure-as-Code)</h3>
+<pre><span class="p">$</span> python scripts/cml_lab.py build
+[+] node R0-ISP  (iosv) mgmt 10.10.20.181
+...
+[+] link  R0-ISP GigabitEthernet0/2 &lt;-&gt; R3-DC GigabitEthernet0/0
+  Starting lab 'Capstone-P3' — IOSv ใช้เวลา boot ประมาณ 3–6 นาที
+[OK] lab converged
+<span class="p">$</span> python scripts/cml_lab.py status
+<span class="p">$</span> for i in 181 182 183 184; do ping -c1 -W1 10.10.20.$i; done</pre>
+<p>สคริปต์ render <code>bootstrap.j2</code> (hostname, user, Gi0/3 mgmt IP, RSA key, SSHv2) ใส่เป็น <b>Day-0 config</b> ของแต่ละ node จึงไม่ต้องพิมพ์ทาง console เลย</p>
+<div class="check"><b>Checkpoint 3:</b> ping .181–.184 ได้ทุกตัว และ <code>ssh admin@10.10.20.182</code> เข้าได้ ถ้า ping ได้แต่ SSH ไม่ได้ (ยังไม่มี RSA key) ให้รัน <code>python scripts/cml_lab.py ssh-key</code> ซึ่งจะสร้าง key ให้ผ่าน console server</div>
+
+<h3>Phase 4 — ใบงาน 28.1.3 บน Real IOS</h3>
+<pre><span class="p">$</span> python scripts/lab_28_1_3.py --device R1-HQ
+  Part 1: Connect to R1-HQ (10.10.20.182) via SSH      → Prompt: R1-HQ#
+  Part 2: send_command('show ip interface brief')        → ตาราง + TextFSM list of dict
+  Part 3: send_config_set() — create loopbacks           → Loopback101/102
+  Part 4: Verify + save                                  → [OK]</pre>
+<figure class="shot small"><img src="screenshots/fig-02-lab2813.png" alt="" onerror="this.remove()"><div class="ph"><b>แทรกภาพ: ผลรัน lab_28_1_3.py (Part 1–4)</b><code>screenshots/fig-02-lab2813.png</code></div><figcaption>รูปที่ 2 ผลการรันใบงาน 28.1.3 บน vIOS</figcaption></figure>
+
+<h3>Phase 5 — เปิด Collector (หน้าต่าง terminal ที่ 2)</h3>
+<pre><span class="p">$</span> sudo .venv/bin/python scripts/collector.py          <span class="c"># บน devbox</span>
+[*] syslog listening on udp/514
+[*] netflow listening on udp/2055</pre>
+
+<h3>Phase 6 — Deploy config เต็มชุด</h3>
+<pre><span class="p">$</span> python scripts/deploy.py
+[ OK ] R0-ISP   78 changed lines
+[ OK ] R1-HQ    214 changed lines
+[ OK ] R2-BR1   192 changed lines
+[ OK ] R3-DC    192 changed lines</pre>
+<p>ทุกเครื่องถูกสำรอง config ก่อนและหลังเปลี่ยน (<code>configs/backups/</code>) มีไฟล์ <code>.diff</code> และฉบับล่าสุดอยู่ที่ <code>configs/running/</code> ซึ่งใช้เป็น deliverable “running-config ฉบับเต็ม” ได้ทันที ถ้าในผลมีบรรทัด <code>% Invalid input</code> สคริปต์จะขึ้น FAIL และ exit code เป็น 1</p>
+
+<h3>Phase 7 — Verify อัตโนมัติ + ตรวจด้วย CLI</h3>
+<pre><span class="p">$</span> python scripts/verify.py          <span class="c"># NTP อาจต้องรอ 2–5 นาทีหลัง deploy</span>
+R1-HQ    OSPFv2 neighbors FULL              <span class="ok">PASS</span>  2/2 2.2.2.2=FULL/  -, 3.3.3.3=FULL/  -
+R1-HQ    IKE SA (QM_IDLE)                   <span class="ok">PASS</span>  2/2
+R1-HQ    Ping v6 -&gt; R3-DC Lo0               <span class="ok">PASS</span>  100%
+...
+สรุป: 62 checks, FAIL 0                     → evidence/verify_&lt;เวลา&gt;.md</pre>
+<p>คำสั่ง CLI ที่ควรโชว์สดคู่กัน:</p>
+<pre>R1-HQ# show ip ospf neighbor                 R1-HQ# show ipv6 ospf neighbor
+R1-HQ# show crypto isakmp sa                 R1-HQ# show crypto ipsec sa | include encaps|decaps
+R1-HQ# show ip route ospf                    R1-HQ# show ipv6 route ospf
+R1-HQ# show policy-map control-plane         R1-HQ# show flow monitor FNF-MONITOR cache
+R1-HQ# show ntp associations                 R1-HQ# show snmp user
+R1-HQ# show ip access-lists ACL-WAN-IN       R1-HQ# debug ip ospf events   (แล้ว undebug all)</pre>
+
+<h3>Phase 8 — บันทึก Golden Config</h3>
+<pre><span class="p">$</span> python scripts/deploy.py --golden      <span class="c"># copy running-config flash0:golden.cfg ทุกเครื่อง</span></pre>
+
+<h3>Phase 9 — Fault Injection &amp; Recovery</h3>
+<table>
+<thead><tr><th>คำสั่ง</th><th>ผลลัพธ์</th></tr></thead>
+<tbody>
+<tr><td><code>python scripts/fault.py list</code></td><td>แสดง 4 scenario: <code>mtu</code> <code>psk</code> <code>mgmt-acl</code> <code>flap</code></td></tr>
+<tr><td><code>python scripts/fault.py run psk</code></td><td>ครบวงจร (ใช้ตอนเก็บหลักฐานทำรายงาน) ได้ <code>evidence/fault_psk_&lt;เวลา&gt;/timeline.md</code></td></tr>
+<tr><td><code>python scripts/fault.py inject mtu</code></td><td>ฉีดปัญหาอย่างเดียว ใช้ตอนเดโมเพื่อไล่แก้เองบน CLI ต่อหน้ากรรมการ</td></tr>
+<tr><td><code>python scripts/fault.py recover mtu</code></td><td>แก้แบบเจาะจงจุด (targeted fix)</td></tr>
+<tr><td><code>python scripts/fault.py recover psk --rollback</code></td><td>กู้ทั้งเครื่องด้วย <code>configure replace flash0:golden.cfg force</code></td></tr>
+</tbody>
+</table>
+
+<h3>Phase 10 — รวบรวมสิ่งส่งมอบ</h3>
+<pre><span class="p">$</span> python scripts/cml_lab.py export        <span class="c"># → topology/Capstone-P3.yaml (ไฟล์ topology ที่ใช้ส่งงาน)</span>
+<span class="p">$</span> python scripts/deploy.py --golden       <span class="c"># → configs/running/*.cfg (running-config ฉบับเต็มทุกเครื่อง)</span>
+<span class="p">mac$</span> scp -r developer@10.10.20.50:~/capstone/{topology,configs,captures,evidence,logs} "Capstone Project P3/"</pre>
+<ol>
+<li>ภาพหน้าจอวางใน <code>report/screenshots/</code> ตามชื่อไฟล์ที่ระบุในแต่ละกรอบ</li>
+<li>เปิด <code>report/report.html</code> ใน Chrome แล้ว <i>Print → Save as PDF</i> (ภาพจะแทนกรอบให้อัตโนมัติ)</li>
+<li>ก่อนคืน sandbox ให้ export ให้ครบทุกอย่าง เพราะ lab จะถูกลบเมื่อหมดเวลาจอง</li>
+</ol>
+</section>
+
+<section class="page">
+<h2>A4 แผน Wireshark Capture</h2>
+<p>สั่ง capture ได้ทั้งจาก CML UI (เลือกลิงก์ → <i>Packet Capture</i> → Start/Download) และผ่าน CML API ด้วยสคริปต์ ซึ่งเป็นส่วนหนึ่งของ automation</p>
+<pre><span class="p">$</span> python scripts/cml_lab.py capture start --a R1-HQ --b R0-ISP
+<span class="p">$</span> python scripts/fault.py recover psk          <span class="c"># ให้เกิดการเจรจา IKE ใหม่ระหว่าง capture</span>
+<span class="p">$</span> python scripts/cml_lab.py capture stop  --a R1-HQ --b R0-ISP --name 01_ike_esp
+[OK] captures/01_ike_esp.pcap  — scp มาที่ Mac แล้วเปิดด้วย Wireshark</pre>
+<table>
+<thead><tr><th>#</th><th>ลิงก์</th><th>เหตุการณ์ที่จับ</th><th>Display filter</th><th>สิ่งที่ต้องชี้ในรายงาน</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>R1 ↔ R0</td><td>IKEv1 Main Mode (6 msg) + Quick Mode (3 msg)</td><td class="mono">isakmp</td><td>MM1–2 เสนอ policy (AES-256/SHA-256/DH14), MM5–6 เข้ารหัสแล้ว, QM สร้าง IPsec SA</td></tr>
+<tr><td>2</td><td>R1 ↔ R0</td><td>ทราฟฟิก LAN–LAN หลัง tunnel ขึ้น</td><td class="mono">esp</td><td>เห็นแค่ ESP (SPI, sequence) มองไม่เห็น OSPF/ICMP ข้างใน จึงเป็นหลักฐานว่าการเข้ารหัสทำงาน</td></tr>
+<tr><td>3</td><td>R2 ↔ R0</td><td>PSK mismatch</td><td class="mono">isakmp</td><td>MM5 ถูกส่งซ้ำ (retransmission) ไม่มี MM6 ตอบกลับ</td></tr>
+<tr><td>4</td><td>SW-MGMT ↔ EXT-MGMT</td><td>Netmiko SSH session ขณะรัน verify.py</td><td class="mono">tcp.port==22</td><td>TCP 3-way handshake (SYN, SYN-ACK, ACK) แล้วตามด้วย SSHv2 key exchange</td></tr>
+<tr><td>5</td><td>SW-MGMT ↔ EXT-MGMT</td><td>Syslog + NetFlow + SNMPv3</td><td class="mono">syslog || cflow || snmp</td><td>Syslog เป็น plaintext, NetFlow v9 template/data (Decode As UDP 2055 → CFLOW), SNMPv3 ส่วน PDU ถูกเข้ารหัส</td></tr>
+</tbody>
+</table>
+<div class="note"><b>ประเด็นที่ควรอธิบายตอน Q&amp;A:</b> OSPF Hello ไม่โผล่บนลิงก์ WAN เพราะอยู่ใน GRE แล้วถูกห่อด้วย ESP ถ้าต้องการโชว์ header ของ OSPF Hello หรือ DBD ให้ใช้ <code>debug ip ospf packet</code> หรือ Embedded Packet Capture บน Tunnel interface (ถ้า image รองรับ) ส่วนบน WAN ถ้าเห็น OSPF แบบ plaintext แปลว่า IPsec <i>ไม่ได้ทำงาน</i></div>
+<div class="grid2">
+<figure class="shot small"><img src="screenshots/fig-03-wireshark-ike.png" alt="" onerror="this.remove()"><div class="ph"><b>แทรกภาพ: Wireshark ISAKMP Main/Quick Mode</b><code>fig-03-wireshark-ike.png</code></div><figcaption>รูปที่ 3 การเจรจา IKE</figcaption></figure>
+<figure class="shot small"><img src="screenshots/fig-04-wireshark-ssh.png" alt="" onerror="this.remove()"><div class="ph"><b>แทรกภาพ: TCP 3-way handshake ของ Netmiko SSH</b><code>fig-04-wireshark-ssh.png</code></div><figcaption>รูปที่ 4 Netmiko SSH session</figcaption></figure>
+</div>
+
+<h2>A5 สคริปต์ Live Demo 15 นาที</h2>
+<table>
+<thead><tr><th style="width:13%">นาที</th><th style="width:30%">สิ่งที่ทำ</th><th>คำสั่ง / สิ่งที่พูด</th></tr></thead>
+<tbody>
+<tr><td>0:00–1:30</td><td>เปิดเรื่อง + topology</td><td>Hub-and-Spoke และเหตุผลที่แยก OOB และ dual-stack · โชว์ CML ว่ารัน IOSv จริง (<code>show version</code>) และ lab นี้สร้างจาก <code>cml_lab.py build</code></td></tr>
+<tr><td>1:30–3:00</td><td>Lab 28.1.3</td><td><code>lab_28_1_3.py</code> ชี้ <code>ConnectHandler</code>, <code>send_command</code>, <code>send_config_set</code></td></tr>
+<tr><td>3:00–5:00</td><td>Automation pipeline</td><td>โชว์ <code>inventory.yaml</code> และ <code>site.j2</code> → <code>deploy.py --dry-run</code> → <code>deploy.py R2-BR1</code> (สด 1 เครื่อง ส่วนที่เหลือ deploy ไว้ก่อนแล้ว)</td></tr>
+<tr><td>5:00–7:00</td><td>Verification</td><td><code>verify.py</code> ได้ FAIL 0 + CLI <code>show ip ospf neighbor</code>, <code>show crypto ipsec sa</code></td></tr>
+<tr><td>7:00–11:30</td><td><b>Live Fault #1 (PSK)</b></td><td><code>fault.py inject psk</code> → ให้กรรมการดูอาการ → ไล่แก้มือบน CLI: <code>show crypto isakmp sa</code> (MM_KEY_EXCH) → <code>show logging | i CRYPTO|PARSER</code> → เจอว่ามีคนเปลี่ยน key → แก้ → <code>clear crypto session</code> → verify</td></tr>
+<tr><td>11:30–13:30</td><td>Fault #2 (mgmt-acl)</td><td>inject แล้ว SSH เข้าไม่ได้ จึงกู้ผ่าน Console server ของ CML (OOB) ด้วย <code>fault.py recover mgmt-acl</code> → อธิบายเรื่อง access-class</td></tr>
+<tr><td>13:30–15:00</td><td>Trade-off + สรุป</td><td>สไลด์ Trade-off Matrix และบทเรียน → เข้าสู่ Q&amp;A</td></tr>
+</tbody>
+</table>
+<div class="note"><b>แผนสำรอง:</b> (1) จอง sandbox ให้ครอบคลุมเวลาเดโม แล้ว build และ verify ให้ผ่านก่อนเดโมอย่างน้อย 30 นาที (2) อัดวิดีโอหน้าจอ fault ทั้ง 4 แบบสำรองไว้ เผื่อ VPN หรือ sandbox มีปัญหา (3) ถ้า node ค้าง ใช้ <code>fault.py recover &lt;x&gt; --rollback</code> หรือ Stop/Start node นั้นใน CML (golden config ถูก save ลง NVRAM แล้ว) (4) ถ้าจองไม่ได้ในวันเดโม ให้ใช้ไฟล์ <code>evidence/</code>, <code>.pcap</code> และวิดีโอที่อัดไว้ นำเสนอแทน</div></div>
+
+<h2>A6 ปัญหาที่พบบ่อยและวิธีแก้</h2>
+<table>
+<thead><tr><th style="width:32%">อาการ</th><th>สาเหตุ / วิธีแก้</th></tr></thead>
+<tbody>
+<tr><td><code>cml_lab.py</code> แจ้ง version mismatch</td><td>ติดตั้ง <code>virl2-client</code> ให้เลขรุ่นหลักตรงกับ CML เช่น <code>pip install "virl2-client==2.8.*"</code></td></tr>
+<tr><td>ping .181–.184 ไม่ได้</td><td>node ยัง boot ไม่เสร็จ (ดู <code>cml_lab.py status</code>), External Connector ไม่ได้ตั้งเป็น <code>bridge0</code> หรือ IP ชนกับเครื่องอื่นใน sandbox (เปลี่ยนเลขใน inventory)</td></tr>
+<tr><td>ping ได้แต่ SSH ไม่ได้</td><td>ยังไม่มี RSA key ให้รัน <code>cml_lab.py ssh-key</code></td></tr>
+<tr><td><code>Authentication failed</code> หลายครั้งติดกัน</td><td>โดน <code>login block-for 120</code> (quiet mode) ให้รอ 2 นาที หรือเข้า console แล้วสั่ง <code>show login</code></td></tr>
+<tr><td>IKE ไม่ขึ้นตั้งแต่แรก</td><td>ดูตัวนับใน <code>show ip access-lists ACL-WAN-IN</code> ว่ามี match ที่ isakmp ไหม และ PSK/peer IP ตรงกันหรือไม่</td></tr>
+<tr><td><code>% Invalid input</code> ที่บรรทัด police/flow</td><td>image บางรุ่นใช้ syntax ต่างกัน ให้แก้ใน <code>site.j2</code> แล้ว deploy ใหม่ (สคริปต์รันซ้ำได้โดยไม่เสียหาย)</td></tr>
+<tr><td>Collector ไม่ได้รับ syslog</td><td>ต้องรันบน devbox (10.10.20.50) ด้วย sudo และ firewall ของ devbox ต้องเปิด UDP 514/2055</td></tr>
+<tr><td>NTP verify ได้ WARN</td><td>ปกติ ต้องรอ sync 2–5 นาที ดูได้ที่ <code>show ntp associations</code></td></tr>
+</tbody>
+</table>
+</section>
+
+<!-- ============================ PART B ============================ -->
+<section class="page">
+<div style="font:600 9pt 'Plex Thai';letter-spacing:.12em;color:var(--accent)">ส่วนที่ B</div>
+<h1>Technical Report</h1>
+
+<h2>B1 บทสรุปผู้บริหาร</h2>
+<p>โปรเจคนี้ยกระดับใบงาน 28.1.3 จากการใช้ Netmiko ตั้งค่า router ตัวเดียว ไปเป็นระบบ <b>Network-as-Code</b> ที่ deploy เครือข่ายองค์กร 3 site บน Cisco IOSv ได้ทั้งหมดจากไฟล์ inventory ไฟล์เดียว โดย config ของ router ทุกตัวมาจาก template เดียวกัน ทำให้ไม่มีความคลาดเคลื่อนจากการพิมพ์มือ ระบบตรวจความถูกต้อง 62 รายการได้ภายในไม่ถึงหนึ่งนาที และจำลองความล้มเหลวได้ซ้ำ 4 แบบ พร้อมเก็บหลักฐานสำหรับ RCA อัตโนมัติ</p>
+<table>
+<thead><tr><th>ตัวชี้วัด</th><th class="num">ผล</th><th>หมายเหตุ</th></tr></thead>
+<tbody>
+<tr><td>จำนวนบรรทัด config ที่สร้างจาก template</td><td class="num">675</td><td>4 router จาก inventory 74 บรรทัด</td></tr>
+<tr><td>เวลา deploy ทั้ง 4 router (parallel)</td><td class="num">[__] วินาที</td><td>ใส่ค่าจริงจากการรัน</td></tr>
+<tr><td>จำนวน verification checks</td><td class="num">62</td><td>ISP 4 + Hub 20 + Spoke 19×2</td></tr>
+<tr><td>MTTR เฉลี่ยของ 4 fault</td><td class="num">[__] วินาที</td><td>เวลาระหว่าง INJECT กับ POST-RECOVERY ใน timeline.md</td></tr>
+</tbody>
+</table>
+
+<h2>B2 การออกแบบ</h2>
+<h3>B2.1 Topology</h3>
+<ul>
+<li><b>Hub-and-Spoke:</b> HQ เป็น hub ส่วน Branch และ DC เป็น spoke สอดคล้องกับองค์กรจริงที่ทราฟฟิกส่วนใหญ่วิ่งเข้าสู่ HQ/DC</li>
+<li><b>Underlay กับ Overlay แยกกัน:</b> R0-ISP รู้จักแค่ /30 ของ WAN ไม่รู้เส้นทางภายในองค์กร ทราฟฟิกภายในจึงต้องผ่านอุโมงค์ที่เข้ารหัสเท่านั้น</li>
+<li><b>OOB Management:</b> Gi0/3 ทุกตัวต่อเข้าวง 10.10.20.0/24 ของ sandbox ผ่าน External Connector และไม่ประกาศใน OSPF ทำให้ automation ยังเข้าถึงอุปกรณ์ได้แม้ Data plane ล่ม และยังมี Console server ของ CML เป็นช่องทางสุดท้าย (พิสูจน์ใน INC-03)</li>
+</ul>
+<h3>B2.2 แผนแอดเดรส</h3>
+<table>
+<thead><tr><th>Block</th><th>IPv4</th><th>IPv6</th><th>เหตุผล</th></tr></thead>
+<tbody>
+<tr><td>WAN (จำลอง Internet)</td><td class="mono">203.0.113.0/24 → /30</td><td class="mono">2001:db8:ffff:N::/64</td><td>ใช้ TEST-NET-3 (RFC 5737) และ prefix สำหรับเอกสาร (RFC 3849) จึงไม่ชนกับ IP จริง</td></tr>
+<tr><td>LAN</td><td class="mono">10.&lt;site&gt;.&lt;vlan&gt;.0/24</td><td class="mono">2001:db8:&lt;site&gt;:&lt;vlan&gt;::/64</td><td>เลข site/VLAN ตรงกันทั้ง v4 และ v6 อ่านแล้วรู้ทันทีว่าอยู่ที่ไหน</td></tr>
+<tr><td>Tunnel</td><td class="mono">172.16.&lt;คู่&gt;.0/30</td><td class="mono">2001:db8:&lt;คู่&gt;::/64</td><td>เลขคู่ 12 = R1↔R2 และ 13 = R1↔R3 ตรงกับเลข Tunnel interface</td></tr>
+<tr><td>Loopback</td><td class="mono">10.0.0.N/32</td><td class="mono">2001:db8:0:N::1/128</td><td>ใช้เป็น source ของ ping/verify และ Router-ID = N.N.N.N</td></tr>
+<tr><td>Management</td><td class="mono">10.10.20.181–184/24</td><td>–</td><td>วงของ sandbox (bridge0) อยู่นอก OSPF จึงไม่ถูกกระทบจากปัญหาของ routing</td></tr>
+</tbody>
+</table>
+<h3>B2.3 ความปลอดภัยรายระนาบ (Plane)</h3>
+<table>
+<thead><tr><th>Plane</th><th>มาตรการ</th></tr></thead>
+<tbody>
+<tr><td>Management</td><td>AAA local, SSHv2 only, <code>ACL-MGMT-SSH</code> บน VTY, <code>login block-for</code>, SNMPv3 authPriv (SHA/AES-128) + ACL, NTP แบบมี authentication, Syslog + <code>archive log config</code> (บันทึกว่าใครแก้อะไรเมื่อไร), banner</td></tr>
+<tr><td>Control</td><td>CoPP แยก class Routing / IPsec / Mgmt / ICMP / default, OSPF passive-interface default, ไม่รัน OSPF บน WAN</td></tr>
+<tr><td>Data</td><td>IPsec AES-256 + SHA-256 + DH14 + PFS, <code>ACL-WAN-IN</code> รับเฉพาะ IKE/ESP จาก peer ที่รู้จัก, Flexible NetFlow เพื่อดู traffic</td></tr>
+</tbody>
+</table>
+<h3>B2.4 สถาปัตยกรรม Automation</h3>
+<table>
+<thead><tr><th>หลักการ</th><th>การนำไปใช้</th></tr></thead>
+<tbody>
+<tr><td>Single source of truth</td><td><code>inventory.yaml</code> เป็นที่เดียวที่เก็บค่าต่างๆ ส่วน template ไม่มี IP ฝังอยู่เลย</td></tr>
+<tr><td>Fail fast</td><td><code>StrictUndefined</code> และ <code>--dry-run</code> ตรวจจับข้อผิดพลาดก่อนแตะอุปกรณ์</td></tr>
+<tr><td>Safe change</td><td>backup ก่อนและหลัง, diff, ตรวจ <code>% Invalid</code>, และมี golden config ไว้ rollback</td></tr>
+<tr><td>Observability</td><td>session log ทุกครั้ง (<code>logs/</code>), รายงาน verify เป็น Markdown/JSON, timeline ของ fault</td></tr>
+<tr><td>Concurrency</td><td><code>ThreadPoolExecutor</code> สั่งงานทุก router พร้อมกัน</td></tr>
+<tr><td>Secrets</td><td>credential override ด้วย environment variable ได้</td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="page">
+<h2>B3 Real IOS Configuration &amp; Verification</h2>
+<h3>B3.1 ส่วนสำคัญของ config (R1-HQ, render จาก site.j2)</h3>
+<pre>crypto isakmp policy 10
+ encryption aes 256 / hash sha256 / authentication pre-share / group 14
+crypto ipsec transform-set TS-AES256-SHA256 esp-aes 256 esp-sha256-hmac
+ mode transport                                  <span class="c">! GRE มี outer header อยู่แล้ว จึงประหยัดได้ 20 byte</span>
+crypto ipsec profile IPSEC-PROFILE
+ set transform-set TS-AES256-SHA256 / set pfs group14
+interface Tunnel12
+ ip address 172.16.12.1 255.255.255.252 / ipv6 address 2001:db8:12::1/64
+ ip mtu 1400 / ip tcp adjust-mss 1360            <span class="c">! เผื่อ GRE 24 + ESP overhead ไว้</span>
+ ip ospf network point-to-point / hello 5 / dead 20
+ ipv6 ospf 1 area 0
+ tunnel source GigabitEthernet0/0 / tunnel destination 203.0.113.5
+ tunnel protection ipsec profile IPSEC-PROFILE
+router ospf 1
+ router-id 1.1.1.1 / passive-interface default / no passive-interface Tunnel12, Tunnel13
+policy-map PM-COPP  (Routing: ไม่ drop · IPsec 128k · Mgmt 512k · ICMP 32k · default 64k)
+control-plane / service-policy input PM-COPP</pre>
+<p>config ฉบับเต็มของทุกเครื่องอยู่ที่ <code>configs/running/</code> และฉบับก่อน deploy อยู่ที่ <code>configs/rendered/</code></p>
+
+<h3>B3.2 Verification Matrix (verify.py)</h3>
+<table>
+<thead><tr><th>Plane</th><th>Check</th><th>คำสั่ง IOS</th><th>เกณฑ์ผ่าน</th></tr></thead>
+<tbody>
+<tr><td rowspan="4">Control</td><td>OSPFv2 adjacency</td><td class="mono">show ip ospf neighbor</td><td>FULL = expected (Hub 2, Spoke 1)</td></tr>
+<tr><td>OSPFv3 adjacency</td><td class="mono">show ipv6 ospf neighbor</td><td>FULL = expected</td></tr>
+<tr><td>IKE Phase 1</td><td class="mono">show crypto isakmp sa</td><td>QM_IDLE ≥ จำนวน tunnel</td></tr>
+<tr><td>CoPP</td><td class="mono">show policy-map control-plane</td><td>มี PM-COPP</td></tr>
+<tr><td rowspan="4">Data</td><td>Interface</td><td class="mono">show ip interface brief</td><td>WAN/LAN/Tunnel up/up</td></tr>
+<tr><td>ESP</td><td class="mono">show crypto ipsec sa</td><td>#pkts encaps &gt; 0</td></tr>
+<tr><td>IPv4 reachability</td><td class="mono">ping &lt;Lo0&gt; source Lo0</td><td>≥ 80%</td></tr>
+<tr><td>IPv6 reachability</td><td class="mono">ping ipv6 &lt;Lo0&gt; source Lo0</td><td>≥ 80%</td></tr>
+<tr><td rowspan="5">Mgmt</td><td>NTP</td><td class="mono">show ntp status</td><td>synchronized</td></tr>
+<tr><td>NetFlow</td><td class="mono">show flow monitor / exporter</td><td>Allocated, ส่งไปยัง collector</td></tr>
+<tr><td>Syslog</td><td class="mono">show logging</td><td>มี host 10.10.20.50 (devbox)</td></tr>
+<tr><td>SNMPv3</td><td class="mono">show snmp user</td><td>มี user และ AES128</td></tr>
+<tr><td>SSH / ACL</td><td class="mono">show ip ssh / access-lists</td><td>v2.0 และ ACL-WAN-IN มี match</td></tr>
+</tbody>
+</table>
+<div class="grid2">
+<figure class="shot small"><img src="screenshots/fig-05-verify.png" alt="" onerror="this.remove()"><div class="ph"><b>แทรกภาพ: verify.py สรุป FAIL 0</b><code>fig-05-verify.png</code></div><figcaption>รูปที่ 5 ผล verification อัตโนมัติ</figcaption></figure>
+<figure class="shot small"><img src="screenshots/fig-06-ospf-ipsec.png" alt="" onerror="this.remove()"><div class="ph"><b>แทรกภาพ: show ip ospf neighbor + show crypto isakmp sa (R1-HQ)</b><code>fig-06-ospf-ipsec.png</code></div><figcaption>รูปที่ 6 Control plane บน CLI จริง</figcaption></figure>
+<figure class="shot small"><img src="screenshots/fig-07-netflow.png" alt="" onerror="this.remove()"><div class="ph"><b>แทรกภาพ: show flow monitor FNF-MONITOR cache</b><code>fig-07-netflow.png</code></div><figcaption>รูปที่ 7 Flexible NetFlow cache</figcaption></figure>
+<figure class="shot small"><img src="screenshots/fig-08-collector.png" alt="" onerror="this.remove()"><div class="ph"><b>แทรกภาพ: collector.py รับ Syslog + NetFlow</b><code>fig-08-collector.png</code></div><figcaption>รูปที่ 8 Collector บน automation host</figcaption></figure>
+</div>
+</section>
+
+<!-- ============================ RCA ============================ -->
+<section class="page">
+<h2>B4 Fault Injection &amp; Root Cause Analysis</h2>
+<p>ทุกเหตุการณ์รันด้วย <code>fault.py run &lt;scenario&gt;</code> และเก็บหลักฐานไว้ใน <code>evidence/fault_*/timeline.md</code> โดยตัวอย่าง log ในหัวข้อนี้คือรูปแบบข้อความของ IOS ที่<b>คาดว่าจะเห็น</b> ให้แทนที่ด้วยผลจริงจาก timeline ก่อนส่ง และกรอกเวลาจริงในช่อง <code>[__]</code></p>
+<table>
+<thead><tr><th>ID</th><th>เหตุการณ์</th><th>ระดับ</th><th>ผลกระทบ</th><th>ตรวจพบโดย</th><th>วิธีกู้</th></tr></thead>
+<tbody>
+<tr><td>INC-01</td><td>IPsec PSK mismatch</td><td><span class="tag high">High</span></td><td>BR1 ขาดจากองค์กร</td><td>verify: IKE, OSPF FAIL</td><td>แก้ key + clear session</td></tr>
+<tr><td>INC-02</td><td>OSPF MTU mismatch</td><td><span class="tag high">High</span></td><td>route ของ BR1 ไม่เข้า RIB</td><td>verify: OSPF FAIL</td><td>แก้ ip mtu ให้ตรงกัน</td></tr>
+<tr><td>INC-03</td><td>Management ACL lockout</td><td><span class="tag med">Medium</span></td><td>จัดการ R3 ผ่าน SSH ไม่ได้ แต่ data plane ปกติ</td><td>verify: SSH connect FAIL</td><td>กู้ผ่าน console (OOB)</td></tr>
+<tr><td>INC-04</td><td>WAN link flapping</td><td><span class="tag high">High</span></td><td>BR1 หลุดเป็นช่วงๆ</td><td>Syslog: LINK/OSPF</td><td>ทำให้ link เสถียร + ป้องกันด้วย dampening/BFD</td></tr>
+</tbody>
+</table>
+
+<h3>INC-01 · IPsec Pre-Shared Key ไม่ตรงกัน (R2-BR1 ↔ R1-HQ)</h3>
+<dl class="kv">
+<dt>Inject</dt><dd><code>fault.py inject psk</code>: บน R2 เปลี่ยน <code>crypto isakmp key</code> ที่ใช้กับ 203.0.113.1 เป็น <code>WRONG-KEY-2569</code> แล้ว <code>clear crypto session</code></dd>
+<dt>Timeline</dt><dd>Inject [__:__:__] → OSPF Down [__:__:__] (ภายใน dead 20 วินาที) → ตรวจพบ [__:__:__] → กู้คืน [__:__:__] → FULL [__:__:__]</dd>
+</dl>
+<h4>อาการ</h4>
+<pre>R2-BR1# show crypto isakmp sa
+dst             src             state          conn-id status
+203.0.113.1     203.0.113.5     <span class="bad">MM_KEY_EXCH</span>       0 ACTIVE
+R1-HQ#  <span class="c">%CRYPTO-4-IKMP_BAD_MESSAGE: IKE message from 203.0.113.5 failed its sanity check or is malformed</span>
+R1-HQ#  <span class="c">%OSPF-5-ADJCHG: Process 1, Nbr 2.2.2.2 on Tunnel12 from FULL to DOWN, Neighbor Down: Dead timer expired</span>
+R2-BR1# <span class="c">%PARSER-5-CFGLOG_LOGGEDCMD: User:admin logged command:crypto isakmp key ***** address 203.0.113.1</span></pre>
+<h4>การวินิจฉัย (Top-down ตาม layer ของ overlay)</h4>
+<ol>
+<li><code>show ip ospf neighbor</code> บน R1 พบว่าไม่มี 2.2.2.2 → ปัญหาอยู่ที่ Tunnel12 หรือต่ำกว่านั้น</li>
+<li><code>show interface Tunnel12</code> ได้ up/up → GRE ไม่ใช่สาเหตุ เพราะ tunnel interface ขึ้นได้แม้ IPsec ไม่ทำงาน</li>
+<li><code>ping 203.0.113.5 source Gi0/0</code> สำเร็จ → underlay ปกติ</li>
+<li><code>show crypto isakmp sa</code> ค้างที่ MM_KEY_EXCH → Phase 1 ล้มเหลวที่ขั้น MM5/MM6 ซึ่งเป็นจุดแรกที่ใช้ key ที่สร้างจาก PSK</li>
+<li>Wireshark (capture #3) พบว่า MM5 ถูกส่งซ้ำและไม่มี MM6 ตอบกลับ; <code>show logging | i PARSER</code> พบว่ามีการแก้ <code>crypto isakmp key</code> ไม่นานก่อนเกิดเหตุ</li>
+</ol>
+<h4>Root Cause (5-Whys)</h4>
+<p>BR1 ขาดการเชื่อมต่อ ← OSPF บน Tunnel12 down ← ไม่มี IPsec SA จึงไม่มีทราฟฟิกผ่านอุโมงค์ ← IKE Phase 1 ยืนยันตัวตนไม่ผ่าน ← <b>PSK บน R2 ไม่ตรงกับ R1</b> ← มีการแก้ config ด้วยมือนอก pipeline โดยไม่ผ่านการ verify</p>
+<h4>การแก้ไขและพิสูจน์</h4>
+<pre>R2-BR1(config)# no crypto isakmp key WRONG-KEY-2569 address 203.0.113.1
+R2-BR1(config)# crypto isakmp key &lt;PSK&gt; address 203.0.113.1
+R2-BR1# clear crypto session
+R2-BR1# show crypto isakmp sa        → <span class="ok">QM_IDLE</span>     ;  verify.py --quick → <span class="ok">FAIL 0</span></pre>
+<p><b>การป้องกัน:</b> แก้ config ผ่าน <code>deploy.py</code> เท่านั้น, ตั้ง alert ใน syslog สำหรับ <code>CFGLOG_LOGGEDCMD</code> ที่มีคำว่า crypto, ระยะยาวเปลี่ยนไปใช้ IKEv2 + certificate (PKI) แทน PSK</p>
+<div class="grid2">
+<figure class="shot small"><img src="screenshots/fig-09-inc01-symptom.png" alt="" onerror="this.remove()"><div class="ph"><b>แทรกภาพ: MM_KEY_EXCH + IKMP_BAD_MESSAGE</b><code>fig-09-inc01-symptom.png</code></div><figcaption>รูปที่ 9 INC-01 อาการ</figcaption></figure>
+<figure class="shot small"><img src="screenshots/fig-10-inc01-fixed.png" alt="" onerror="this.remove()"><div class="ph"><b>แทรกภาพ: QM_IDLE + OSPF FULL หลังแก้</b><code>fig-10-inc01-fixed.png</code></div><figcaption>รูปที่ 10 INC-01 หลังกู้คืน</figcaption></figure>
+</div>
+</section>
+
+<section class="page">
+<h3>INC-02 · OSPF MTU Mismatch บน Tunnel12</h3>
+<dl class="kv">
+<dt>Inject</dt><dd><code>fault.py inject mtu</code>: บน R2 ตั้ง <code>ip mtu 1300</code> ที่ Tunnel12 (R1 ใช้ 1400) แล้ว shut/no shut เพื่อให้ adjacency เริ่มต้นใหม่ พร้อมเปิด <code>debug ip ospf adj</code></dd>
+<dt>Timeline</dt><dd>Inject [__:__:__] → ค้าง EXSTART [__:__:__] → ตรวจพบ [__:__:__] → แก้ [__:__:__] → FULL [__:__:__]</dd>
+</dl>
+<h4>อาการ</h4>
+<pre>R2-BR1# show ip ospf neighbor
+Neighbor ID     Pri   State           Dead Time   Address         Interface
+1.1.1.1           0   <span class="bad">EXSTART/  -</span>     00:00:17    172.16.12.1     Tunnel12
+R2-BR1# <span class="c">OSPF-1 ADJ   Tu12: Nbr 1.1.1.1 has larger interface MTU</span>
+R1-HQ#  <span class="c">%OSPF-5-ADJCHG: Process 1, Nbr 2.2.2.2 on Tunnel12 from EXSTART to DOWN, Neighbor Down: Too many retransmissions</span></pre>
+<h4>การวินิจฉัย</h4>
+<ol>
+<li>neighbor มีอยู่แต่ไม่ถึง FULL แปลว่า Hello ผ่านแล้ว (ค่า area, timer, auth ตรงกัน) ปัญหาจึงอยู่ที่ขั้นแลก Database Description</li>
+<li>สถานะที่ค้างใน EXSTART/EXCHANGE มีสาเหตุหลักคือ MTU mismatch และ router-id ซ้ำ ตรวจ router-id ด้วย <code>show ip protocols</code> แล้วไม่ซ้ำ</li>
+<li><code>show ip interface Tunnel12 | i MTU</code> ทั้งสองฝั่งได้ 1300 กับ 1400 ซึ่งยืนยันได้จาก debug</li>
+</ol>
+<h4>Root Cause</h4>
+<p>OSPF ใส่ค่า Interface MTU ไว้ใน DBD packet (RFC 2328 §10.6) ผู้รับจะทิ้ง DBD ที่ระบุ MTU <i>มากกว่า</i> MTU ของตัวเอง R2 (1300) จึงไม่รับ DBD จาก R1 (1400) ทำให้ adjacency วนอยู่ใน EXSTART/EXCHANGE แม้ Hello จะผ่าน <b>สาเหตุต้นทางคือค่า <code>ip mtu</code> สองฝั่งของลิงก์เดียวกันไม่ตรงกัน</b></p>
+<h4>การแก้ไข</h4>
+<pre>R2-BR1(config)# interface Tunnel12
+R2-BR1(config-if)# ip mtu 1400          → neighbor <span class="ok">FULL</span> ภายในไม่กี่วินาที</pre>
+<p><b>ทางเลือกที่ไม่แนะนำ:</b> <code>ip ospf mtu-ignore</code> ทำให้ adjacency ขึ้นได้ แต่ซ่อนปัญหาไว้ แพ็กเก็ตขนาดใหญ่จะยังถูก fragment หรือ drop เหมือนเดิม <b>การป้องกัน:</b> กำหนด MTU ใน template เป็นค่ากลางค่าเดียว และ verify.py ตรวจว่า MTU ของ tunnel ทั้งสองฝั่งเท่ากัน</p>
+<div class="grid2">
+<figure class="shot small"><img src="screenshots/fig-11-inc02-symptom.png" alt="" onerror="this.remove()"><div class="ph"><b>แทรกภาพ: EXSTART + debug "larger interface MTU"</b><code>fig-11-inc02-symptom.png</code></div><figcaption>รูปที่ 11 INC-02 อาการ</figcaption></figure>
+<figure class="shot small"><img src="screenshots/fig-12-inc02-fixed.png" alt="" onerror="this.remove()"><div class="ph"><b>แทรกภาพ: neighbor FULL หลังแก้</b><code>fig-12-inc02-fixed.png</code></div><figcaption>รูปที่ 12 INC-02 หลังกู้คืน</figcaption></figure>
+</div>
+
+<h3>INC-03 · ACL บน VTY drop ทราฟฟิก Management (R3-DC)</h3>
+<dl class="kv">
+<dt>Inject</dt><dd><code>fault.py inject mgmt-acl</code>: ผูก <code>ACL-VTY-LOCKOUT</code> (permit เฉพาะ 10.10.20.181 ซึ่งเป็น R0 ไม่ใช่ devbox) กับ <code>line vty 0 4</code> แทน ACL-MGMT-SSH</dd>
+<dt>Timeline</dt><dd>Inject [__:__:__] → SSH ล้มเหลว [__:__:__] → เข้า console [__:__:__] → กู้คืน [__:__:__]</dd>
+</dl>
+<pre>automation$ verify.py R3-DC → <span class="bad">SSH connect FAIL</span> (TCP connection to device failed / refused)
+R3-DC# <span class="c">%SEC-6-IPACCESSLOGS: list ACL-VTY-LOCKOUT denied 10.10.20.50 1 packet</span>
+R1-HQ# show ip ospf neighbor   → 3.3.3.3 <span class="ok">FULL</span>   (data plane ไม่กระทบ)</pre>
+<p><b>Root Cause:</b> access-class บน VTY อนุญาตเฉพาะ host 10.10.20.181 ซึ่งไม่ใช่ automation host (devbox 10.10.20.50) จึงตัดช่องทางจัดการผ่าน SSH ทั้งหมด <b>บทเรียน:</b> ต้องมีช่องทาง Out-of-Band เสมอ งานนี้กู้ผ่าน <b>Console server ของ CML</b> ด้วย <code>fault.py recover mgmt-acl</code> ซึ่ง Netmiko SSH เข้า CML ด้วย <code>terminal_server</code> แล้ว <code>open /Capstone-P3/R3-DC/0</code> และ <code>redispatch</code> เป็น <code>cisco_ios</code> เหมือน console server ในองค์กรจริง <b>การป้องกัน:</b> ใช้ <code>reload in 5</code> ก่อนแก้ ACL ด้านการจัดการ (หรือ <code>configure terminal revert timer</code>) และให้ deploy.py ตรวจว่า SSH กลับเข้าได้ก่อน commit</p></p>
+<figure class="shot small"><img src="screenshots/fig-13-inc03.png" alt="" onerror="this.remove()"><div class="ph"><b>แทรกภาพ: SSH ถูกปฏิเสธ + กู้ผ่าน console</b><code>fig-13-inc03.png</code></div><figcaption>รูปที่ 13 INC-03 อาการและการกู้คืนผ่าน OOB</figcaption></figure>
+
+<h3>INC-04 · Link Flapping บน WAN ของ R2-BR1</h3>
+<dl class="kv">
+<dt>Inject</dt><dd><code>fault.py inject flap</code>: shut/no shut Gi0/0 สลับกัน 3 รอบ (down 8 วินาที / up 12 วินาที) หรือแบบสมจริงกว่าคือ <code>cml_lab.py flap --a R2-BR1 --b R0-ISP</code> ที่ตัดและต่อ “สาย” ผ่าน CML API ทำให้ IOS เห็นเป็น carrier loss จริงๆ</dd>
+</dl>
+<pre>R2-BR1# <span class="c">%LINEPROTO-5-UPDOWN: Line protocol on Interface Tunnel12, changed state to down</span>
+R2-BR1# <span class="c">%OSPF-5-ADJCHG: Process 1, Nbr 1.1.1.1 on Tunnel12 from FULL to DOWN, Neighbor Down: Interface down or detached</span>
+R1-HQ#  show ip route ospf → 10.2.10.0/24 <span class="bad">หาย</span> / กลับมา ซ้ำตามรอบ flap</pre>
+<p><b>Root Cause:</b> WAN ของ BR1 ไม่เสถียร ทุกครั้งที่ link down จะทำให้ tunnel down → OSPF down → IKE ต้องเจรจาใหม่ เกิด <i>churn</i> ทั้ง control plane (ถ้าจำลองด้วย <code>shutdown</code> จะเห็นเป็น <i>administratively down</i> ส่วนถ้าใช้ <code>cml_lab.py flap</code> จะเห็นเป็น <i>down</i> เหมือนสายหลุดจริง) <b>การแก้:</b> ทำให้ link กลับมาเสถียร <b>การป้องกัน:</b> <code>dampening</code> บน interface เพื่อกด interface ที่ flap บ่อย, BFD หรือ timer ที่เหมาะสม, และมี tunnel สำรองผ่าน ISP ที่สอง</p>
+<figure class="shot small"><img src="screenshots/fig-14-inc04.png" alt="" onerror="this.remove()"><div class="ph"><b>แทรกภาพ: Syslog LINK/OSPF ซ้ำบน collector</b><code>fig-14-inc04.png</code></div><figcaption>รูปที่ 14 INC-04 Syslog บน collector</figcaption></figure>
+
+<h4>เปรียบเทียบวิธีกู้คืน</h4>
+<table>
+<thead><tr><th>วิธี</th><th>ข้อดี</th><th>ข้อเสีย</th><th>ใช้เมื่อ</th></tr></thead>
+<tbody>
+<tr><td>Targeted fix</td><td>แก้ตรงจุด กระทบน้อย</td><td>ต้องรู้ root cause ก่อน</td><td>วินิจฉัยได้ชัดเจนแล้ว</td></tr>
+<tr><td><code>configure replace golden.cfg</code></td><td>กลับสู่สถานะที่ตรวจแล้วว่าดี ลบ drift ทั้งหมด</td><td>ลบการเปลี่ยนแปลงที่ตั้งใจทำแต่ยังไม่ได้เก็บเป็น golden</td><td>หาสาเหตุไม่พบ หรือมีการแก้หลายจุด</td></tr>
+<tr><td>Console OOB</td><td>ใช้ได้แม้ in-band ล่มหมด</td><td>ช้า และต้องเข้าถึงทางกายภาพหรือ console server</td><td>ถูกล็อก SSH หรือ mgmt IP หาย</td></tr>
+</tbody>
+</table>
+</section>
+
+<!-- ============================ TRADE-OFF ============================ -->
+<section class="page">
+<h2>B5 Comparative Analysis &amp; Trade-off Matrix</h2>
+<p>ให้คะแนนแต่ละเกณฑ์ 1–5 คูณน้ำหนัก (รวม 100%) แล้วเทียบคะแนนถ่วงน้ำหนัก (เต็ม 5.00)</p>
+
+<h3>T1 · เครื่องมือ Automation</h3>
+<table>
+<thead><tr><th>เกณฑ์ (น้ำหนัก)</th><th class="num">Netmiko</th><th class="num">NAPALM</th><th class="num">Ansible (cisco.ios)</th><th class="num">NETCONF / RESTCONF</th></tr></thead>
+<tbody>
+<tr><td>เรียนรู้ง่ายและต่อยอดใบงาน 28.1.3 ได้ (20%)</td><td class="num">5</td><td class="num">3</td><td class="num">3</td><td class="num">2</td></tr>
+<tr><td>ควบคุมได้ละเอียด: custom logic, prompt, fault injection (25%)</td><td class="num">5</td><td class="num">3</td><td class="num">3</td><td class="num">4</td></tr>
+<tr><td>Idempotency / declarative (20%)</td><td class="num">2</td><td class="num">4</td><td class="num">5</td><td class="num">5</td></tr>
+<tr><td>Multi-vendor abstraction (10%)</td><td class="num">3</td><td class="num">5</td><td class="num">4</td><td class="num">4</td></tr>
+<tr><td>ใช้กับ IOSv (IOS classic) ได้ทันที (25%)</td><td class="num">5</td><td class="num">4</td><td class="num">5</td><td class="num">1</td></tr>
+<tr><td><b>คะแนนถ่วงน้ำหนัก</b></td><td class="num best">4.20</td><td class="num">3.65</td><td class="num">4.00</td><td class="num">3.05</td></tr>
+</tbody>
+</table>
+<p><b>ข้อสรุป:</b> Netmiko เหมาะกับงานนี้ที่สุด เพราะต้องควบคุมลำดับคำสั่งแบบ imperative เพื่อฉีดและกู้ปัญหา และ IOS classic ไม่มี YANG model ส่วนจุดอ่อนเรื่อง idempotency ชดเชยด้วย diff, verify และ golden config ถ้าใช้ใน production ควรใช้ Ansible คุม workflow แล้วเรียกใช้ Netmiko ในงานเฉพาะทาง หรือย้ายไป IOS-XE เพื่อใช้ RESTCONF</p>
+
+<h3>T2 · เทคโนโลยี VPN Overlay</h3>
+<table>
+<thead><tr><th>เกณฑ์ (น้ำหนัก)</th><th class="num">GRE over IPsec (P2P)</th><th class="num">DMVPN Phase 3</th><th class="num">IPsec SVTI</th><th class="num">Crypto map</th></tr></thead>
+<tbody>
+<tr><td>ความปลอดภัย (25%)</td><td class="num">5</td><td class="num">5</td><td class="num">5</td><td class="num">4</td></tr>
+<tr><td>ขยายจำนวน spoke (20%)</td><td class="num">2</td><td class="num">5</td><td class="num">2</td><td class="num">2</td></tr>
+<tr><td>รองรับ multicast/IGP และ dual-stack ใน tunnel เดียว (20%)</td><td class="num">5</td><td class="num">4</td><td class="num">4</td><td class="num">1</td></tr>
+<tr><td>ความง่ายของ config (15%)</td><td class="num">4</td><td class="num">2</td><td class="num">5</td><td class="num">3</td></tr>
+<tr><td>Troubleshoot ง่าย / เห็นภาพการทำงาน (20%)</td><td class="num">5</td><td class="num">3</td><td class="num">4</td><td class="num">3</td></tr>
+<tr><td><b>คะแนนถ่วงน้ำหนัก</b></td><td class="num best">4.25</td><td class="num">3.95</td><td class="num">4.00</td><td class="num">2.65</td></tr>
+</tbody>
+</table>
+<p><b>ข้อสรุป:</b> มี 3 site การใช้ P2P GRE/IPsec จึงคุ้มที่สุด เพราะ GRE ส่งได้ทั้ง IPv4 และ IPv6 รวมถึง OSPF multicast ใน tunnel เดียว แต่ถ้ามี branch เกิน 10 แห่งควรเปลี่ยนเป็น DMVPN Phase 3 เพราะจำนวน tunnel แบบ P2P จะโตแบบ O(n) ที่ hub และไม่มี spoke-to-spoke โดยตรง</p>
+
+<h3>T3 · Routing Protocol บน Overlay</h3>
+<table>
+<thead><tr><th>เกณฑ์ (น้ำหนัก)</th><th class="num">OSPFv2 + OSPFv3</th><th class="num">EIGRP (named)</th><th class="num">BGP</th></tr></thead>
+<tbody>
+<tr><td>มาตรฐานเปิด / multi-vendor (20%)</td><td class="num">5</td><td class="num">3</td><td class="num">5</td></tr>
+<tr><td>ความเร็ว convergence (20%)</td><td class="num">4</td><td class="num">5</td><td class="num">2</td></tr>
+<tr><td>Dual-stack (20%)</td><td class="num">4</td><td class="num">5</td><td class="num">5</td></tr>
+<tr><td>ความง่ายของ config (15%)</td><td class="num">3</td><td class="num">4</td><td class="num">2</td></tr>
+<tr><td>Scalability / policy control (25%)</td><td class="num">4</td><td class="num">3</td><td class="num">5</td></tr>
+<tr><td><b>คะแนนถ่วงน้ำหนัก</b></td><td class="num best">4.05</td><td class="num">3.95</td><td class="num">3.95</td></tr>
+</tbody>
+</table>
+<p><b>ข้อสรุป:</b> คะแนนสูสีกัน แต่เลือก OSPF เพราะเป็นมาตรฐานเปิดและอยู่ในหลักสูตร CCNA ส่วน BGP เหมาะเมื่อต้องการ policy ระหว่างองค์กร หรือเชื่อมกับ ISP หลายราย</p>
+
+<h3>T4 · แพลตฟอร์มจำลอง</h3>
+<table>
+<thead><tr><th>เกณฑ์ (น้ำหนัก)</th><th class="num">Packet Tracer</th><th class="num">GNS3 (cloud VM)</th><th class="num">CML (DevNet Sandbox)</th><th class="num">EVE-NG CE</th></tr></thead>
+<tbody>
+<tr><td>ความสมจริงของ IOS (25%)</td><td class="num">1</td><td class="num">5</td><td class="num">5</td><td class="num">5</td></tr>
+<tr><td>Wireshark / packet capture (10%)</td><td class="num">1</td><td class="num">5</td><td class="num">4</td><td class="num">4</td></tr>
+<tr><td>Automation / API ของแพลตฟอร์ม (20%)</td><td class="num">2</td><td class="num">4</td><td class="num">5</td><td class="num">3</td></tr>
+<tr><td>ใช้กับ Mac Apple Silicon ได้ + เวลาติดตั้ง (25%)</td><td class="num">5</td><td class="num">3</td><td class="num">4</td><td class="num">2</td></tr>
+<tr><td>ต้นทุน + อาจารย์รับรูปแบบไฟล์ (20%)</td><td class="num">4</td><td class="num">3</td><td class="num">5</td><td class="num">3</td></tr>
+<tr><td><b>คะแนนถ่วงน้ำหนัก</b></td><td class="num">2.80</td><td class="num">3.90</td><td class="num best">4.65</td><td class="num">3.35</td></tr>
+</tbody>
+</table>
+<p><b>ข้อสรุป:</b> CML ของ DevNet Sandbox ได้คะแนนสูงสุด เพราะรัน Real IOSv บน x86 ของ Cisco ได้ฟรี ไม่ต้องติดตั้งอะไรบน Mac และมี REST API ที่ทำให้การสร้าง topology, capture และจำลองสายหลุดเป็นโค้ดได้ทั้งหมด จุดอ่อนคือเวลาจองมีจำกัด (ได้ 4 ในเกณฑ์การเข้าถึง) ซึ่งลดความเสี่ยงได้ด้วยการจองล่วงหน้า บันทึกหลักฐานเป็นไฟล์ และอัดวิดีโอสำรอง ส่วน GNS3 เป็นทางเลือกที่ดีถ้ามีเครื่อง x86 ของตัวเอง และ Packet Tracer รันคำสั่งอย่าง <code>flow</code>, <code>control-plane</code> และ Netmiko over SSH ไม่ได้ จึงใช้เพียงวาด draft</p>
+
+<h2>B6 บทเรียนและงานต่อยอด</h2>
+<ul>
+<li>การมี <b>OOB management</b> และ <b>golden config</b> ทำให้กล้ากดรัน fault injection เพราะรู้ว่ากู้คืนได้เสมอ</li>
+<li>อาการเดียวกัน (OSPF down) มีได้หลายสาเหตุ (PSK, MTU, link) การไล่ตรวจตาม layer และใช้ข้อมูลจากหลายแหล่ง (show, syslog, debug, pcap) ช่วยให้ระบุสาเหตุได้เร็ว</li>
+<li>ข้อจำกัด: Netmiko เป็น imperative จึงต้องเขียนตัวตรวจ diff และ verify เอง, credential ยังเป็น local user, PSK ยังไม่ใช่ PKI</li>
+<li>งานต่อยอด: CI pipeline (GitHub Actions) ที่รัน <code>--dry-run</code> และ lint config ทุก commit, TACACS+/RADIUS, IKEv2 + certificate, DMVPN, ทำ dashboard จาก NetFlow, ย้ายไปใช้ IOS-XE และ RESTCONF</li>
+</ul>
+</section>
+
+<!-- ============================ APPENDIX ============================ -->
+<section class="page">
+<h2>ภาคผนวก ก · เตรียมตอบ Technical Q&amp;A</h2>
+<table>
+<thead><tr><th style="width:36%">คำถามที่คาดว่าจะถูกถาม</th><th>แนวคำตอบ</th></tr></thead>
+<tbody>
+<tr><td>ทำไมไม่รัน OSPF บน WAN ด้วย</td><td>ถ้า router เรียนรู้ tunnel destination ผ่าน tunnel เองจะเกิด <i>recursive routing</i> (%TUN-5-RECURDOWN) ทำให้ tunnel ล่มวนซ้ำ จึงใช้ static default route ผ่าน ISP สำหรับ underlay</td></tr>
+<tr><td>ทำไม ip mtu 1400 และ adjust-mss 1360</td><td>1500 − GRE 24 − ESP transport overhead (SPI/Seq/IV/pad/ICV ประมาณ 40–60 byte) ≈ 1416 จึงปัดลงเป็น 1400 เพื่อเผื่อไว้ ส่วน MSS = 1400 − IP 20 − TCP 20 = 1360 ช่วยกัน fragmentation</td></tr>
+<tr><td>Transport mode กับ Tunnel mode</td><td>GRE สร้าง outer IP header ที่ปลายทางเดียวกันอยู่แล้ว การใช้ transport mode จึงประหยัด IP header ซ้ำได้ 20 byte</td></tr>
+<tr><td>ทำไม OSPF ค้างที่ EXSTART เมื่อ MTU ไม่ตรงกัน</td><td>DBD packet ระบุ interface MTU ไว้ ผู้รับจะปฏิเสธ DBD ที่มี MTU มากกว่าของตัวเอง ทำให้แลก database ไม่สำเร็จ แต่ Hello ไม่ได้ตรวจ MTU จึงยังเห็น neighbor อยู่</td></tr>
+<tr><td>รู้ได้อย่างไรว่าเป็น PSK ผิด ไม่ใช่ policy ผิด</td><td>ถ้า policy ไม่ตรงกันจะล้มตั้งแต่ MM1/MM2 (MM_NO_STATE และ “atts are not acceptable”) แต่ PSK ผิดจะผ่าน MM1–4 แล้วล้มที่ MM5/6 ซึ่งเป็นจุดแรกที่ถอดรหัสด้วย key จาก PSK จึงเห็น MM_KEY_EXCH และ IKMP_BAD_MESSAGE</td></tr>
+<tr><td>CoPP class Routing ทำไม exceed-action transmit</td><td>ไม่ควร drop routing protocol เพราะจะทำให้ adjacency ล่มเอง จึงใช้ class นี้เพื่อนับและเฝ้าดูเท่านั้น ส่วน ICMP/default จำกัดเข้มเพื่อกัน DoS ไปยัง CPU</td></tr>
+<tr><td>Netmiko ต่างจาก Paramiko อย่างไร</td><td>Netmiko ต่อยอดจาก Paramiko โดยจัดการเรื่อง prompt, paging (<code>terminal length 0</code>), enable/config mode, timing และ TextFSM ให้ตามชนิดอุปกรณ์</td></tr>
+<tr><td><code>send_command</code> กับ <code>send_command_timing</code></td><td>แบบแรกรอจนเจอ prompt ตาม pattern ส่วนแบบหลังรอตามเวลา เหมาะกับคำสั่งที่มีคำถามโต้ตอบหรือ prompt เปลี่ยน เช่น <code>clear crypto session</code></td></tr>
+<tr><td>Idempotent ไหม ถ้ารัน deploy ซ้ำ</td><td>IOS CLI เป็น merge จึงรันซ้ำได้โดยไม่เสียหาย และ diff จะเป็นศูนย์ ยกเว้น <code>snmp-server user</code> ที่ไม่แสดงใน running-config ส่วนการลบ config เก่าต้องใช้ <code>configure replace</code></td></tr>
+<tr><td>ทำไม Wireshark บน WAN ไม่เห็น OSPF</td><td>OSPF อยู่ใน GRE และถูกห่อด้วย ESP จึงเห็นเพียง ESP ซึ่งเป็นหลักฐานว่าการเข้ารหัสทำงาน</td></tr>
+<tr><td>SNMPv3 มีระดับความปลอดภัยอะไรบ้าง</td><td>noAuthNoPriv / authNoPriv / authPriv งานนี้ใช้ authPriv (SHA + AES-128) และจำกัด manager ด้วย ACL</td></tr>
+<tr><td>ถ้า branch เพิ่มเป็น 50 แห่งต้องแก้อะไร</td><td>เพิ่ม entry ใน inventory ได้ทันที แต่ควรเปลี่ยน overlay เป็น DMVPN Phase 3 และใช้ OSPF area แยกหรือ BGP ตาม T2/T3</td></tr>
+</tbody>
+</table>
+
+<h2>ภาคผนวก ข · Mapping ใบงาน 28.1.3 → โปรเจค</h2>
+<table>
+<thead><tr><th>ใบงานต้นฉบับ</th><th>ในโปรเจคนี้</th></tr></thead>
+<tbody>
+<tr><td>Part 1: Launch VM, ต่อ SSH ไปที่ CSR1kv</td><td>IOSv บน CML (DevNet Sandbox) สร้าง topology + Day-0 อัตโนมัติด้วย <code>cml_lab.py build</code></td></tr>
+<tr><td>Part 2: <code>ConnectHandler</code> + <code>send_command("show ip interface brief")</code></td><td><code>lab_28_1_3.py</code> Part 1–2 + TextFSM structured output</td></tr>
+<tr><td>Part 3: <code>send_config_set()</code> สร้าง Loopback</td><td><code>lab_28_1_3.py</code> Part 3 แล้วขยายเป็น <code>deploy.py</code> ที่ push config ทั้งองค์กรจาก template</td></tr>
+<tr><td>Part 4: ตรวจผลด้วย show</td><td><code>verify.py</code> 62 checks + รายงาน PASS/FAIL</td></tr>
+<tr><td>(ไม่มีในใบงาน)</td><td><code>cml_lab.py</code> (IaC, capture, link flap), <code>fault.py</code>, <code>collector.py</code>, golden config rollback</td></tr>
+</tbody>
+</table>
+
+<h2>ภาคผนวก ค · Deliverables Checklist</h2>
+<table>
+<thead><tr><th style="width:8%">✓</th><th>รายการ</th><th>ไฟล์/โฟลเดอร์</th></tr></thead>
+<tbody>
+<tr><td>☐</td><td>CML topology ที่ใช้งานได้จริง (อาจารย์อนุญาตให้ใช้ .yaml)</td><td><code>topology/Capstone-P3.yaml</code></td></tr>
+<tr><td>☐</td><td>running-config ฉบับเต็มทุกอุปกรณ์</td><td><code>configs/running/*.cfg</code></td></tr>
+<tr><td>☐</td><td>Packet Tracer draft (bare minimum)</td><td><code>topology-draft.pkt</code></td></tr>
+<tr><td>☐</td><td>Wireshark captures</td><td><code>captures/01_ike_esp.pcap</code> … <code>05_mgmt.pcap</code></td></tr>
+<tr><td>☐</td><td>หลักฐาน verify และ fault timeline</td><td><code>evidence/</code></td></tr>
+<tr><td>☐</td><td>Source code + templates + inventory</td><td><code>scripts/</code>, <code>templates/</code>, <code>inventory.yaml</code></td></tr>
+<tr><td>☐</td><td>Runbook &amp; Technical Report (PDF) ที่มีภาพหน้าจอจริงครบ 14 รูป</td><td><code>report/Capstone-P3-Runbook-Report.pdf</code></td></tr>
+<tr><td>☐</td><td>สไลด์นำเสนอ</td><td>Canva (ลิงก์)</td></tr>
+</tbody>
+</table>
+</section>
+
+</main>
+</body>
+</html>

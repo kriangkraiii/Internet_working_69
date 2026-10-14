@@ -1,0 +1,69 @@
+ *** R1-HQ | KKU Capstone P3 | Authorized access only - all activity is logged *** 
+
+
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************
+R1-HQ#
+R1-HQ#terminal width 511
+R1-HQ#terminal length 0
+R1-HQ#
+R1-HQ#
+R1-HQ#
+R1-HQ#
+R1-HQ#show ip ospf neighbor
+
+Neighbor ID     Pri   State           Dead Time   Address         Interface
+3.3.3.3           0   FULL/  -        00:00:18    172.16.13.2     Tunnel13
+2.2.2.2           0   FULL/  -        00:00:15    172.16.12.2     Tunnel12
+R1-HQ#
+R1-HQ#
+R1-HQ#show crypto isakmp sa
+IPv4 Crypto ISAKMP SA
+dst             src             state          conn-id status
+203.0.113.5     203.0.113.1     QM_IDLE           1014 ACTIVE
+203.0.113.1     203.0.113.9     QM_IDLE           1003 ACTIVE
+203.0.113.9     203.0.113.1     QM_IDLE           1002 ACTIVE
+
+IPv6 Crypto ISAKMP SA
+
+R1-HQ#
+R1-HQ#
+R1-HQ#
+R1-HQ#show crypto ipsec sa | include interface|encaps|decaps
+interface: Tunnel12
+    #pkts encaps: 2686, #pkts encrypt: 2686, #pkts digest: 2686
+    #pkts decaps: 2626, #pkts decrypt: 2626, #pkts verify: 2626
+interface: Tunnel13
+    #pkts encaps: 2477, #pkts encrypt: 2477, #pkts digest: 2477
+    #pkts decaps: 2402, #pkts decrypt: 2402, #pkts verify: 2402
+R1-HQ#
+R1-HQ#
+R1-HQ#show policy-map control-plane | include Class-map|conformed|exceeded
+    Class-map: CM-COPP-ROUTING (match-all)  
+        conformed 2443 packets, 196048 bytes; actions:
+        exceeded 0 packets, 0 bytes; actions:
+        conformed 0000 bps, exceeded 0000 bps
+    Class-map: CM-COPP-IPSEC (match-all)  
+        conformed 3868 packets, 604964 bytes; actions:
+        exceeded 0 packets, 0 bytes; actions:
+        conformed 0000 bps, exceeded 0000 bps
+    Class-map: CM-COPP-MGMT (match-all)  
+        conformed 11087 packets, 851566 bytes; actions:
+        exceeded 0 packets, 0 bytes; actions:
+        conformed 4000 bps, exceeded 0000 bps
+    Class-map: CM-COPP-ICMP (match-all)  
+        conformed 261 packets, 26070 bytes; actions:
+        exceeded 0 packets, 0 bytes; actions:
+        conformed 0000 bps, exceeded 0000 bps
+    Class-map: class-default (match-any)  
+        conformed 13360 packets, 1593491 bytes; actions:
+        exceeded 3 packets, 1450 bytes; actions:
+        conformed 1000 bps, exceeded 0000 bps
+R1-HQ#
+R1-HQ#exit

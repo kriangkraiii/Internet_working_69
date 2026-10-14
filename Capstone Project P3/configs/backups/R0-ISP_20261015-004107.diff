@@ -1,0 +1,109 @@
+-Current configuration : 3204 bytes
++Current configuration : 4879 bytes
++!
+-service timestamps debug datetime msec
+-service timestamps log datetime msec
+-no service password-encryption
++service timestamps debug datetime msec localtime show-timezone
++service timestamps log datetime msec localtime show-timezone
++service password-encryption
++security passwords min-length 8
++logging buffered 64000
+-no aaa new-model
+-!
+-!
+-!
++aaa new-model
++!
++!
++aaa authentication login default local
++aaa authorization exec default local 
++!
++!
++!
++!
++!
++aaa session-id common
++!
++!
++!
++clock timezone ICT 7 0
+-no ipv6 cef
++login block-for 120 attempts 5 within 60
++login on-failure log
++login on-success log
++ipv6 unicast-routing
++ipv6 cef
+-username admin privilege 15 secret 9 $9$MW5Yavh5JYIWTt$ytLz.f/wRukoyH01o0FohePM0psPrmqoy0CcmMj/N56
++archive
++ log config
++  logging enable
++  notify syslog contenttype plaintext
++  hidekeys
++file prompt quiet
++username admin privilege 15 secret 9 $9$YjycmtpNCbagmc$pLPQ.P2H1WfnEZZaBBV0q/dH08jMo0ssZiYZH4MllGg
+- no ip address
+- shutdown
+- duplex auto
+- speed auto
+- media-type rj45
++ description to R1-HQ
++ ip address 203.0.113.2 255.255.255.252
++ duplex auto
++ speed auto
++ media-type rj45
++ ipv6 address 2001:DB8:FFFF:1::2/64
+- no ip address
+- shutdown
+- duplex auto
+- speed auto
+- media-type rj45
++ description to R2-BR1
++ ip address 203.0.113.6 255.255.255.252
++ duplex auto
++ speed auto
++ media-type rj45
++ ipv6 address 2001:DB8:FFFF:2::2/64
+- no ip address
+- shutdown
+- duplex auto
+- speed auto
+- media-type rj45
++ description to R3-DC
++ ip address 203.0.113.10 255.255.255.252
++ duplex auto
++ speed auto
++ media-type rj45
++ ipv6 address 2001:DB8:FFFF:3::2/64
++ip ssh time-out 60
++ip access-list standard ACL-SNMP
++ permit 10.10.20.50
++ deny   any log
++!
++ip access-list extended ACL-MGMT-SSH
++ remark ** allow SSH only from OOB management subnet **
++ permit tcp 10.10.20.0 0.0.0.255 any eq 22
++ deny   ip any any log
++!
++logging source-interface GigabitEthernet0/3
++logging host 10.10.20.50
++!
++snmp-server group SNMPV3-GRP v3 priv read V3-VIEW access ACL-SNMP
++snmp-server view V3-VIEW iso included
++snmp-server location R0-ISP-GNS3
++snmp-server contact capstone@kku.lab
++snmp-server chassis-id 
++snmp-server enable traps snmp linkdown linkup
++snmp-server enable traps config
++snmp-server host 10.10.20.50 version 3 priv snmpadmin 
++!
++banner motd ^C *** R0-ISP | KKU Capstone P3 | Authorized access only - all activity is logged *** ^C
++ exec-timeout 15 0
+- login local
++ access-class ACL-MGMT-SSH in
++ logging synchronous
++ntp authentication-key 1 md5 080F585E221C1C54405E5A5D 7
++ntp authenticate
++ntp trusted-key 1
++ntp source GigabitEthernet0/3
++ntp master 3

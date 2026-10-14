@@ -1,0 +1,189 @@
+ *** R1-HQ | KKU Capstone P3 | Authorized access only - all activity is logged *** 
+
+
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************
+R1-HQ#
+R1-HQ#terminal width 511
+R1-HQ#terminal length 0
+R1-HQ#
+R1-HQ#
+R1-HQ#
+R1-HQ#
+R1-HQ#show ip interface brief
+Interface                  IP-Address      OK? Method Status                Protocol
+GigabitEthernet0/0         203.0.113.1     YES manual up                    up      
+GigabitEthernet0/1         10.1.10.1       YES manual up                    up      
+GigabitEthernet0/2         unassigned      YES unset  administratively down down    
+GigabitEthernet0/3         10.10.20.182    YES TFTP   up                    up      
+Loopback0                  10.0.0.1        YES manual up                    up      
+NVI0                       203.0.113.1     YES unset  up                    up      
+Tunnel12                   172.16.12.1     YES manual up                    up      
+Tunnel13                   172.16.13.1     YES manual up                    up      
+R1-HQ#
+R1-HQ#
+R1-HQ#show ip ospf neighbor
+
+Neighbor ID     Pri   State           Dead Time   Address         Interface
+3.3.3.3           0   FULL/  -        00:00:18    172.16.13.2     Tunnel13
+2.2.2.2           0   FULL/  -        00:00:15    172.16.12.2     Tunnel12
+R1-HQ#
+R1-HQ#
+R1-HQ#show ipv6 ospf neighbor
+
+            OSPFv3 Router with ID (1.1.1.1) (Process ID 1)
+
+Neighbor ID     Pri   State           Dead Time   Interface ID    Interface
+3.3.3.3           0   FULL/  -        00:00:39    10              Tunnel13
+2.2.2.2           0   FULL/  -        00:00:32    10              Tunnel12
+R1-HQ#
+R1-HQ#
+R1-HQ#show crypto isakmp sa
+IPv4 Crypto ISAKMP SA
+dst             src             state          conn-id status
+203.0.113.5     203.0.113.1     QM_IDLE           1019 ACTIVE
+203.0.113.1     203.0.113.9     QM_IDLE           1003 ACTIVE
+203.0.113.9     203.0.113.1     QM_IDLE           1002 ACTIVE
+
+IPv6 Crypto ISAKMP SA
+
+R1-HQ#
+R1-HQ#
+R1-HQ#
+R1-HQ#show crypto ipsec sa
+
+interface: Tunnel12
+    Crypto map tag: Tunnel12-head-0, local addr 203.0.113.1
+
+   protected vrf: (none)
+   local  ident (addr/mask/prot/port): (203.0.113.1/255.255.255.255/47/0)
+   remote ident (addr/mask/prot/port): (203.0.113.5/255.255.255.255/47/0)
+   current_peer 203.0.113.5 port 500
+     PERMIT, flags={origin_is_acl,}
+    #pkts encaps: 2963, #pkts encrypt: 2963, #pkts digest: 2963
+    #pkts decaps: 2906, #pkts decrypt: 2906, #pkts verify: 2906
+    #pkts compressed: 0, #pkts decompressed: 0
+    #pkts not compressed: 0, #pkts compr. failed: 0
+    #pkts not decompressed: 0, #pkts decompress failed: 0
+    #send errors 0, #recv errors 0
+
+     local crypto endpt.: 203.0.113.1, remote crypto endpt.: 203.0.113.5
+     plaintext mtu 1458, path mtu 1500, ip mtu 1500, ip mtu idb GigabitEthernet0/0
+     current outbound spi: 0xEE3DEFBB(3997036475)
+     PFS (Y/N): Y, DH group: group14
+
+     inbound esp sas:
+      spi: 0xFB964E7E(4220931710)
+        transform: esp-256-aes esp-sha256-hmac ,
+        in use settings ={Transport, }
+        conn id: 29, flow_id: SW:29, sibling_flags 80004000, crypto map: Tunnel12-head-0
+        sa timing: remaining key lifetime (k/sec): (4210173/3320)
+        IV size: 16 bytes
+        replay detection support: Y
+        Status: ACTIVE(ACTIVE)
+
+     inbound ah sas:
+
+     inbound pcp sas:
+
+     outbound esp sas:
+      spi: 0xEE3DEFBB(3997036475)
+        transform: esp-256-aes esp-sha256-hmac ,
+        in use settings ={Transport, }
+        conn id: 30, flow_id: SW:30, sibling_flags 80004000, crypto map: Tunnel12-head-0
+        sa timing: remaining key lifetime (k/sec): (4210173/3320)
+        IV size: 16 bytes
+        replay detection support: Y
+        Status: ACTIVE(ACTIVE)
+
+     outbound ah sas:
+
+     outbound pcp sas:
+
+interface: Tunnel13
+    Crypto map tag: Tunnel13-head-0, local addr 203.0.113.1
+
+   protected vrf: (none)
+   local  ident (addr/mask/prot/port): (203.0.113.1/255.255.255.255/47/0)
+   remote ident (addr/mask/prot/port): (203.0.113.9/255.255.255.255/47/0)
+   current_peer 203.0.113.9 port 500
+     PERMIT, flags={origin_is_acl,}
+    #pkts encaps: 2757, #pkts encrypt: 2757, #pkts digest: 2757
+    #pkts decaps: 2676, #pkts decrypt: 2676, #pkts verify: 2676
+    #pkts compressed: 0, #pkts decompressed: 0
+    #pkts not compressed: 0, #pkts compr. failed: 0
+    #pkts not decompressed: 0, #pkts decompress failed: 0
+    #send errors 0, #recv errors 0
+
+     local crypto endpt.: 203.0.113.1, remote crypto endpt.: 203.0.113.9
+     plaintext mtu 1458, path mtu 1500, ip mtu 1500, ip mtu idb GigabitEthernet0/0
+     current outbound spi: 0x78B9B1CA(2025435594)
+     PFS (Y/N): Y, DH group: group14
+
+     inbound esp sas:
+      spi: 0x5905120E(1493504526)
+        transform: esp-256-aes esp-sha256-hmac ,
+        in use settings ={Transport, }
+        conn id: 23, flow_id: SW:23, sibling_flags 80000000, crypto map: Tunnel13-head-0
+        sa timing: remaining key lifetime (k/sec): (4149379/738)
+        IV size: 16 bytes
+        replay detection support: Y
+        Status: ACTIVE(ACTIVE)
+
+     inbound ah sas:
+
+     inbound pcp sas:
+
+     outbound esp sas:
+      spi: 0x78B9B1CA(2025435594)
+        transform: esp-256-aes esp-sha256-hmac ,
+        in use settings ={Transport, }
+        conn id: 24, flow_id: SW:24, sibling_flags 80000000, crypto map: Tunnel13-head-0
+        sa timing: remaining key lifetime (k/sec): (4149373/738)
+        IV size: 16 bytes
+        replay detection support: Y
+        Status: ACTIVE(ACTIVE)
+
+     outbound ah sas:
+
+     outbound pcp sas:
+R1-HQ#
+R1-HQ#
+R1-HQ#ping 10.0.0.2 source Loopback0 repeat 5
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 10.0.0.2, timeout is 2 seconds:
+Packet sent with a source address of 10.0.0.1 
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 2/3/4 ms
+R1-HQ#
+R1-HQ#
+R1-HQ#ping ipv6 2001:db8:0:2::1 source Loopback0 repeat 5
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 2001:DB8:0:2::1, timeout is 2 seconds:
+Packet sent with a source address of 2001:DB8:0:1::1
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 3/3/4 ms
+R1-HQ#
+R1-HQ#
+R1-HQ#ping 10.0.0.3 source Loopback0 repeat 5
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 10.0.0.3, timeout is 2 seconds:
+Packet sent with a source address of 10.0.0.1 
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 3/3/5 ms
+R1-HQ#
+R1-HQ#
+R1-HQ#ping ipv6 2001:db8:0:3::1 source Loopback0 repeat 5
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 2001:DB8:0:3::1, timeout is 2 seconds:
+Packet sent with a source address of 2001:DB8:0:1::1
+!!!!!
+Success rate is 100 percent (5/5), round-trip min/avg/max = 3/3/4 ms
+R1-HQ#
+R1-HQ#exit

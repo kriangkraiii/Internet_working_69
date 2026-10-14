@@ -1,0 +1,117 @@
+
+****
+CML2 Console Server
+Copyright (c) 2019-2024 Cisco Systems, Inc. and/or its affiliates
+****
+
+tab completion works
+list available nodes and node labels / IDs with "list"
+it's also possible to do a "open /Lab at Wed 22:21 PM/iosv-0/0" command
+or to directly connect via UUID "connect 697bb5b8-7181-49c5-8e85-540eacf9deac"
+(e.g. lab name followed by node name and line number
+
+[J[2K
+consoles> [J[2K
+consoles> [J[2K
+consoles> 
+[J[2K
+consoles> [J[2K
+consoles> o[J[2K
+consoles> op[J[2K
+consoles> ope[J[2K
+consoles> open[J[2K
+consoles> open [J[2K
+consoles> open /[J[2K
+consoles> open /C[J[2K
+consoles> open /Ca[J[2K
+consoles> open /Cap[J[2K
+consoles> open /Caps[J[2K
+consoles> open /Capst[J[2K
+consoles> open /Capsto[J[2K
+consoles> open /Capston[J[2K
+consoles> open /Capstone[J[2K
+consoles> open /Capstone-[J[2K
+consoles> open /Capstone-P[J[2K
+consoles> open /Capstone-P3[J[2K
+consoles> open /Capstone-P3/[J[2K
+consoles> open /Capstone-P3/R[J[2K
+consoles> open /Capstone-P3/R2[J[2K
+consoles> open /Capstone-P3/R2-[J[2K
+consoles> open /Capstone-P3/R2-B[J[2K
+consoles> open /Capstone-P3/R2-BR[J[2K
+consoles> open /Capstone-P3/R2-BR1[J[2K
+consoles> open /Capstone-P3/R2-BR1/[J[2K
+consoles> open /Capstone-P3/R2-BR1/0[J[2K
+consoles> open /Capstone-P3/R2-BR1/0[J[2K
+consoles> open /Capstone-P3/R2-BR1/0
+Connecting to console for R2-BR1
+Connected to CML terminalserver.
+Escape character is '^]'.
+ *** R2-BR1 | KKU Capstone P3 | Authorized access only - all activity is logged *** 
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************
+
+User Access Verification
+
+Username: 
+Username: admin
+Password: 
+
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************
+R2-BR1>
+*Oct 15 00:53:46.271 ICT: %SEC_LOGIN-5-LOGIN_SUCCESS: Login Success [user: admin] [Source: UNKNOWN] [localport: 0] at 00:53:46 ICT Thu Oct 15 2026
+R2-BR1>********
+% Bad IP address or host name
+% Unknown command or computer name, or unable to find computer address
+R2-BR1>enable
+Password: 
+R2-BR1#
+*Oct 15 00:53:50.683 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:!exec: enable
+R2-BR1#end
+Translating "end"
+
+Translating "end"
+
+Translating "end"
+
+% Bad IP address or host name
+% Unknown command or computer name, or unable to find computer address
+R2-BR1#terminal length 0
+R2-BR1#terminal width 511
+R2-BR1#
+R2-BR1#
+R2-BR1#
+R2-BR1#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+R2-BR1(config)#ip route 10.10.0.0 255.255.0.0 10.10.20.254
+R2-BR1(config)#ip route 192.168.0.0 255.255.0.0 10.10.20.254
+R2-BR1(config)#ip access-list standard ACL-MGMT-SSH
+Access-list type conflicts with prior definition
+% A named extended IP access list with this name already exists
+R2-BR1(config)#permit any
+                  ^
+% Invalid input detected at '^' marker.
+
+R2-BR1(config)#end
+R2-BR1#
+*Oct 15 00:53:55.767 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:ip route 10.10.0.0 255.255.0.0 10.10.20.254
+*Oct 15 00:53:56.232 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:ip route 192.168.0.0 255.255.0.0 10.10.20.254
+R2-BR1#write memory
+Building configuration...
+
+  
+*Oct 15 00:53:56.767 ICT: %PARSER-5-CFGLOG_LOGGEDCMD: User:admin  logged command:ip access-list standard ACL-MGMT-SSH
+*Oct 15 00:53:57.574 ICT: %SYS-5-CONFIG_I: Configured from console by admin on consoleexit

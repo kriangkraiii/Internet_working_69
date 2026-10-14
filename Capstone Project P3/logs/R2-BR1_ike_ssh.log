@@ -1,0 +1,30 @@
+ *** R2-BR1 | KKU Capstone P3 | Authorized access only - all activity is logged *** 
+
+
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************
+R2-BR1#
+R2-BR1#terminal width 511
+R2-BR1#terminal length 0
+R2-BR1#
+R2-BR1#
+R2-BR1#clear crypto session
+R2-BR1#
+R2-BR1#
+R2-BR1#
+R2-BR1#show crypto isakmp sa
+IPv4 Crypto ISAKMP SA
+dst             src             state          conn-id status
+203.0.113.1     203.0.113.5     QM_IDLE           1010 ACTIVE
+203.0.113.1     203.0.113.5     MM_NO_STATE       1009 ACTIVE (deleted)
+
+IPv6 Crypto ISAKMP SA
+
+R2-BR1#
+R2-BR1#exit

@@ -1,0 +1,98 @@
+
+****
+CML2 Console Server
+Copyright (c) 2019-2024 Cisco Systems, Inc. and/or its affiliates
+****
+
+tab completion works
+list available nodes and node labels / IDs with "list"
+it's also possible to do a "open /Lab at Wed 22:21 PM/iosv-0/0" command
+or to directly connect via UUID "connect 697bb5b8-7181-49c5-8e85-540eacf9deac"
+(e.g. lab name followed by node name and line number
+
+[J[2K
+consoles> [J[2K
+consoles> [J[2K
+consoles> 
+[J[2K
+consoles> [J[2K
+consoles> o[J[2K
+consoles> op[J[2K
+consoles> ope[J[2K
+consoles> open[J[2K
+consoles> open [J[2K
+consoles> open /[J[2K
+consoles> open /C[J[2K
+consoles> open /Ca[J[2K
+consoles> open /Cap[J[2K
+consoles> open /Caps[J[2K
+consoles> open /Capst[J[2K
+consoles> open /Capsto[J[2K
+consoles> open /Capston[J[2K
+consoles> open /Capstone[J[2K
+consoles> open /Capstone-[J[2K
+consoles> open /Capstone-P[J[2K
+consoles> open /Capstone-P3[J[2K
+consoles> open /Capstone-P3/[J[2K
+consoles> open /Capstone-P3/R[J[2K
+consoles> open /Capstone-P3/R2[J[2K
+consoles> open /Capstone-P3/R2-[J[2K
+consoles> open /Capstone-P3/R2-B[J[2K
+consoles> open /Capstone-P3/R2-BR[J[2K
+consoles> open /Capstone-P3/R2-BR1[J[2K
+consoles> open /Capstone-P3/R2-BR1/[J[2K
+consoles> open /Capstone-P3/R2-BR1/0[J[2K
+consoles> open /Capstone-P3/R2-BR1/0[J[2K
+consoles> open /Capstone-P3/R2-BR1/0
+Connecting to console for R2-BR1
+Connected to CML terminalserver.
+Escape character is '^]'.
+
+R2-BR1>
+R2-BR1>terminal width 511
+R2-BR1>terminal length 0
+R2-BR1>
+R2-BR1>
+R2-BR1>enable
+Password: 
+R2-BR1#
+R2-BR1#
+R2-BR1#
+R2-BR1#show crypto key mypubkey rsa
+% Key pair was generated at: 16:43:42 UTC Oct 14 2026
+Key name: R2-BR1.kku.lab
+Key type: RSA KEYS
+ Storage Device: private-config
+ Usage: General Purpose Key
+ Key is not exportable.
+ Key Data:
+  30820122 300D0609 2A864886 F70D0101 01050003 82010F00 3082010A 02820101 
+  00857859 0AF7E76B 2BF0FBA3 AD8F71EE D6C45698 142A4DD2 2B575F03 B90C2412 
+  8E6FB381 E18FB8A2 61ECB4AC 3BFFF086 D35B4EDD B8F93346 E28C8707 D1A8030E 
+  B639E558 E836E0B3 6AE0E4DA 7B0DA516 63CE955B EF23385F C3F12D05 9B751B8E 
+  DDED1EEB F7654122 32E8E521 56C5FEE1 721267BD 28ACEA57 67B43E6D 8ED160A6 
+  44AC486E A6B03051 6E2D9D4D CA05061F 8984B72F A98A7B97 BDC7EA89 7DEC21E8 
+  019617EC 14A716C9 23EE0F50 2B3E1956 F8661A87 462892EF 91CC2E20 182EB213 
+  A51B613C 8B15A763 0239E5AE 43847FBA A62576E6 5611E2B1 327E20F3 EE3C12AF 
+  A308C1D4 C3FF6AF5 EAAB9DC8 DA3ABF6C D93E8046 31B12538 38BC326C A2324390 
+  D5020301 0001
+% Key pair was generated at: 16:47:03 UTC Oct 14 2026
+Key name: R2-BR1.kku.lab.server
+Key type: RSA KEYS
+Temporary key
+ Usage: Encryption Key
+ Key is not exportable.
+ Key Data:
+  307C300D 06092A86 4886F70D 01010105 00036B00 30680261 00DEE0FC 6D81B725 
+  BEAC1897 CC24A866 0B626A43 BFBA870C E0873603 8E28F39E 5191407D 1FD958E5 
+  0FE3D57F 0377204B B1EEC95B 53D49B54 D71294B7 52591FF5 87C14233 07ABD1DD 
+  1B8F7BF5 4A33720E 5642F36E DEC4C6F5 9989A76D 4E449CE6 53020301 0001
+R2-BR1#
+R2-BR1#
+R2-BR1#
+R2-BR1#write mem
+Building configuration...
+
+  [OK]
+R2-BR1#
+R2-BR1#exit

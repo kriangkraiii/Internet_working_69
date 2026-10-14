@@ -1,0 +1,35 @@
+ *** R3-DC | KKU Capstone P3 | Authorized access only - all activity is logged *** 
+
+
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************
+R3-DC#
+R3-DC#terminal width 511
+R3-DC#terminal length 0
+R3-DC#
+R3-DC#
+R3-DC#
+R3-DC#
+R3-DC#show running-config | section line vty
+line vty 0 4
+ access-class ACL-MGMT-SSH in
+ logging synchronous
+ transport input ssh
+R3-DC#
+R3-DC#
+R3-DC#show ip access-lists ACL-VTY-LOCKOUT
+R3-DC#
+R3-DC#
+R3-DC#
+R3-DC#write mem
+Building configuration...
+
+  [OK]
+R3-DC#
+R3-DC#exit

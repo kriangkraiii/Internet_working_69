@@ -1,0 +1,34 @@
+ *** R3-DC | KKU Capstone P3 | Authorized access only - all activity is logged *** 
+
+
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************
+R3-DC#
+R3-DC#terminal width 511
+R3-DC#terminal length 0
+R3-DC#
+R3-DC#
+R3-DC#
+R3-DC#
+R3-DC#show clock
+02:53:41.475 ICT Thu Oct 15 2026
+R3-DC#
+R3-DC#configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+R3-DC(config)#
+R3-DC(config)#ip access-list standard ACL-VTY-LOCKOUT
+R3-DC(config-std-nacl)#permit host 10.10.20.181
+R3-DC(config-std-nacl)#deny any log
+R3-DC(config-std-nacl)#line vty 0 4
+R3-DC(config-line)#access-class ACL-VTY-LOCKOUT in
+R3-DC(config-line)#
+R3-DC(config-line)#end
+R3-DC#
+R3-DC#
+R3-DC#exit

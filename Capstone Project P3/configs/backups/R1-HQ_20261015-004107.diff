@@ -1,0 +1,248 @@
+-Current configuration : 3492 bytes
+-!
++Current configuration : 9329 bytes
++!
+-service timestamps debug datetime msec
+-service timestamps log datetime msec
+-no service password-encryption
++service timestamps debug datetime msec localtime show-timezone
++service timestamps log datetime msec localtime show-timezone
++service password-encryption
++security passwords min-length 8
++logging buffered 64000
+-no aaa new-model
+-!
+-!
+-!
++aaa new-model
++!
++!
++aaa authentication login default local
++aaa authorization exec default local 
++!
++!
++!
++!
++!
++aaa session-id common
++!
++!
++!
++clock timezone ICT 7 0
+-no ipv6 cef
++login block-for 120 attempts 5 within 60
++login on-failure log
++login on-success log
++ipv6 unicast-routing
++ipv6 cef
++!
++!
++flow record FNF-RECORD
++ match ipv4 source address
++ match ipv4 destination address
++ match ipv4 protocol
++ match transport source-port
++ match transport destination-port
++ match interface input
++ collect counter bytes
++ collect counter packets
++ collect timestamp sys-uptime first
++ collect timestamp sys-uptime last
++!
++!
++flow exporter FNF-EXPORTER
++ destination 10.10.20.50
++ source GigabitEthernet0/3
++ transport udp 2055
++!
++!
++flow monitor FNF-MONITOR
++ exporter FNF-EXPORTER
++ cache timeout active 60
++ record FNF-RECORD
+-username admin privilege 15 secret 9 $9$vhPhPOMNJHv9ON$84GIVPdImtWVYKEOj754B/ZXB2ofUF6m6eRdyABtauU
++archive
++ log config
++  logging enable
++  notify syslog contenttype plaintext
++  hidekeys
++file prompt quiet
++username admin privilege 15 secret 9 $9$8u/muLhhTe5yCM$G0/F/Qo/MRrbk4DQQk2SRFiKYWKv1S7UvgyfXKzDrjs
++!
++class-map match-all CM-COPP-MGMT
++ match access-group name CoPP-MGMT
++class-map match-all CM-COPP-ICMP
++ match access-group name CoPP-ICMP
++class-map match-all CM-COPP-IPSEC
++ match access-group name CoPP-IPSEC
++class-map match-all CM-COPP-ROUTING
++ match access-group name CoPP-ROUTING
++!
++policy-map PM-COPP
++ class CM-COPP-ROUTING
++  police cir 256000 conform-action transmit  exceed-action transmit 
++ class CM-COPP-IPSEC
++  police cir 128000 conform-action transmit  exceed-action drop 
++ class CM-COPP-MGMT
++  police cir 512000 conform-action transmit  exceed-action drop 
++ class CM-COPP-ICMP
++  police cir 32000 conform-action transmit  exceed-action drop 
++ class class-default
++  police cir 64000 conform-action transmit  exceed-action drop 
++!
+-!
+-!
+-!
+-!
+-!
+-!
+-!
++crypto isakmp policy 10
++ encr aes 256
++ hash sha256
++ authentication pre-share
++ group 14
++crypto isakmp key KKU-Capstone-PSK address 203.0.113.5    
++crypto isakmp key KKU-Capstone-PSK address 203.0.113.9    
++crypto isakmp keepalive 10 3 periodic
++!
++!
++crypto ipsec transform-set TS-AES256-SHA256 esp-aes 256 esp-sha256-hmac 
++ mode transport
++!
++crypto ipsec profile IPSEC-PROFILE
++ set transform-set TS-AES256-SHA256 
++ set pfs group14
++!
++!
++!
++!
++!
++!
++!
++interface Loopback0
++ description ROUTER-ID
++ ip address 10.0.0.1 255.255.255.255
++ ipv6 address 2001:DB8:0:1::1/128
++ ipv6 ospf 1 area 0
++interface Tunnel12
++ description GRE-IPsec-to-R2-BR1
++ ip address 172.16.12.1 255.255.255.252
++ ip mtu 1400
++ ip flow monitor FNF-MONITOR input
++ ip tcp adjust-mss 1360
++ ip ospf network point-to-point
++ ip ospf dead-interval 20
++ ip ospf hello-interval 5
++ ipv6 address 2001:DB8:12::1/64
++ ipv6 ospf 1 area 0
++ ipv6 ospf network point-to-point
++ tunnel source GigabitEthernet0/0
++ tunnel destination 203.0.113.5
++ tunnel protection ipsec profile IPSEC-PROFILE
++!
++interface Tunnel13
++ description GRE-IPsec-to-R3-DC
++ ip address 172.16.13.1 255.255.255.252
++ ip mtu 1400
++ ip flow monitor FNF-MONITOR input
++ ip tcp adjust-mss 1360
++ ip ospf network point-to-point
++ ip ospf dead-interval 20
++ ip ospf hello-interval 5
++ ipv6 address 2001:DB8:13::1/64
++ ipv6 ospf 1 area 0
++ ipv6 ospf network point-to-point
++ tunnel source GigabitEthernet0/0
++ tunnel destination 203.0.113.9
++ tunnel protection ipsec profile IPSEC-PROFILE
++!
+- no ip address
+- shutdown
++ description WAN-to-R0-ISP
++ ip address 203.0.113.1 255.255.255.252
++ ip access-group ACL-WAN-IN in
++ ipv6 address 2001:DB8:FFFF:1::1/64
+- no ip address
+- shutdown
++ description LAN-R1-HQ
++ ip address 10.1.10.1 255.255.255.0
++ ip flow monitor FNF-MONITOR input
++ ipv6 address 2001:DB8:1:10::1/64
++ ipv6 ospf 1 area 0
++router ospf 1
++ router-id 1.1.1.1
++ passive-interface default
++ no passive-interface Tunnel12
++ no passive-interface Tunnel13
++ network 10.0.0.1 0.0.0.0 area 0
++ network 10.1.10.1 0.0.0.0 area 0
++ network 172.16.12.1 0.0.0.0 area 0
++ network 172.16.13.1 0.0.0.0 area 0
++!
++ip route 0.0.0.0 0.0.0.0 203.0.113.2 name UNDERLAY-DEFAULT
++ip ssh time-out 60
++ip access-list standard ACL-SNMP
++ permit 10.10.20.50
++ deny   any log
++!
++ip access-list extended ACL-MGMT-SSH
++ remark ** allow SSH only from OOB management subnet **
++ permit tcp 10.10.20.0 0.0.0.255 any eq 22
++ deny   ip any any log
++ip access-list extended ACL-WAN-IN
++ remark ** IKE / NAT-T / ESP from known peers only **
++ permit udp host 203.0.113.5 host 203.0.113.1 eq isakmp
++ permit udp host 203.0.113.5 host 203.0.113.1 eq non500-isakmp
++ permit esp host 203.0.113.5 host 203.0.113.1
++ permit udp host 203.0.113.9 host 203.0.113.1 eq isakmp
++ permit udp host 203.0.113.9 host 203.0.113.1 eq non500-isakmp
++ permit esp host 203.0.113.9 host 203.0.113.1
++ permit icmp any any echo-reply
++ permit icmp any any unreachable
++ permit icmp any any time-exceeded
++ permit icmp any any echo
++ deny   ip any any log
++ip access-list extended CoPP-ICMP
++ permit icmp any any
++ip access-list extended CoPP-IPSEC
++ permit udp any any eq isakmp
++ permit udp any any eq non500-isakmp
++ permit esp any any
++ip access-list extended CoPP-MGMT
++ permit tcp 10.10.20.0 0.0.0.255 any eq 22
++ permit udp 10.10.20.0 0.0.0.255 any eq snmp
++ permit udp 10.10.20.0 0.0.0.255 any eq ntp
++ permit udp 10.10.20.0 0.0.0.255 eq ntp any
++ip access-list extended CoPP-ROUTING
++ permit ospf any any
++!
++logging source-interface GigabitEthernet0/3
++logging host 10.10.20.50
++ipv6 router ospf 1
++ router-id 1.1.1.1
++ passive-interface default
++ no passive-interface Tunnel12
++ no passive-interface Tunnel13
++!
++snmp-server group SNMPV3-GRP v3 priv read V3-VIEW access ACL-SNMP
++snmp-server view V3-VIEW iso included
++snmp-server location R1-HQ-GNS3
++snmp-server contact capstone@kku.lab
++snmp-server chassis-id 
++snmp-server enable traps snmp linkdown linkup
++snmp-server enable traps config
++snmp-server host 10.10.20.50 version 3 priv snmpadmin 
++!
++!
++ service-policy input PM-COPP
++banner motd ^C *** R1-HQ | KKU Capstone P3 | Authorized access only - all activity is logged *** ^C
++ exec-timeout 15 0
+- login local
++ access-class ACL-MGMT-SSH in
++ logging synchronous
++ntp authentication-key 1 md5 1439061B27013368767D656C 7
++ntp authenticate
++ntp trusted-key 1
++ntp source GigabitEthernet0/3
++ntp server 10.10.20.181 key 1 prefer
